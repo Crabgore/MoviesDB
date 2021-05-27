@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">MoviesDB</string>
+
+    <string name="country">Country: %1$s</string>
+    <string name="year">Release: %1$s</string>
+    <string name="duration">Duration: %1$s min.</string>
+    <string name="episode_duration">Episode duration: ~%1$s min.</string>
+    <string name="season_count">Number of seasons: %1$s</string>
+    <string name="gender_male">Gender: Male</string>
+    <string name="gender_female">Gender: Female</string>
+    <string name="place_of_birth">Place of birth: %1$s</string>
+    <string name="birthday">Birthday: %1$s</string>
+    <string name="now_playing">Now playing</string>
+    <string name="popular">Popular</string>
+    <string name="top_rating">Top rating</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="on_the_air">On the air</string>
+    <string name="actors">Actors</string>
+    <string name="crew">Crew</string>
+    <string name="movie_crew">Movie crew</string>
+    <string name="movie_actor">Movie actor</string>
+    <string name="tv_actor">TV actor</string>
+    <string name="tv_crew">TV crew</string>
+
+</resources>
