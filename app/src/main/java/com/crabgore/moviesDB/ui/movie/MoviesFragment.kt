@@ -25,21 +25,14 @@ class MoviesFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<MoviesViewModel> { viewModelFactory }
 
-    private var _binding: FragmentMoviesBinding? = null
-    private val binding get() = _binding!!
-    private var thisView: View? = null
-    private var isViewWasNull = false
+    private val binding get() = _binding!! as FragmentMoviesBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMoviesBinding.inflate(inflater, container, false)
-        if (thisView == null) {
-            thisView = binding.root
-            isViewWasNull = true
-        }
-        return thisView
+        return checkViewState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,11 +42,6 @@ class MoviesFragment : BaseFragment() {
             startObservers()
             getData()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initUI() {

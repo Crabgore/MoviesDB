@@ -33,21 +33,14 @@ class MovieDetailsFragment : BaseFragment() {
 
     private val args: MovieDetailsFragmentArgs by navArgs()
     private lateinit var picasso: Picasso
-    private var _binding: FragmentMovieDetailsBinding? = null
-    private val binding get() = _binding!!
-    private var thisView: View? = null
-    private var isViewWasNull = false
+    private val binding get() = _binding!! as FragmentMovieDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
-        if (thisView == null) {
-            thisView = binding.root
-            isViewWasNull = true
-        }
-        return thisView
+        return checkViewState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,11 +50,6 @@ class MovieDetailsFragment : BaseFragment() {
             startObservers()
             getData()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initUI() {

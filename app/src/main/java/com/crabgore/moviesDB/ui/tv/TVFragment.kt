@@ -25,21 +25,14 @@ class TVFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<TVViewModel> { viewModelFactory }
 
-    private var _binding: FragmentTVBinding? = null
-    private val binding get() = _binding!!
-    private var thisView: View? = null
-    private var isViewWasNull = false
+    private val binding get() = _binding!! as FragmentTVBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentTVBinding.inflate(inflater, container, false)
-        if (thisView == null) {
-            thisView = binding.root
-            isViewWasNull = true
-        }
-        return thisView
+        return checkViewState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -49,11 +42,6 @@ class TVFragment : BaseFragment() {
             startObservers()
             getData()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initUI() {

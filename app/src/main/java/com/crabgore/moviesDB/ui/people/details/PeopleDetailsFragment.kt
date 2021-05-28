@@ -31,21 +31,14 @@ class PeopleDetailsFragment : BaseFragment() {
 
     private val args: PeopleDetailsFragmentArgs by navArgs()
     private lateinit var picasso: Picasso
-    private var _binding: FragmentPeopleDetailsBinding? = null
-    private val binding get() = _binding!!
-    private var thisView: View? = null
-    private var isViewWasNull = false
+    private val binding get() = _binding!! as FragmentPeopleDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPeopleDetailsBinding.inflate(inflater, container, false)
-        if (thisView == null) {
-            thisView = binding.root
-            isViewWasNull = true
-        }
-        return thisView
+        return checkViewState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,11 +48,6 @@ class PeopleDetailsFragment : BaseFragment() {
             startObservers()
             getData()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initUI() {

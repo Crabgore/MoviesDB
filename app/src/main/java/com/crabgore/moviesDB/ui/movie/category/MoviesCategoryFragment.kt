@@ -25,10 +25,7 @@ class MoviesCategoryFragment : BaseFragment() {
     private val viewModel by viewModels<MoviesCategoryViewModel> { viewModelFactory }
 
     private val args: MoviesCategoryFragmentArgs by navArgs()
-    private var _binding: FragmentMoviesCategoryBinding? = null
-    private val binding get() = _binding!!
-    private var thisView: View? = null
-    private var isViewWasNull = false
+    private val binding get() = _binding!! as FragmentMoviesCategoryBinding
     private lateinit var itemAdapter: ItemAdapter<MovieItem>
     private var offset = 10
     private var page = 1
@@ -38,11 +35,7 @@ class MoviesCategoryFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMoviesCategoryBinding.inflate(inflater, container, false)
-        if (thisView == null) {
-            thisView = binding.root
-            isViewWasNull = true
-        }
-        return thisView
+        return checkViewState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,11 +45,6 @@ class MoviesCategoryFragment : BaseFragment() {
             initUI()
             getData()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private fun initUI() {

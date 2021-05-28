@@ -9,19 +9,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.crabgore.moviesDB.Const
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_PEOPLE
-import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
-import com.crabgore.moviesDB.databinding.FragmentMoviesCategoryBinding
 import com.crabgore.moviesDB.databinding.FragmentPeopleBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.PeopleItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import kotlinx.android.synthetic.main.fragment_people.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -30,10 +26,7 @@ class PeopleFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val viewModel by viewModels<PeopleViewModel> { viewModelFactory }
 
-    private var _binding: FragmentPeopleBinding? = null
-    private val binding get() = _binding!!
-    private var thisView: View? = null
-    private var isViewWasNull = false
+    private val binding get() = _binding!! as FragmentPeopleBinding
     private lateinit var itemAdapter: ItemAdapter<PeopleItem>
     private var offset = 10
     private var page = 1
@@ -43,11 +36,11 @@ class PeopleFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPeopleBinding.inflate(inflater, container, false)
-        if (thisView == null) {
-            thisView = binding.root
+        if (viewState == null) {
+            viewState = binding.root
             isViewWasNull = true
         }
-        return thisView
+        return viewState
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

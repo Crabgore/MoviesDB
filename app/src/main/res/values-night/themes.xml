@@ -76,6 +76,12 @@
         <item name="android:maxLines">3</item>
     </style>
 
+    <style name="Overview" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="BigTitles" parent="@android:style/TextAppearance.Small">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">sans-serif</item>

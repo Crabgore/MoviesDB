@@ -1,13 +1,27 @@
 package com.crabgore.moviesDB.ui.base
 
+import android.view.View
 import androidx.activity.addCallback
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
+import androidx.viewbinding.ViewBinding
 import com.crabgore.moviesDB.common.popBackStackAllInstances
 import dagger.android.support.DaggerFragment
 
 open class BaseFragment : DaggerFragment() {
-    var isNavigated = false
+    var _binding: ViewBinding? = null
+    var viewState: View? = null
+    var isViewWasNull = false
+
+    private var isNavigated = false
+
+    fun checkViewState(): View? {
+        if (viewState == null) {
+            viewState = _binding?.root
+            isViewWasNull = true
+        }
+        return viewState
+    }
 
     fun navigateWithAction(action: NavDirections) {
         isNavigated = true
@@ -40,6 +54,7 @@ open class BaseFragment : DaggerFragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        _binding = null
         if (!isNavigated)
             requireActivity().onBackPressedDispatcher.addCallback(this) {
                 val navController = findNavController()

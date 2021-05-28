@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">MoviesDB</string>
+
+    <string name="country">Страна: %1$s</string>
+    <string name="year">Дата премьеры: %1$s</string>
+    <string name="duration">Продолжительность: %1$s мин.</string>
+    <string name="episode_duration">Продолжительность серии: ~%1$s мин.</string>
+    <string name="season_count">Количество сезонов: %1$s</string>
+    <string name="gender_male">Пол: Мужской</string>
+    <string name="gender_female">Пол: Женский</string>
+    <string name="place_of_birth">Место рождения: %1$s</string>
+    <string name="birthday">Дата рождения: %1$s</string>
+    <string name="now_playing">Сейчас в кинотеатрах</string>
+    <string name="popular">Популярные</string>
+    <string name="top_rating">Высокий рейтинг</string>
+    <string name="upcoming">Скоро выходят</string>
+    <string name="on_the_air">Сейчас в эфире</string>
+    <string name="actors">Актёры</string>
+    <string name="crew">Команда</string>
+    <string name="movie_crew">Команда фильма</string>
+    <string name="movie_actor">Актёр фильма</string>
+    <string name="tv_actor">Актёр сериала</string>
+    <string name="tv_crew">Команда сериала</string>
+
+</resources>

@@ -27,10 +27,7 @@ class SearchFragment : BaseFragment() {
     private val viewModel by viewModels<SearchViewModel> { viewModelFactory }
 
     private val args: SearchFragmentArgs by navArgs()
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
-    private var thisView: View? = null
-    private var isViewWasNull = false
+    private val binding get() = _binding!! as FragmentSearchBinding
     private lateinit var itemAdapter: ItemAdapter<SearchItem>
 
     override fun onCreateView(
@@ -38,11 +35,7 @@ class SearchFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        if (thisView == null) {
-            thisView = binding.root
-            isViewWasNull = true
-        }
-        return thisView
+        return checkViewState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -52,11 +45,6 @@ class SearchFragment : BaseFragment() {
             initUI()
             binding.searchEt.requestFocus()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onResume() {
