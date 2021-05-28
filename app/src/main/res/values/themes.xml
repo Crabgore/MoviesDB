@@ -28,6 +28,10 @@
         <item name="android:src">@drawable/ic_no_photo_night</item>
     </style>
 
+    <style name="loader_logo">
+        <item name="android:src">@drawable/loader_icon_day</item>
+    </style>
+
     <style name="cards">
         <item name="cardCornerRadius">15dp</item>
         <item name="cardElevation">5dp</item>
