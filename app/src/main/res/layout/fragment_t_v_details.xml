@@ -115,6 +115,13 @@
 
                         <TextView
                             style="@style/Additions"
+                            android:id="@+id/episodes"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp" />
+
+                        <TextView
+                            style="@style/Additions"
                             android:id="@+id/country"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

@@ -54,12 +54,11 @@ fun addDecoration(recyclerView: RecyclerView, spacing: Int) {
 fun formatDate(string: String): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
-        formatter.format(LocalDate.parse(string))
+        if (string != "") formatter.format(LocalDate.parse(string)) else ""
     } else {
         val stringToDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val dateToStringFormat = SimpleDateFormat("d MMMM yyyy", Locale.getDefault())
-        val date = stringToDateFormat.parse(string)
-        dateToStringFormat.format(date)
+        if (string != "") dateToStringFormat.format(stringToDateFormat.parse(string)) else ""
     }
 }
 

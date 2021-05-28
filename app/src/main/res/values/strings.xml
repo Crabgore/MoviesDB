@@ -6,6 +6,7 @@
     <string name="duration">Duration: %1$s min.</string>
     <string name="episode_duration">Episode duration: ~%1$s min.</string>
     <string name="season_count">Number of seasons: %1$s</string>
+    <string name="episodes_count">Number of episodes: %1$s</string>
     <string name="gender_male">Gender: Male</string>
     <string name="gender_female">Gender: Female</string>
     <string name="place_of_birth">Place of birth: %1$s</string>

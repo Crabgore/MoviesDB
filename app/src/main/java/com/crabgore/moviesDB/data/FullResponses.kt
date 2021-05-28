@@ -56,6 +56,7 @@ data class TVDetailsResponse (
     val name: String?,
     val nextEpisodeToAir: Any? = null,
     val networks: List<Network>?,
+    @field:Json(name="number_of_episodes")
     val numberOfEpisodes: Long?,
     @field:Json(name="number_of_seasons")
     val numberOfSeasons: Long?,

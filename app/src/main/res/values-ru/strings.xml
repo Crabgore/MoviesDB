@@ -6,6 +6,7 @@
     <string name="duration">Продолжительность: %1$s мин.</string>
     <string name="episode_duration">Продолжительность серии: ~%1$s мин.</string>
     <string name="season_count">Количество сезонов: %1$s</string>
+    <string name="episodes_count">Количество серий: %1$s</string>
     <string name="gender_male">Пол: Мужской</string>
     <string name="gender_female">Пол: Женский</string>
     <string name="place_of_birth">Место рождения: %1$s</string>

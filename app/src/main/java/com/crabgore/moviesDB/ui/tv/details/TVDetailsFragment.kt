@@ -101,6 +101,8 @@ class TVDetailsFragment : BaseFragment() {
         }
         binding.seasons.text =
             requireContext().getString(R.string.season_count, tv.numberOfSeasons.toString())
+        binding.episodes.text =
+            requireContext().getString(R.string.episodes_count, tv.numberOfEpisodes.toString())
         tv.productionCountries?.let {
             val countries = StringBuilder()
             for (i in it.indices) {
@@ -112,10 +114,12 @@ class TVDetailsFragment : BaseFragment() {
         tv.firstAirDate?.let {
             binding.year.text = requireContext().getString(R.string.year, formatDate(it))
         }
-        binding.duration.text = requireContext().getString(
-            R.string.episode_duration,
-            tv.episodeRunTime?.get(0).toString()
-        )
+        tv.episodeRunTime?.let {
+            if (it.isNotEmpty()) binding.duration.text = requireContext().getString(
+                R.string.episode_duration,
+                it[0].toString()
+            )
+        }
         binding.rating.text = tv.voteAverage.toString()
         binding.description.text = tv.overview
     }
