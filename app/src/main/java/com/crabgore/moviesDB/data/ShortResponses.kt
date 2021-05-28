@@ -3,40 +3,37 @@ package com.crabgore.moviesDB.data
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
-
 @JsonClass(generateAdapter = true)
 data class MoviesResponse(
     val dates: Dates?,
     val page: Long?,
     val results: List<Movie>,
-    @field:Json(name="total_pages")
+    @field:Json(name = "total_pages")
     val totalPages: Int,
     val totalResults: Int?
 )
-
 
 @JsonClass(generateAdapter = true)
 data class TVResponse(
     val dates: Dates?,
     val page: Long,
     val results: List<TV>,
-    @field:Json(name="total_pages")
+    @field:Json(name = "total_pages")
     val totalPages: Int,
     val totalResults: Int?
 )
-
 
 @JsonClass(generateAdapter = true)
 data class PeopleResponse(
     val page: Long,
     val results: List<People>,
-    @field:Json(name="total_pages")
+    @field:Json(name = "total_pages")
     val totalPages: Int,
     val totalResults: Long?
 )
 
 @JsonClass(generateAdapter = true)
-data class SearchMovieResponse (
+data class SearchMovieResponse(
     val page: Long? = null,
     val results: List<Movie>? = null,
     val totalPages: Long? = null,
@@ -44,7 +41,7 @@ data class SearchMovieResponse (
 )
 
 @JsonClass(generateAdapter = true)
-data class SearchTVResponse (
+data class SearchTVResponse(
     val page: Long? = null,
     val results: List<TV>? = null,
     val totalPages: Long? = null,
@@ -52,7 +49,7 @@ data class SearchTVResponse (
 )
 
 @JsonClass(generateAdapter = true)
-data class SearchPeopleResponse (
+data class SearchPeopleResponse(
     val page: Long? = null,
     val results: List<People>? = null,
     val totalPages: Long? = null,
@@ -68,7 +65,7 @@ data class Dates(
 @JsonClass(generateAdapter = true)
 data class Movie(
     val adult: Boolean,
-    @field:Json(name="backdrop_path")
+    @field:Json(name = "backdrop_path")
     val backdropPath: String?,
     val genreIDS: List<Long>?,
     val id: Int,
@@ -76,22 +73,22 @@ data class Movie(
     val originalTitle: String?,
     val overview: String?,
     val popularity: Double?,
-    @field:Json(name="poster_path")
+    @field:Json(name = "poster_path")
     val posterPath: String?,
-    @field:Json(name="release_date")
+    @field:Json(name = "release_date")
     val releaseDate: String?,
     val title: String?,
     val video: Boolean?,
-    @field:Json(name="vote_average")
+    @field:Json(name = "vote_average")
     val voteAverage: Double?,
     val voteCount: Long?
 )
 
 @JsonClass(generateAdapter = true)
 data class TV(
-    @field:Json(name="backdrop_path")
+    @field:Json(name = "backdrop_path")
     val backdropPath: String?,
-    @field:Json(name="first_air_date")
+    @field:Json(name = "first_air_date")
     val firstAirDate: String?,
     val genreIDS: List<Long>?,
     val id: Int,
@@ -101,9 +98,9 @@ data class TV(
     val originalName: String?,
     val overview: String?,
     val popularity: Double?,
-    @field:Json(name="poster_path")
+    @field:Json(name = "poster_path")
     val posterPath: String?,
-    @field:Json(name="vote_average")
+    @field:Json(name = "vote_average")
     val voteAverage: Double?,
     val voteCount: Long?
 )
@@ -114,10 +111,10 @@ data class People(
     val gender: Long?,
     val id: Int,
     val knownFor: List<KnownFor>?,
-    val knownForDepartment: KnownForDepartment?,
+    val knownForDepartment: String?,
     val name: String?,
     val popularity: Double?,
-    @field:Json(name="profile_path")
+    @field:Json(name = "profile_path")
     val profilePath: String? = null
 )
 
@@ -127,7 +124,7 @@ data class KnownFor(
     val firstAirDate: String? = null,
     val genreIDS: List<Long>?,
     val id: Long,
-    val mediaType: MediaType?,
+    val mediaType: String?,
     val name: String? = null,
     val originCountry: List<String>? = null,
     val originalLanguage: String?,
@@ -144,30 +141,30 @@ data class KnownFor(
 )
 
 @JsonClass(generateAdapter = true)
-data class PeopleCreditsResponse (
+data class PeopleCreditsResponse(
     val cast: List<Cast>? = null,
     val crew: List<Cast>? = null,
     val id: Int
 )
 
 @JsonClass(generateAdapter = true)
-data class TVCastResponse (
+data class TVCastResponse(
     val cast: List<TVCast>? = null,
     val crew: List<TVCast>? = null,
     val id: Int
 )
 
 @JsonClass(generateAdapter = true)
-data class TVCast (
-    @field:Json(name="backdrop_path")
+data class TVCast(
+    @field:Json(name = "backdrop_path")
     val backdropPath: String? = null,
     val genreIDS: List<Long>? = null,
-    val originalLanguage: OriginalLanguage? = null,
+    val originalLanguage: String? = null,
     val firstAirDate: String? = null,
     val voteCount: Long? = null,
-    @field:Json(name="vote_average")
+    @field:Json(name = "vote_average")
     val voteAverage: Double? = null,
-    @field:Json(name="poster_path")
+    @field:Json(name = "poster_path")
     val posterPath: String? = null,
     val originalName: String? = null,
     val originCountry: List<String>? = null,
@@ -182,23 +179,23 @@ data class TVCast (
 )
 
 @JsonClass(generateAdapter = true)
-data class Cast (
-    @field:Json(name="poster_path")
+data class Cast(
+    @field:Json(name = "poster_path")
     val posterPath: String? = null,
     val video: Boolean? = null,
     val id: Int,
     val overview: String? = null,
-    @field:Json(name="release_date")
+    @field:Json(name = "release_date")
     val releaseDate: String? = null,
     val title: String? = null,
     val adult: Boolean? = null,
-    @field:Json(name="backdrop_path")
+    @field:Json(name = "backdrop_path")
     val backdropPath: String? = null,
     val voteCount: Long? = null,
     val genreIDS: List<Long>? = null,
-    @field:Json(name="vote_average")
+    @field:Json(name = "vote_average")
     val voteAverage: Double? = null,
-    val originalLanguage: OriginalLanguage? = null,
+    val originalLanguage: String? = null,
     val originalTitle: String? = null,
     val popularity: Double? = null,
     val character: String? = null,
@@ -209,14 +206,14 @@ data class Cast (
 )
 
 @JsonClass(generateAdapter = true)
-data class MovieCreditsResponse (
+data class MovieCreditsResponse(
     val id: Int,
     val cast: List<MovieCast>? = null,
     val crew: List<MovieCast>? = null
 )
 
 @JsonClass(generateAdapter = true)
-data class MovieCast (
+data class MovieCast(
     val adult: Boolean? = null,
     val gender: Long? = null,
     val id: Int,
@@ -224,36 +221,14 @@ data class MovieCast (
     val name: String? = null,
     val originalName: String? = null,
     val popularity: Double? = null,
-    @field:Json(name="profile_path")
+    @field:Json(name = "profile_path")
     val profilePath: String? = null,
     val castID: Long? = null,
     val character: String? = null,
-    @field:Json(name="credit_id")
+    @field:Json(name = "credit_id")
     val creditID: String? = null,
     val order: Long? = null,
     val department: String? = null,
     val job: String? = null
 )
-
-enum class Department {
-    Directing,
-    Production,
-    Writing
-}
-
-enum class OriginalLanguage {
-    En,
-    Pt,
-    Ru
-}
-
-enum class MediaType {
-    Movie,
-    Tv
-}
-
-enum class KnownForDepartment {
-    Acting,
-    Crew
-}
 
