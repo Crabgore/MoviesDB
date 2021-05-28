@@ -6,6 +6,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
+import com.crabgore.moviesDB.common.formatDate
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import com.squareup.picasso.Picasso
@@ -41,13 +42,15 @@ class SearchItem(
                 Picasso.get().load(IMAGES_API_HOST + it).fit().centerCrop().into(image)
             }
             title.text = item.title
-            year.text = item.context.getString(R.string.year, item.year)
-            rating.text = item.rating.toString()
+            item.year?.let {
+                year.text = item.context.getString(R.string.year, formatDate(it))
+            }
+            rating.text = String.format("%.1f", item.rating)
         }
 
         override fun unbindView(item: SearchItem) {
             title.text = null
-            image.setImageResource(R.drawable.ic_no_image)
+            image.setImageResource(R.drawable.ic_no_photo_night)
         }
     }
 }

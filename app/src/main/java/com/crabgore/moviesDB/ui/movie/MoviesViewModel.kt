@@ -69,6 +69,7 @@ class MoviesViewModel @Inject constructor(
             list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
         }
         nowPlayingLD.value = list
+        increaseCounter()
     }
 
     private fun parsePopularResponse(response: MoviesResponse) {
@@ -78,6 +79,7 @@ class MoviesViewModel @Inject constructor(
             list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
         }
         popularLD.value = list
+        increaseCounter()
     }
 
     private fun parseTopRatedResponse(response: MoviesResponse) {
@@ -87,6 +89,7 @@ class MoviesViewModel @Inject constructor(
             list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
         }
         topRatedLD.value = list
+        increaseCounter()
     }
 
     private fun parseUpcomingResponse(response: MoviesResponse) {
@@ -96,5 +99,6 @@ class MoviesViewModel @Inject constructor(
             list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
         }
         upcomingLD.value = list
+        increaseCounter()
     }
 }

@@ -52,11 +52,6 @@ class PeopleFragment : BaseFragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
     private fun initUI() {
         binding.searchEt.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
@@ -82,6 +77,8 @@ class PeopleFragment : BaseFragment() {
                 if (it) showToast(requireContext(), "That's all movies we have")
             }
         })
+
+        observeLoader(viewModel, 1)
     }
 
     private fun getData() {

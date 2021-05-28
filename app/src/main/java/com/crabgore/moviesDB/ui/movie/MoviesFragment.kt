@@ -83,6 +83,8 @@ class MoviesFragment : BaseFragment() {
                 setRV(binding.upcomingMoviesRv, it)
             }
         })
+
+        observeLoader(viewModel, 4)
     }
 
     private fun getData() {

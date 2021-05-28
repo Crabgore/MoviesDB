@@ -39,7 +39,7 @@ class PeopleItem(
 
         override fun unbindView(item: PeopleItem) {
             name.text = null
-            profile.setImageResource(R.drawable.ic_no_image)
+            profile.setImageResource(R.drawable.ic_no_photo_night)
         }
     }
 }

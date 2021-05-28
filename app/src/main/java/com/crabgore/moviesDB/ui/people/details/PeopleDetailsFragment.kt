@@ -88,6 +88,8 @@ class PeopleDetailsFragment : BaseFragment() {
                 else binding.tvCrewLayout.visibility = GONE
             }
         })
+
+        observeLoader(viewModel, 3)
     }
 
     private fun setRV(recyclerView: RecyclerView, list: List<CreditsItem>, isTv: Boolean = false) {

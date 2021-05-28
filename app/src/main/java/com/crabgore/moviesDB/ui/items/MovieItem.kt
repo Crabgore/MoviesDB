@@ -49,7 +49,7 @@ class MovieItem(
 
         override fun unbindView(item: MovieItem) {
             title.text = null
-            poster.setImageResource(R.drawable.ic_no_image)
+            poster.setImageResource(R.drawable.ic_no_photo_night)
         }
     }
 }

@@ -7,16 +7,19 @@ import io.reactivex.disposables.Disposable
 
 abstract class BaseViewModel : ViewModel() {
     private val compositeDisposable by lazy { CompositeDisposable() }
+    val doneLD: MutableLiveData<Int> = MutableLiveData(0)
 
     val failure: MutableLiveData<Throwable> = MutableLiveData()
 
     fun addDisposable(disposable: Disposable) = compositeDisposable.add(disposable)
 
-    protected fun handleFailure(failure: Throwable) {
-        this.failure.value = failure
+    fun increaseCounter() {
+        doneLD.value = doneLD.value?.plus(1)
     }
 
-    override fun onCleared() {
-        compositeDisposable.clear()
+    protected fun handleFailure(fail: Throwable) {
+        failure.value = fail
     }
+
+    override fun onCleared() = compositeDisposable.clear()
 }

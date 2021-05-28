@@ -5,6 +5,7 @@ import androidx.activity.addCallback
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
+import com.crabgore.moviesDB.MainActivity
 import com.crabgore.moviesDB.common.popBackStackAllInstances
 import dagger.android.support.DaggerFragment
 
@@ -19,8 +20,18 @@ open class BaseFragment : DaggerFragment() {
         if (viewState == null) {
             viewState = _binding?.root
             isViewWasNull = true
-        }
+        } else isViewWasNull = false
+
         return viewState
+    }
+
+    fun observeLoader(viewModel: BaseViewModel, counter: Int) {
+        showLoader()
+        viewModel.doneLD.observe(viewLifecycleOwner, { data ->
+            data?.let {
+                if (it == counter) hideLoader()
+            }
+        })
     }
 
     fun navigateWithAction(action: NavDirections) {
@@ -33,14 +44,23 @@ open class BaseFragment : DaggerFragment() {
         findNavController().navigate(resId)
     }
 
+    private fun showLoader() {
+        (activity as MainActivity).showLoader()
+    }
+
+    private fun hideLoader() {
+        (activity as MainActivity).hideLoader()
+    }
+
+//    fun popBack() {
+//        findNavController().popBackStack()
+//    }
+
 //    fun navigateWithAnimation(resId: Int) {
+//        showLoader()
 //        isNavigated = true
 //        findNavController().navigate(resId, null, getNavOptions())
 //    }
-
-    fun popBack() {
-        findNavController().popBackStack()
-    }
 
 //    private fun getNavOptions(): NavOptions {
 //        val builder = NavOptions.Builder()
@@ -50,7 +70,7 @@ open class BaseFragment : DaggerFragment() {
 //            ).setPopExitAnim(R.anim.slide_out_right).build()
 //    }
 
-    open fun backPressed() {}
+//    open fun backPressed() {}
 
     override fun onDestroyView() {
         super.onDestroyView()

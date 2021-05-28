@@ -75,6 +75,8 @@ class TVDetailsFragment : BaseFragment() {
                 else binding.crewLayout.visibility = GONE
             }
         })
+
+        observeLoader(viewModel, 2)
     }
 
     private fun getData() {

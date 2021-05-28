@@ -48,5 +48,6 @@ class PeopleViewModel  @Inject constructor(
         }
         moviesLiveData.value = list
         maxPages = response.totalPages
+        increaseCounter()
     }
 }

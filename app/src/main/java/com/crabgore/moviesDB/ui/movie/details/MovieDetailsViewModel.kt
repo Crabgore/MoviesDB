@@ -50,6 +50,7 @@ class MovieDetailsViewModel @Inject constructor(
     private fun parseMovieDetailsResponse(response: MovieDetailsResponse) {
         Timber.d("Got Movie Details $response")
         movieLD.value = response
+        increaseCounter()
     }
 
     private fun parseMovieCreditsResponse(response: MovieCreditsResponse) {
@@ -66,5 +67,6 @@ class MovieDetailsViewModel @Inject constructor(
 
         castLD.value = castList
         crewLD.value = crewList
+        increaseCounter()
     }
 }

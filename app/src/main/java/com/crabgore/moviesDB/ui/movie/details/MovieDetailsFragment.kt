@@ -76,6 +76,8 @@ class MovieDetailsFragment : BaseFragment() {
                 else crew_layout.visibility = GONE
             }
         })
+
+        observeLoader(viewModel, 2)
     }
 
     private fun getData() {

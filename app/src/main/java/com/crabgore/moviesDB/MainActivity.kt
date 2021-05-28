@@ -2,30 +2,27 @@ package com.crabgore.moviesDB
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.get
 import androidx.navigation.ui.NavigationUI
 import com.crabgore.moviesDB.common.hideKeyboard
+import com.crabgore.moviesDB.databinding.ActivityMainBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
+    private var binding: ActivityMainBinding? = null
     private val navController by lazy { findNavController(R.id.nav_host_fragment) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding?.root
+        setContentView(view)
         initUI()
-    }
-
-    override fun onBackPressed() {
-        hideKeyboard()
-        when (navController.currentDestination?.id) {
-            navController.graph[R.id.moviesFragment].id -> fragmentBackPressed()
-            else -> super.onBackPressed()
-        }
     }
 
     private fun initUI() {
@@ -33,16 +30,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavigation() {
-        NavigationUI.setupWithNavController(btv, navController)
+        NavigationUI.setupWithNavController(binding!!.btv, navController)
         btv.setOnNavigationItemReselectedListener {
             navController.popBackStack(it.itemId, false)
         }
     }
 
-    private fun fragmentBackPressed() {
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        val fragment = navHostFragment.childFragmentManager.fragments[0] as BaseFragment
-        fragment.backPressed()
+    fun showLoader() {
+        binding?.loaderLayout?.visibility = VISIBLE
+    }
+
+    fun hideLoader() {
+        binding?.loaderLayout?.visibility = GONE
     }
 }

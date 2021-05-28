@@ -44,7 +44,7 @@ class CreditsItem(
             }
             title.text = item.title
             job.text = item.character ?: item.job
-            rating.text = item.rating.toString()
+            rating.text = String.format("%.1f", item.rating)
             item.adult?.let {
                 if (it) adult.visibility = View.VISIBLE
             }
@@ -52,7 +52,7 @@ class CreditsItem(
 
         override fun unbindView(item: CreditsItem) {
             title.text = null
-            poster.setImageResource(R.drawable.ic_no_image)
+            poster.setImageResource(R.drawable.ic_no_photo_night)
         }
     }
 }

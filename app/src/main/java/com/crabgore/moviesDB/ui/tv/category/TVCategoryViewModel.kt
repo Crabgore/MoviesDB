@@ -64,6 +64,7 @@ class TVCategoryViewModel  @Inject constructor(
         }
         moviesLiveData.value = list
         maxPages = response.totalPages
+        increaseCounter()
     }
 
     private fun parsePopularResponse(response: TVResponse) {
@@ -74,6 +75,7 @@ class TVCategoryViewModel  @Inject constructor(
         }
         moviesLiveData.value = list
         maxPages = response.totalPages
+        increaseCounter()
     }
 
     private fun parseTopRatedResponse(response: TVResponse) {
@@ -84,5 +86,6 @@ class TVCategoryViewModel  @Inject constructor(
         }
         moviesLiveData.value = list
         maxPages = response.totalPages
+        increaseCounter()
     }
 }

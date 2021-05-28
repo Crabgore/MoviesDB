@@ -81,6 +81,8 @@ class TVFragment : BaseFragment() {
                 setRV(binding.topRatedTvRv, it)
             }
         })
+
+        observeLoader(viewModel, 3)
     }
 
     private fun getData() {

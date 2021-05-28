@@ -66,6 +66,8 @@ class MoviesCategoryFragment : BaseFragment() {
                 if (it) showToast(requireContext(), "That's all movies we have")
             }
         })
+
+        observeLoader(viewModel, 1)
     }
 
     private fun getData() {
