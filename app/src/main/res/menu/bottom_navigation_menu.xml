@@ -14,4 +14,9 @@
         android:id="@+id/peopleFragment"
         android:icon="@drawable/ic_person"
         android:title="persons" />
+
+    <item
+        android:id="@+id/loginFragment"
+        android:icon="@drawable/ic_favorite"
+        android:title="favorite" />
 </menu>

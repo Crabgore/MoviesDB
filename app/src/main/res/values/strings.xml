@@ -22,5 +22,8 @@
     <string name="movie_actor">Movie actor</string>
     <string name="tv_actor">TV actor</string>
     <string name="tv_crew">TV crew</string>
+    <string name="register">&lt;a href=https://www.themoviedb.org/signup>Don\'t have an account yet? Register now.&lt;/a></string>
+    <string name="login">LOGIN</string>
+    <string name="exit">LOGOUT</string>
 
 </resources>

@@ -22,4 +22,10 @@ interface Remote {
     fun getSearchMovieResults(query: String): Single<SearchMovieResponse>
     fun getSearchTVResults(query: String): Single<SearchTVResponse>
     fun getSearchPeopleResults(query: String): Single<SearchPeopleResponse>
+
+    fun getToken(): Single<TokenResponse>
+    fun authWithLogin(request: AuthWithLoginRequest): Single<TokenResponse>
+    fun sessionId(request: RequestToken): Single<SessionResponse>
+    fun getAccountDetails(session: String): Single<AccountResponse>
+    fun logOut(session: LogoutRequest): Single<DeleteSessionResponse>
 }

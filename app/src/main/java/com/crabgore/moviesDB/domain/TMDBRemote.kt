@@ -102,4 +102,26 @@ class TMDBRemote @Inject constructor(
     override fun getSearchPeopleResults(query: String): Single<SearchPeopleResponse> {
         return service.searchPeople(query, API_KEY, language).singleOrError()
     }
+
+
+
+    override fun getToken(): Single<TokenResponse> {
+        return service.requestToken(API_KEY).singleOrError()
+    }
+
+    override fun authWithLogin(request: AuthWithLoginRequest): Single<TokenResponse> {
+        return service.authWithLogin(API_KEY, request).singleOrError()
+    }
+
+    override fun sessionId(request: RequestToken): Single<SessionResponse> {
+        return service.sessionId(API_KEY, request).singleOrError()
+    }
+
+    override fun getAccountDetails(session: String): Single<AccountResponse> {
+        return service.accountDetails(API_KEY, session).singleOrError()
+    }
+
+    override fun logOut(session: LogoutRequest): Single<DeleteSessionResponse> {
+        return service.logOut(API_KEY, session).singleOrError()
+    }
 }

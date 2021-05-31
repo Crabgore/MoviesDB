@@ -1,9 +1,7 @@
 package com.crabgore.moviesDB.data
 
 import io.reactivex.Observable
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiService {
 
@@ -134,4 +132,33 @@ interface ApiService {
         @Query("api_key") apiKey: String,
         @Query("language") language: String?
     ): Observable<SearchPeopleResponse>
+
+    @GET("authentication/token/new")
+    fun requestToken(
+        @Query("api_key") apiKey: String
+    ): Observable<TokenResponse>
+
+    @POST("authentication/token/validate_with_login")
+    fun authWithLogin(
+        @Query("api_key") apiKey: String,
+        @Body request: AuthWithLoginRequest
+    ): Observable<TokenResponse>
+
+    @POST("authentication/session/new")
+    fun sessionId(
+        @Query("api_key") apiKey: String,
+        @Body request: RequestToken
+    ): Observable<SessionResponse>
+
+    @GET("account")
+    fun accountDetails(
+        @Query("api_key") apiKey: String,
+        @Query("session_id") sessionId: String
+    ): Observable<AccountResponse>
+
+    @HTTP(method = "DELETE", path = "authentication/session", hasBody = true)
+    fun logOut(
+        @Query("api_key") apiKey: String,
+        @Body request: LogoutRequest
+    ): Observable<DeleteSessionResponse>
 }

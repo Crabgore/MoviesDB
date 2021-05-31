@@ -11,10 +11,10 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    modules = [AndroidSupportInjectionModule::class, RemoteModule::class, MoviesFragmentModule::class,
-        MovieDetailsModule::class, MoviesCategoryModule::class, TVFragmentModule::class,
-        TVDetailsModule::class, TVCategoryModule::class, PeopleFragmentModule::class,
-        PeopleDetailsModule::class, SearchModule::class]
+    modules = [AndroidSupportInjectionModule::class, RemoteModule::class, StorageModule::class,
+        MoviesFragmentModule::class, MovieDetailsModule::class, MoviesCategoryModule::class,
+        TVFragmentModule::class, TVDetailsModule::class, TVCategoryModule::class,
+        PeopleFragmentModule::class, PeopleDetailsModule::class, SearchModule::class, LoginModule::class]
 )
 
 interface AppComponent : AndroidInjector<App> {

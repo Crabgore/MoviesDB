@@ -42,7 +42,11 @@
         <item name="tint">@color/night_dark</item>
     </style>
 
-    <style name="input_layout_box" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="button">
+        <item name="cornerRadius">15dp</item>
+    </style>
+
+    <style name="input_layout_box_search" parent="input_layout_box">
         <item name="boxCornerRadiusTopStart">15dp</item>
         <item name="boxCornerRadiusTopEnd">15dp</item>
         <item name="boxCornerRadiusBottomStart">15dp</item>
@@ -50,6 +54,13 @@
         <item name="endIconDrawable">@drawable/ic_search</item>
         <item name="endIconMode">custom</item>
         <item name="endIconTint">@color/night_dark</item>
+    </style>
+
+    <style name="input_layout_box" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">15dp</item>
+        <item name="boxCornerRadiusTopEnd">15dp</item>
+        <item name="boxCornerRadiusBottomStart">15dp</item>
+        <item name="boxCornerRadiusBottomEnd">15dp</item>
     </style>
 
     <!-- Тексты. -->
