@@ -89,8 +89,7 @@ dependencies {
     def fast_adapter_version = "5.4.1"
     implementation "com.mikepenz:fastadapter:$fast_adapter_version"
 
-    //Palette
-    implementation 'androidx.palette:palette-ktx:1.0.0'
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.1.0'
 
     /**
      * Navigation component

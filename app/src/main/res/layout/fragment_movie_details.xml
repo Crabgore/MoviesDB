@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".ui.movie.details.MovieDetailsFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/full_image_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="25dp"
+        android:background="#CC000000"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.ortiz.touchview.TouchImageView
+            android:id="@+id/full_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">

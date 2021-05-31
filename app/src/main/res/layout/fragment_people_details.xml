@@ -6,6 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".ui.people.details.PeopleDetailsFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/full_image_lay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="25dp"
+        android:background="#CC000000"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <com.ortiz.touchview.TouchImageView
+            android:id="@+id/full_picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -65,29 +82,29 @@
                             android:maxLines="3" />
 
                         <TextView
-                            style="@style/Additions"
                             android:id="@+id/gender"
+                            style="@style/Additions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp" />
 
                         <TextView
-                            style="@style/Additions"
                             android:id="@+id/country"
+                            style="@style/Additions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp" />
 
                         <TextView
-                            style="@style/Additions"
                             android:id="@+id/birthday"
+                            style="@style/Additions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp" />
 
                         <TextView
-                            style="@style/Additions"
                             android:id="@+id/deathday"
+                            style="@style/Additions"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp" />
@@ -104,8 +121,8 @@
                 app:layout_constraintTop_toBottomOf="@id/profile_card">
 
                 <TextView
-                    style="@style/Overview"
                     android:id="@+id/biography"
+                    style="@style/Overview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp" />

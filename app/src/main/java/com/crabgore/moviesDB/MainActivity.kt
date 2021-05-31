@@ -25,6 +25,16 @@ class MainActivity : AppCompatActivity() {
         initUI()
     }
 
+    override fun onBackPressed() {
+        hideKeyboard()
+        when (navController.currentDestination?.id) {
+            navController.graph[R.id.peopleDetailsFragment].id,
+            navController.graph[R.id.movieDetailsFragment].id,
+            navController.graph[R.id.TVDetailsFragment].id -> fragmentBackPressed()
+            else -> super.onBackPressed()
+        }
+    }
+
     private fun initUI() {
         setUpNavigation()
     }
@@ -42,5 +52,12 @@ class MainActivity : AppCompatActivity() {
 
     fun hideLoader() {
         binding?.loaderLayout?.visibility = GONE
+    }
+
+    private fun fragmentBackPressed() {
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val fragment = navHostFragment.childFragmentManager.fragments[0] as BaseFragment
+        fragment.backPressed()
     }
 }

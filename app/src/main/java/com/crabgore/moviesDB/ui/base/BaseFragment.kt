@@ -52,9 +52,11 @@ open class BaseFragment : DaggerFragment() {
         (activity as MainActivity).hideLoader()
     }
 
-//    fun popBack() {
-//        findNavController().popBackStack()
-//    }
+    fun popBack() {
+        findNavController().popBackStack()
+    }
+
+    open fun backPressed() {}
 
 //    fun navigateWithAnimation(resId: Int) {
 //        showLoader()
@@ -69,8 +71,6 @@ open class BaseFragment : DaggerFragment() {
 //                R.anim.slide_in_left
 //            ).setPopExitAnim(R.anim.slide_out_right).build()
 //    }
-
-//    open fun backPressed() {}
 
     override fun onDestroyView() {
         super.onDestroyView()

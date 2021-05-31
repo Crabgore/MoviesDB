@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
+import com.crabgore.moviesDB.Const.Addresses.Companion.ORIGINAL_IMAGES_API_HOST
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
@@ -50,8 +52,14 @@ class PeopleDetailsFragment : BaseFragment() {
         }
     }
 
+    override fun backPressed() {
+        if (binding.fullImageLay.visibility == VISIBLE) binding.fullImageLay.visibility = GONE
+        else popBack()
+    }
+
     private fun initUI() {
         picasso = Picasso.get()
+        binding.profile.setOnClickListener { showFullImage() }
     }
 
     private fun startObservers() {
@@ -142,5 +150,13 @@ class PeopleDetailsFragment : BaseFragment() {
             binding.deathday.text = it
         }
         binding.biography.text = people.biography
+    }
+
+    private fun showFullImage() {
+        val photo = viewModel.peopleLD.value?.profilePath
+        photo?.let {
+            picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
+            binding.fullImageLay.visibility = VISIBLE
+        }
     }
 }

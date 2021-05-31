@@ -51,8 +51,14 @@ class TVDetailsFragment : BaseFragment() {
         }
     }
 
+    override fun backPressed() {
+        if (binding.fullImageLay.visibility == View.VISIBLE) binding.fullImageLay.visibility = GONE
+        else popBack()
+    }
+
     private fun initUI() {
         picasso = Picasso.get()
+        binding.poster.setOnClickListener { showFullImage() }
     }
 
     private fun startObservers() {
@@ -146,6 +152,14 @@ class TVDetailsFragment : BaseFragment() {
                 TVDetailsFragmentDirections.actionTVDetailsFragmentToPeopleDetailsFragment(item.id)
             navigateWithAction(directions)
             false
+        }
+    }
+
+    private fun showFullImage() {
+        val photo = viewModel.TVLD.value?.posterPath
+        photo?.let {
+            picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
+            binding.fullImageLay.visibility = View.VISIBLE
         }
     }
 }

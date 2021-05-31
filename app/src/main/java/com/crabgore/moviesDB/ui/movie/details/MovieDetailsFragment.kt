@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -52,8 +53,14 @@ class MovieDetailsFragment : BaseFragment() {
         }
     }
 
+    override fun backPressed() {
+        if (binding.fullImageLay.visibility == VISIBLE) binding.fullImageLay.visibility = GONE
+        else popBack()
+    }
+
     private fun initUI() {
         picasso = Picasso.get()
+        binding.poster.setOnClickListener { showFullImage() }
     }
 
     private fun startObservers() {
@@ -140,6 +147,14 @@ class MovieDetailsFragment : BaseFragment() {
                 )
             navigateWithAction(directions)
             false
+        }
+    }
+
+    private fun showFullImage() {
+        val photo = viewModel.movieLD.value?.posterPath
+        photo?.let {
+            picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
+            binding.fullImageLay.visibility = VISIBLE
         }
     }
 }
