@@ -141,6 +141,7 @@ class UserViewModel @Inject constructor(
         Timber.d("Got account $response")
         storage.putInt(ACCOUNT_ID, response.id)
         accountLD.value = response
+        increaseCounter()
     }
 
     private fun parseFavoriteMoviesResponse(response: MoviesResponse) {
@@ -150,6 +151,7 @@ class UserViewModel @Inject constructor(
             list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
         }
         favMoviesLD.value = list
+        increaseCounter()
     }
 
     private fun parseFavoriteTVResponse(response: TVResponse) {
@@ -159,5 +161,6 @@ class UserViewModel @Inject constructor(
             list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
         }
         favTVLD.value = list
+        increaseCounter()
     }
 }

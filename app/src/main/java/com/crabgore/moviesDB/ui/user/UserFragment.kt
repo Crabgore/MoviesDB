@@ -114,6 +114,8 @@ class UserFragment : BaseFragment() {
                 setRV(binding.favTvRv, it)
             }
         })
+
+        observeLoader(viewModel, 3)
     }
 
     private fun getData() {
