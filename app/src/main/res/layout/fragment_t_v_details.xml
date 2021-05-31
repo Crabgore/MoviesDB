@@ -206,6 +206,15 @@
                     android:layout_margin="5dp" />
             </androidx.cardview.widget.CardView>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/mark_as_favorite_btn"
+                style="@style/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="@string/mark_as_favorite"
+                app:layout_constraintTop_toBottomOf="@id/overview_card" />
+
             <LinearLayout
                 android:id="@+id/actor_layout"
                 android:layout_width="match_parent"
@@ -213,7 +222,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/overview_card">
+                app:layout_constraintTop_toBottomOf="@id/mark_as_favorite_btn">
 
                 <TextView
                     style="@style/Main_Titles"

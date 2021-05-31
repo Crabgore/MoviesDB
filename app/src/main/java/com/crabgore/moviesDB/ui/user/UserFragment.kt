@@ -1,4 +1,4 @@
-package com.crabgore.moviesDB.ui
+package com.crabgore.moviesDB.ui.user
 
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
@@ -10,30 +10,37 @@ import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.crabgore.moviesDB.Const
 import com.crabgore.moviesDB.Const.Addresses.Companion.GRAVATAR_IMAGES_HOST
 import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.CircleTransform
+import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
 import com.crabgore.moviesDB.data.AccountResponse
-import com.crabgore.moviesDB.databinding.FragmentLoginBinding
+import com.crabgore.moviesDB.databinding.FragmentUserBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
+import com.crabgore.moviesDB.ui.items.MovieItem
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
-class LoginFragment : BaseFragment() {
+class UserFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel by viewModels<LoginViewModel> { viewModelFactory }
+    private val viewModel by viewModels<UserViewModel> { viewModelFactory }
 
-    private val binding get() = _binding!! as FragmentLoginBinding
+    private val binding get() = _binding!! as FragmentUserBinding
     private lateinit var picasso: Picasso
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentUserBinding.inflate(inflater, container, false)
         return checkViewState()
     }
 
@@ -95,6 +102,18 @@ class LoginFragment : BaseFragment() {
                 getData()
             }
         })
+
+        viewModel.favMoviesLD.observe(viewLifecycleOwner, { data ->
+            data?.let {
+                setRV(binding.favMovieRv, it)
+            }
+        })
+
+        viewModel.favTVLD.observe(viewLifecycleOwner, { data ->
+            data?.let {
+                setRV(binding.favTvRv, it)
+            }
+        })
     }
 
     private fun getData() {
@@ -110,5 +129,32 @@ class LoginFragment : BaseFragment() {
                 .transform(CircleTransform()).into(binding.avatar)
         }
         binding.nickName.text = response.username
+    }
+
+    private fun setRV(recyclerView: RecyclerView, moviesList: List<MovieItem>) {
+        val itemAdapter = ItemAdapter<MovieItem>()
+        val fastAdapter = FastAdapter.with(itemAdapter)
+        itemAdapter.add(moviesList)
+
+        recyclerView.apply {
+            while (itemDecorationCount > 0) {
+                removeItemDecorationAt(0)
+            }
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext()).apply {
+                orientation = LinearLayoutManager.HORIZONTAL
+            }
+            adapter = fastAdapter
+            addDecoration(this, Const.Constants.DECORATION)
+        }
+
+        fastAdapter.onClickListener = { view, adapter, item, position ->
+            val directions =
+                if (recyclerView == binding.favMovieRv)
+                    UserFragmentDirections.actionLoginFragmentToMovieDetailsFragment(item.id)
+                else UserFragmentDirections.actionLoginFragmentToTVDetailsFragment(item.id)
+            navigateWithAction(directions)
+            false
+        }
     }
 }

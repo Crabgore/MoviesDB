@@ -11,4 +11,5 @@
 
     <color name="night_dark">#263238</color>
     <color name="night_light">#29404C</color>
+    <color name="disabled">@android:color/darker_gray</color>
 </resources>

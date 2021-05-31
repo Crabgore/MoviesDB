@@ -6,6 +6,7 @@ import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -61,12 +62,19 @@ class MovieDetailsFragment : BaseFragment() {
     private fun initUI() {
         picasso = Picasso.get()
         binding.poster.setOnClickListener { showFullImage() }
+        binding.markAsFavoriteBtn.setOnClickListener { viewModel.markAsFavorite(args.movieId) }
     }
 
     private fun startObservers() {
         viewModel.movieLD.observe(viewLifecycleOwner, { data ->
             data?.let {
                 setInfo(it)
+            }
+        })
+
+        viewModel.isInFavoritesLD.observe(viewLifecycleOwner, { data ->
+            data?.let {
+                changeButtonStatus(it)
             }
         })
 
@@ -118,7 +126,8 @@ class MovieDetailsFragment : BaseFragment() {
         movie.releaseDate?.let {
             binding.year.text = requireContext().getString(R.string.year, formatDate(it))
         }
-        binding.duration.text = requireContext().getString(R.string.duration, movie.runtime.toString())
+        binding.duration.text =
+            requireContext().getString(R.string.duration, movie.runtime.toString())
         binding.rating.text = movie.voteAverage.toString()
         binding.description.text = movie.overview
     }
@@ -155,6 +164,19 @@ class MovieDetailsFragment : BaseFragment() {
         photo?.let {
             picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
             binding.fullImageLay.visibility = VISIBLE
+        }
+    }
+
+    private fun changeButtonStatus(boolean: Boolean) {
+        if (boolean) {
+            binding.markAsFavoriteBtn.backgroundTintList =
+                ContextCompat.getColorStateList(requireContext(), R.color.disabled)
+            binding.markAsFavoriteBtn.text =
+                requireContext().getString(R.string.remove_from_favorites)
+        } else {
+            binding.markAsFavoriteBtn.backgroundTintList =
+                ContextCompat.getColorStateList(requireContext(), R.color.night_dark)
+            binding.markAsFavoriteBtn.text = requireContext().getString(R.string.mark_as_favorite)
         }
     }
 }

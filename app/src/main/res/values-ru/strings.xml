@@ -25,5 +25,9 @@
     <string name="register">&lt;a href=https://www.themoviedb.org/signup>Ещё нет аккаунта? Зарегистрироваться.&lt;/a></string>
     <string name="login">Войти</string>
     <string name="exit">Выйти</string>
+    <string name="mark_as_favorite">Добавить в избранное</string>
+    <string name="remove_from_favorites">Удалить из избранного</string>
+    <string name="favorite_movies">Избранные фильмы</string>
+    <string name="favorite_tvs">Избранные сериалы</string>
 
 </resources>

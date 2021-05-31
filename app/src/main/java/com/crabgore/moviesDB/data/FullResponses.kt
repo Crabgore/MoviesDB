@@ -180,7 +180,7 @@ data class BelongsToCollection (
 @JsonClass(generateAdapter = true)
 data class AccountResponse (
     val avatar: Avatar? = null,
-    val id: Long? = null,
+    val id: Int,
     val iso639_1: String? = null,
     val iso3166_1: String? = null,
     val name: String? = null,

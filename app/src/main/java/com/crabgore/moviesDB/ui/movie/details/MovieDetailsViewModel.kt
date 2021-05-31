@@ -1,14 +1,15 @@
 package com.crabgore.moviesDB.ui.movie.details
 
 import android.annotation.SuppressLint
-import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.crabgore.moviesDB.Const.MediaTypes.Companion.MOVIE
+import com.crabgore.moviesDB.Const.MyPreferences.Companion.ACCOUNT_ID
+import com.crabgore.moviesDB.Const.MyPreferences.Companion.SESSION_ID
 import com.crabgore.moviesDB.common.isContains
 import com.crabgore.moviesDB.common.parseError
-import com.crabgore.moviesDB.data.MovieCreditsResponse
-import com.crabgore.moviesDB.data.PeopleCreditsResponse
-import com.crabgore.moviesDB.data.MovieDetailsResponse
-import com.crabgore.moviesDB.domain.Remote
+import com.crabgore.moviesDB.data.*
+import com.crabgore.moviesDB.domain.remote.Remote
+import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,11 +19,13 @@ import javax.inject.Inject
 
 @SuppressLint("StaticFieldLeak")
 class MovieDetailsViewModel @Inject constructor(
-    private val remote: Remote
+    private val remote: Remote,
+    private val storage: Storage
 ) : BaseViewModel() {
     val movieLD: MutableLiveData<MovieDetailsResponse> = MutableLiveData()
     val castLD: MutableLiveData<List<CreditsItem>> = MutableLiveData()
     val crewLD: MutableLiveData<List<CreditsItem>> = MutableLiveData()
+    val isInFavoritesLD: MutableLiveData<Boolean> = MutableLiveData()
 
     fun getData(id: Int) {
         Timber.d("Getting Movie Details $id")
@@ -32,6 +35,13 @@ class MovieDetailsViewModel @Inject constructor(
             .doOnError(::onError)
             .subscribe(::parseMovieDetailsResponse, ::handleFailure)
 
+        Timber.d("Getting Movie Account State $id")
+        val accountStateDisposable = remote.getMovieAccountState(id, storage.getString(SESSION_ID)!!)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError(::onError)
+            .subscribe(::parseAccountState, ::handleFailure)
+
         Timber.d("Getting Movie Credits")
         val creditsDisposable = remote.getMovieCredits(id)
             .subscribeOn(Schedulers.io())
@@ -40,6 +50,7 @@ class MovieDetailsViewModel @Inject constructor(
             .subscribe(::parseMovieCreditsResponse, ::handleFailure)
 
         addDisposable(detailsDisposable)
+        addDisposable(accountStateDisposable)
         addDisposable(creditsDisposable)
     }
 
@@ -51,6 +62,11 @@ class MovieDetailsViewModel @Inject constructor(
         Timber.d("Got Movie Details $response")
         movieLD.value = response
         increaseCounter()
+    }
+
+    private fun parseAccountState(response: AccountStateResponse) {
+        Timber.d("Got Movie AccountState $response")
+        isInFavoritesLD.value = response.favorite
     }
 
     private fun parseMovieCreditsResponse(response: MovieCreditsResponse) {
@@ -68,5 +84,24 @@ class MovieDetailsViewModel @Inject constructor(
         castLD.value = castList
         crewLD.value = crewList
         increaseCounter()
+    }
+
+    fun markAsFavorite(id: Int) {
+        val request = MarkAsFavoriteRequest(MOVIE, id, !isInFavoritesLD.value!!)
+
+        val disposable = remote.markAsFavorite(storage.getInt(ACCOUNT_ID), storage.getString(SESSION_ID)!!, request)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnError(::onError)
+            .subscribe(::parseMarkAsFavoriteResponse, ::handleFailure)
+
+        addDisposable(disposable)
+    }
+
+    private fun parseMarkAsFavoriteResponse(response: MarkAsFavoriteResponse) {
+        Timber.d("Got parseMarkAsFavoriteResponse $response")
+        response.success?.let {
+            if (it) isInFavoritesLD.value = !isInFavoritesLD.value!!
+        }
     }
 }

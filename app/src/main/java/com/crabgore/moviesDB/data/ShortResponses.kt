@@ -259,3 +259,25 @@ data class DeleteSessionResponse (
     val success: Boolean? = null
 )
 
+@JsonClass(generateAdapter = true)
+data class MarkAsFavoriteResponse (
+    val success: Boolean? = null,
+    @field:Json(name = "status_code")
+    val statusCode: Int? = null,
+    @field:Json(name = "status_message")
+    val statusMessage: String? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class AccountStateResponse (
+    val id: Long? = null,
+    val favorite: Boolean? = null,
+    val rated: Boolean? = null,
+    val watchlist: Boolean? = null
+)
+
+@JsonClass(generateAdapter = true)
+data class Rated (
+    val value: Long? = null
+)
+

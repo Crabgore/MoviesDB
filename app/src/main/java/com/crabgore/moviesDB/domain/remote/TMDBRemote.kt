@@ -1,4 +1,4 @@
-package com.crabgore.moviesDB.domain
+package com.crabgore.moviesDB.domain.remote
 
 import android.content.Context
 import android.os.Build
@@ -123,5 +123,38 @@ class TMDBRemote @Inject constructor(
 
     override fun logOut(session: LogoutRequest): Single<DeleteSessionResponse> {
         return service.logOut(API_KEY, session).singleOrError()
+    }
+
+
+
+    override fun getFavoriteMovies(
+        accountId: Int,
+        sessionId: String,
+        page: Int?
+    ): Single<MoviesResponse> {
+        return service.favoriteMovies(accountId, sessionId, API_KEY, language, page).singleOrError()
+    }
+
+    override fun getFavoriteTVs(accountId: Int, sessionId: String, page: Int?): Single<TVResponse> {
+        return service.favoriteTVs(accountId, sessionId, API_KEY, language, page).singleOrError()
+    }
+
+    override fun markAsFavorite(
+        accountId: Int,
+        sessionId: String,
+        request: MarkAsFavoriteRequest
+    ): Single<MarkAsFavoriteResponse> {
+        return service.markAsFavorite(accountId, sessionId, API_KEY, request).singleOrError()
+    }
+
+    override fun getMovieAccountState(
+        movieId: Int,
+        sessionId: String
+    ): Single<AccountStateResponse> {
+        return service.movieAccountState(movieId, API_KEY, sessionId).singleOrError()
+    }
+
+    override fun getTVAccountState(tvId: Int, sessionId: String): Single<AccountStateResponse> {
+        return service.tvAccountState(tvId, API_KEY, sessionId).singleOrError()
     }
 }

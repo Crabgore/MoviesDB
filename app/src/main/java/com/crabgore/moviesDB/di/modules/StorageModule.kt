@@ -1,7 +1,7 @@
 package com.crabgore.moviesDB.di.modules
 
-import com.crabgore.moviesDB.domain.SharedPreferencesStorage
-import com.crabgore.moviesDB.domain.Storage
+import com.crabgore.moviesDB.domain.storage.SharedPreferencesStorage
+import com.crabgore.moviesDB.domain.storage.Storage
 import dagger.Binds
 import dagger.Module
 

@@ -1,11 +1,10 @@
 package com.crabgore.moviesDB.ui.people
 
 import android.annotation.SuppressLint
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.crabgore.moviesDB.common.parseError
 import com.crabgore.moviesDB.data.PeopleResponse
-import com.crabgore.moviesDB.domain.Remote
+import com.crabgore.moviesDB.domain.remote.Remote
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.PeopleItem
 import io.reactivex.android.schedulers.AndroidSchedulers

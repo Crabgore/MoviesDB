@@ -25,9 +25,17 @@ object Const {
         }
     }
 
+    class MediaTypes {
+        companion object {
+            const val MOVIE = "movie"
+            const val TV = "tv"
+        }
+    }
+
     class MyPreferences {
         companion object {
             const val SESSION_ID = "session_id"
+            const val ACCOUNT_ID = "account_id"
             const val SEARCH_MOVIE = "search_movie"
             const val SEARCH_TV = "search_tv"
             const val SEARCH_PEOPLE = "search_people"

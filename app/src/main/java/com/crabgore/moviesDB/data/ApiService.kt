@@ -161,4 +161,45 @@ interface ApiService {
         @Query("api_key") apiKey: String,
         @Body request: LogoutRequest
     ): Observable<DeleteSessionResponse>
+
+    @GET("account/{account_id}/favorite/movies")
+    fun favoriteMovies(
+        @Path("account_id") accountId: Int,
+        @Query("session_id") sessionId: String,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String?,
+        @Query("page") page: Int?
+    ): Observable<MoviesResponse>
+
+    @GET("account/{account_id}/favorite/tv")
+    fun favoriteTVs(
+        @Path("account_id") accountId: Int,
+        @Query("session_id") sessionId: String,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String?,
+        @Query("page") page: Int?
+    ): Observable<TVResponse>
+
+
+    @POST("account/{account_id}/favorite")
+    fun markAsFavorite(
+        @Path("account_id") accountId: Int,
+        @Query("session_id") sessionId: String,
+        @Query("api_key") apiKey: String,
+        @Body request: MarkAsFavoriteRequest
+    ): Observable<MarkAsFavoriteResponse>
+
+    @GET("movie/{movie_id}/account_states")
+    fun movieAccountState(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("session_id") sessionId: String
+    ): Observable<AccountStateResponse>
+
+    @GET("tv/{tv_id}/account_states")
+    fun tvAccountState(
+        @Path("tv_id") tvId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("session_id") sessionId: String
+    ): Observable<AccountStateResponse>
 }

@@ -2,7 +2,6 @@ package com.crabgore.moviesDB.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_MOVIE
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_TV
@@ -10,7 +9,7 @@ import com.crabgore.moviesDB.common.parseError
 import com.crabgore.moviesDB.data.SearchMovieResponse
 import com.crabgore.moviesDB.data.SearchPeopleResponse
 import com.crabgore.moviesDB.data.SearchTVResponse
-import com.crabgore.moviesDB.domain.Remote
+import com.crabgore.moviesDB.domain.remote.Remote
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.SearchItem
 import io.reactivex.android.schedulers.AndroidSchedulers

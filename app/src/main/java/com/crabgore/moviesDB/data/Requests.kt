@@ -23,3 +23,11 @@ data class RequestToken(
 data class LogoutRequest(
     var session_id: String
 ) : Parcelable
+
+@JsonClass(generateAdapter = true)
+@Parcelize
+data class MarkAsFavoriteRequest(
+    var media_type: String,
+    var media_id: Int,
+    var favorite: Boolean
+) : Parcelable

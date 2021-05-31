@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
@@ -59,12 +60,19 @@ class TVDetailsFragment : BaseFragment() {
     private fun initUI() {
         picasso = Picasso.get()
         binding.poster.setOnClickListener { showFullImage() }
+        binding.markAsFavoriteBtn.setOnClickListener { viewModel.markAsFavorite(args.tvId) }
     }
 
     private fun startObservers() {
         viewModel.TVLD.observe(viewLifecycleOwner, { data ->
             data?.let {
                 setInfo(it)
+            }
+        })
+
+        viewModel.isInFavoritesLD.observe(viewLifecycleOwner, { data ->
+            data?.let {
+                changeButtonStatus(it)
             }
         })
 
@@ -160,6 +168,16 @@ class TVDetailsFragment : BaseFragment() {
         photo?.let {
             picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
             binding.fullImageLay.visibility = View.VISIBLE
+        }
+    }
+
+    private fun changeButtonStatus(boolean: Boolean) {
+        if (boolean) {
+            binding.markAsFavoriteBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.disabled)
+            binding.markAsFavoriteBtn.text = requireContext().getString(R.string.remove_from_favorites)
+        } else {
+            binding.markAsFavoriteBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.night_dark)
+            binding.markAsFavoriteBtn.text = requireContext().getString(R.string.mark_as_favorite)
         }
     }
 }

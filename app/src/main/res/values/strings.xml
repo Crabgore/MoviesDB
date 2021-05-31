@@ -25,5 +25,9 @@
     <string name="register">&lt;a href=https://www.themoviedb.org/signup>Don\'t have an account yet? Register now.&lt;/a></string>
     <string name="login">LOGIN</string>
     <string name="exit">LOGOUT</string>
+    <string name="mark_as_favorite">Mark as favorite</string>
+    <string name="remove_from_favorites">Remove from favorites</string>
+    <string name="favorite_movies">Favorite movies</string>
+    <string name="favorite_tvs">Favorite TVs</string>
 
 </resources>

@@ -128,7 +128,14 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.crabgore.moviesDB.ui.LoginFragment"
+        android:name="com.crabgore.moviesDB.ui.user.UserFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_user" >
+        <action
+            android:id="@+id/action_loginFragment_to_movieDetailsFragment"
+            app:destination="@id/movieDetailsFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_TVDetailsFragment"
+            app:destination="@id/TVDetailsFragment" />
+    </fragment>
 </navigation>

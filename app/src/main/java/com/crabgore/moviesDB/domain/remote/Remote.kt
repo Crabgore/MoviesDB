@@ -1,4 +1,4 @@
-package com.crabgore.moviesDB.domain
+package com.crabgore.moviesDB.domain.remote
 
 import com.crabgore.moviesDB.data.*
 import io.reactivex.Single
@@ -28,4 +28,10 @@ interface Remote {
     fun sessionId(request: RequestToken): Single<SessionResponse>
     fun getAccountDetails(session: String): Single<AccountResponse>
     fun logOut(session: LogoutRequest): Single<DeleteSessionResponse>
+
+    fun getFavoriteMovies(accountId: Int, sessionId: String, page: Int?): Single<MoviesResponse>
+    fun getFavoriteTVs(accountId: Int, sessionId: String, page: Int?): Single<TVResponse>
+    fun markAsFavorite(accountId: Int, sessionId: String, request: MarkAsFavoriteRequest): Single<MarkAsFavoriteResponse>
+    fun getMovieAccountState(movieId: Int, sessionId: String): Single<AccountStateResponse>
+    fun getTVAccountState(tvId: Int, sessionId: String): Single<AccountStateResponse>
 }
