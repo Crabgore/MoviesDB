@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_PEOPLE
+import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
 import com.crabgore.moviesDB.databinding.FragmentPeopleBinding
@@ -36,11 +37,7 @@ class PeopleFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentPeopleBinding.inflate(inflater, container, false)
-        if (viewState == null) {
-            viewState = binding.root
-            isViewWasNull = true
-        }
-        return viewState
+        return checkViewState()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +71,10 @@ class PeopleFragment : BaseFragment() {
 
         viewModel.isLastPageLiveData.observe(viewLifecycleOwner, { data ->
             data?.let {
-                if (it) showToast(requireContext(), "That's all movies we have")
+                if (it) {
+                    showToast(requireContext(), requireContext().getString(R.string.full_meople))
+                    viewModel.isLastPageLiveData.value = null
+                }
             }
         })
 

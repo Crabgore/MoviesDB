@@ -56,6 +56,8 @@ class UserFragment : BaseFragment() {
         picasso = Picasso.get()
         binding.loginBtn.setOnClickListener { login() }
         binding.logoutBtn.setOnClickListener { viewModel.logout() }
+        binding.favMovieTv.setOnClickListener { toMovieCategory() }
+        binding.favTvTv.setOnClickListener { toTvCategory() }
         val register =
             HtmlCompat.fromHtml(getString(R.string.register), HtmlCompat.FROM_HTML_MODE_LEGACY)
         binding.register.apply {
@@ -158,5 +160,17 @@ class UserFragment : BaseFragment() {
             navigateWithAction(directions)
             false
         }
+    }
+
+    private fun toMovieCategory() {
+        val directions =
+            UserFragmentDirections.actionLoginFragmentToMoviesCategoryFragment(binding.favMovieTv.text.toString())
+        navigateWithAction(directions)
+    }
+
+    private fun toTvCategory() {
+        val directions =
+            UserFragmentDirections.actionLoginFragmentToTVCategoryFragment(binding.favTvTv.text.toString())
+        navigateWithAction(directions)
     }
 }

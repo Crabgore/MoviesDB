@@ -48,11 +48,11 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun onError(throwable: Throwable?) {
-        Timber.d("Error getting Now Playing ${parseError(throwable)}")
+        Timber.d("Error getting search result ${parseError(throwable)}")
     }
 
     private fun parseSearchMovieResponse(response: SearchMovieResponse) {
-        Timber.d("Got Search Results $response")
+        Timber.d("Got Search Movie Results $response")
         val list: MutableList<SearchItem> = mutableListOf()
         response.results?.forEach {
             list.add(SearchItem(context, it.id, it.posterPath, it.title, it.releaseDate, it.voteAverage))
@@ -61,7 +61,7 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun parseSearchTVResponse(response: SearchTVResponse) {
-        Timber.d("Got Search Results $response")
+        Timber.d("Got Search TV Results $response")
         val list: MutableList<SearchItem> = mutableListOf()
         response.results?.forEach {
             list.add(SearchItem(context, it.id, it.posterPath, it.name, it.firstAirDate, it.voteAverage))
@@ -70,7 +70,7 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun parseSearchPeopleResponse(response: SearchPeopleResponse) {
-        Timber.d("Got Search Results $response")
+        Timber.d("Got Search People Results $response")
         val list: MutableList<SearchItem> = mutableListOf()
         response.results?.forEach {
             list.add(SearchItem(context, it.id, it.profilePath, it.name, null, it.popularity))

@@ -27,6 +27,10 @@ class TVDetailsViewModel @Inject constructor(
     val crewLD: MutableLiveData<List<CreditsItem>> = MutableLiveData()
     val isInFavoritesLD: MutableLiveData<Boolean> = MutableLiveData()
 
+    fun checkSession(): String? {
+        return storage.getString(SESSION_ID)
+    }
+
     fun getData(id: Int) {
         Timber.d("Getting TV Details $id")
         val detailsDisposable = remote.getTvDetails(id)
@@ -35,13 +39,16 @@ class TVDetailsViewModel @Inject constructor(
             .doOnError(::onError)
             .subscribe(::parseMovieDetailsResponse, ::handleFailure)
 
-        Timber.d("Getting TV Account State $id")
-        val accountStateDisposable =
-            remote.getTVAccountState(id, storage.getString(SESSION_ID)!!)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(::onError)
-                .subscribe(::parseAccountState, ::handleFailure)
+        storage.getString(SESSION_ID)?.let {
+            Timber.d("Getting TV Account State $id")
+            val accountStateDisposable =
+                remote.getTVAccountState(id, it)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnError(::onError)
+                    .subscribe(::parseAccountState, ::handleFailure)
+            addDisposable(accountStateDisposable)
+        }
 
         val creditsDisposable = remote.getTVCredits(id)
             .subscribeOn(Schedulers.io())
@@ -50,7 +57,6 @@ class TVDetailsViewModel @Inject constructor(
             .subscribe(::parseMovieCreditsResponse, ::handleFailure)
 
         addDisposable(detailsDisposable)
-        addDisposable(accountStateDisposable)
         addDisposable(creditsDisposable)
     }
 

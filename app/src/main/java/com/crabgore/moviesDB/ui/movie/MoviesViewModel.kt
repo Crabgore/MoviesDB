@@ -58,7 +58,7 @@ class MoviesViewModel @Inject constructor(
     }
 
     private fun onError(throwable: Throwable?) {
-        Timber.d("Error getting Now Playing ${parseError(throwable)}")
+        Timber.d("Error getting Movies ${parseError(throwable)}")
     }
 
     private fun parseNowPlayingResponse(response: MoviesResponse) {

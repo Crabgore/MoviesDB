@@ -137,5 +137,11 @@
         <action
             android:id="@+id/action_loginFragment_to_TVDetailsFragment"
             app:destination="@id/TVDetailsFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_moviesCategoryFragment"
+            app:destination="@id/moviesCategoryFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_TVCategoryFragment"
+            app:destination="@id/TVCategoryFragment" />
     </fragment>
 </navigation>

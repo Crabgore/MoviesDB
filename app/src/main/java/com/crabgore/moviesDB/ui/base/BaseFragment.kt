@@ -29,7 +29,7 @@ open class BaseFragment : DaggerFragment() {
         showLoader()
         viewModel.doneLD.observe(viewLifecycleOwner, { data ->
             data?.let {
-                if (it == counter) hideLoader()
+                if (it >= counter) hideLoader()
             }
         })
     }

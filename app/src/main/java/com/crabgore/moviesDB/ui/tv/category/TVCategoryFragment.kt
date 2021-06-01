@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
+import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
 import com.crabgore.moviesDB.databinding.FragmentTVCategoryBinding
@@ -52,7 +53,7 @@ class TVCategoryFragment  : BaseFragment() {
     }
 
     private fun startObservers() {
-        viewModel.moviesLiveData.observe(viewLifecycleOwner, { data ->
+        viewModel.tvLiveData.observe(viewLifecycleOwner, { data ->
             data?.let {
                 if (page == 1) {
                     setRV(it)
@@ -63,7 +64,10 @@ class TVCategoryFragment  : BaseFragment() {
 
         viewModel.isLastPageLiveData.observe(viewLifecycleOwner, { data ->
             data?.let {
-                if (it) showToast(requireContext(), "That's all movies we have")
+                if (it) {
+                    showToast(requireContext(), requireContext().getString(R.string.full_tvs))
+                    viewModel.isLastPageLiveData.value = null
+                }
             }
         })
 
@@ -109,7 +113,7 @@ class TVCategoryFragment  : BaseFragment() {
                         item.id
                     )
                 navigateWithAction(directions)
-                viewModel.moviesLiveData.value = null
+                viewModel.tvLiveData.value = null
                 false
             }
         }

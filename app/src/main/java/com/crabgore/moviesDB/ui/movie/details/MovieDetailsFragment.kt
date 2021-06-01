@@ -62,7 +62,7 @@ class MovieDetailsFragment : BaseFragment() {
     private fun initUI() {
         picasso = Picasso.get()
         binding.poster.setOnClickListener { showFullImage() }
-        binding.markAsFavoriteBtn.setOnClickListener { viewModel.markAsFavorite(args.movieId) }
+        binding.markAsFavoriteBtn.setOnClickListener { markAsFavorite() }
     }
 
     private fun startObservers() {
@@ -169,14 +169,16 @@ class MovieDetailsFragment : BaseFragment() {
 
     private fun changeButtonStatus(boolean: Boolean) {
         if (boolean) {
-            binding.markAsFavoriteBtn.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.disabled)
-            binding.markAsFavoriteBtn.text =
-                requireContext().getString(R.string.remove_from_favorites)
+            binding.markAsFavoriteBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_fill)
+            binding.markAsFavoriteBtn.text = requireContext().getString(R.string.remove_from_favorites)
         } else {
-            binding.markAsFavoriteBtn.backgroundTintList =
-                ContextCompat.getColorStateList(requireContext(), R.color.night_dark)
+            binding.markAsFavoriteBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite)
             binding.markAsFavoriteBtn.text = requireContext().getString(R.string.mark_as_favorite)
         }
+    }
+
+    private fun markAsFavorite() {
+        if (viewModel.checkSession() == null) navigate(R.id.loginFragment)
+        else viewModel.markAsFavorite(args.movieId)
     }
 }

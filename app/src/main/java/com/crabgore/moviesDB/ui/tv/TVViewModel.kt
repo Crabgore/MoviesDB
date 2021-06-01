@@ -53,7 +53,7 @@ class TVViewModel @Inject constructor(
     }
 
     private fun parseOnTheAirResponse(response: TVResponse) {
-        Timber.d("Got Now Playing $response")
+        Timber.d("Got NOn The Air TVs $response")
         val list: MutableList<MovieItem> = mutableListOf()
         response.results.forEach {
             list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
@@ -63,7 +63,7 @@ class TVViewModel @Inject constructor(
     }
 
     private fun parsePopularResponse(response: TVResponse) {
-        Timber.d("Got Popular $response")
+        Timber.d("Got Popular TVs $response")
         val list: MutableList<MovieItem> = mutableListOf()
         response.results.forEach {
             list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
@@ -73,7 +73,7 @@ class TVViewModel @Inject constructor(
     }
 
     private fun parseTopRatedResponse(response: TVResponse) {
-        Timber.d("Got Top Rated $response")
+        Timber.d("Got Top Rated TVs $response")
         val list: MutableList<MovieItem> = mutableListOf()
         response.results.forEach {
             list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))

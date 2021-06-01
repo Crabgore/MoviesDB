@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
+import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
 import com.crabgore.moviesDB.databinding.FragmentMoviesCategoryBinding
@@ -63,7 +64,10 @@ class MoviesCategoryFragment : BaseFragment() {
 
         viewModel.isLastPageLiveData.observe(viewLifecycleOwner, { data ->
             data?.let {
-                if (it) showToast(requireContext(), "That's all movies we have")
+                if (it) {
+                    showToast(requireContext(), requireContext().getString(R.string.full_movies))
+                    viewModel.isLastPageLiveData.value = null
+                }
             }
         })
 

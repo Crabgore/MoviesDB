@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
@@ -53,14 +54,14 @@ class TVDetailsFragment : BaseFragment() {
     }
 
     override fun backPressed() {
-        if (binding.fullImageLay.visibility == View.VISIBLE) binding.fullImageLay.visibility = GONE
+        if (binding.fullImageLay.visibility == VISIBLE) binding.fullImageLay.visibility = GONE
         else popBack()
     }
 
     private fun initUI() {
         picasso = Picasso.get()
         binding.poster.setOnClickListener { showFullImage() }
-        binding.markAsFavoriteBtn.setOnClickListener { viewModel.markAsFavorite(args.tvId) }
+        binding.markAsFavoriteBtn.setOnClickListener { markAsFavorite() }
     }
 
     private fun startObservers() {
@@ -167,17 +168,22 @@ class TVDetailsFragment : BaseFragment() {
         val photo = viewModel.TVLD.value?.posterPath
         photo?.let {
             picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
-            binding.fullImageLay.visibility = View.VISIBLE
+            binding.fullImageLay.visibility = VISIBLE
         }
     }
 
     private fun changeButtonStatus(boolean: Boolean) {
         if (boolean) {
-            binding.markAsFavoriteBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.disabled)
+            binding.markAsFavoriteBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_fill)
             binding.markAsFavoriteBtn.text = requireContext().getString(R.string.remove_from_favorites)
         } else {
-            binding.markAsFavoriteBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.night_dark)
+            binding.markAsFavoriteBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite)
             binding.markAsFavoriteBtn.text = requireContext().getString(R.string.mark_as_favorite)
         }
+    }
+
+    private fun markAsFavorite() {
+        if (viewModel.checkSession() == null) navigate(R.id.loginFragment)
+        else viewModel.markAsFavorite(args.tvId)
     }
 }

@@ -36,6 +36,11 @@
         <item name="tint">@android:color/white</item>
     </style>
 
+    <style name="button">
+        <item name="cornerRadius">15dp</item>
+        <item name="iconTint">@color/night_dark</item>
+    </style>
+
     <style name="input_layout_box_search" parent="input_layout_box">
         <item name="boxCornerRadiusTopStart">15dp</item>
         <item name="boxCornerRadiusTopEnd">15dp</item>

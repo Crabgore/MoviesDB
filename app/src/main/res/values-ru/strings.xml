@@ -29,5 +29,8 @@
     <string name="remove_from_favorites">Удалить из избранного</string>
     <string name="favorite_movies">Избранные фильмы</string>
     <string name="favorite_tvs">Избранные сериалы</string>
+    <string name="full_movies">Это все фильмы в этом разделе</string>
+    <string name="full_tvs">Это все сериалы в этом разделе</string>
+    <string name="full_meople">Это все люди в этом разделе</string>
 
 </resources>

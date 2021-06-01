@@ -44,6 +44,7 @@
 
     <style name="button">
         <item name="cornerRadius">15dp</item>
+        <item name="iconTint">@android:color/white</item>
     </style>
 
     <style name="input_layout_box_search" parent="input_layout_box">
