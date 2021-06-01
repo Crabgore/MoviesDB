@@ -5,11 +5,10 @@ import android.view.View.VISIBLE
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
+import com.crabgore.moviesDB.common.loadImageWithPlaceHolder
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import com.squareup.picasso.Picasso
 
 class MovieItem(
     val id: Int,
@@ -38,7 +37,7 @@ class MovieItem(
 
         override fun bindView(item: MovieItem, payloads: List<Any>) {
             item.poster?.let {
-                Picasso.get().load(IMAGES_API_HOST + it).fit().centerCrop().into(poster)
+                loadImageWithPlaceHolder(it, poster)
             }
             title.text = item.title
             rating.text = item.rating.toString()

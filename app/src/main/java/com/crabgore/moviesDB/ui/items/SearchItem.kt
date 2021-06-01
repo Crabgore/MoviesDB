@@ -4,12 +4,11 @@ import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.formatDate
+import com.crabgore.moviesDB.common.loadImageWithPlaceHolder
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import com.squareup.picasso.Picasso
 
 class SearchItem(
     private val context: Context,
@@ -39,7 +38,7 @@ class SearchItem(
 
         override fun bindView(item: SearchItem, payloads: List<Any>) {
             item.image?.let {
-                Picasso.get().load(IMAGES_API_HOST + it).fit().centerCrop().into(image)
+                loadImageWithPlaceHolder(it, image)
             }
             title.text = item.title
             item.year?.let {

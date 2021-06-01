@@ -53,25 +53,27 @@ class TVCategoryFragment  : BaseFragment() {
     }
 
     private fun startObservers() {
-        viewModel.tvLiveData.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (page == 1) {
-                    setRV(it)
-                    page++
-                } else updateRV(it)
-            }
-        })
-
-        viewModel.isLastPageLiveData.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it) {
-                    showToast(requireContext(), requireContext().getString(R.string.full_tvs))
-                    viewModel.isLastPageLiveData.value = null
+        viewModel.apply {
+            tvLiveData.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (page == 1) {
+                        setRV(it)
+                        page++
+                    } else updateRV(it)
                 }
-            }
-        })
+            })
 
-        observeLoader(viewModel, 1)
+            isLastPageLiveData.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it) {
+                        showToast(requireContext(), requireContext().getString(R.string.full_tvs))
+                        isLastPageLiveData.value = null
+                    }
+                }
+            })
+
+            observeLoader(1)
+        }
     }
 
     private fun getData() {

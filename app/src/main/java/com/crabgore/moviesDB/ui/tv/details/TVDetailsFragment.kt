@@ -3,28 +3,23 @@ package com.crabgore.moviesDB.ui.tv.details
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
-import com.crabgore.moviesDB.Const.Addresses.Companion.ORIGINAL_IMAGES_API_HOST
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
-import com.crabgore.moviesDB.common.addDecoration
-import com.crabgore.moviesDB.common.formatDate
+import com.crabgore.moviesDB.common.*
 import com.crabgore.moviesDB.data.TVDetailsResponse
 import com.crabgore.moviesDB.databinding.FragmentTVDetailsBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
 class TVDetailsFragment : BaseFragment() {
@@ -33,7 +28,6 @@ class TVDetailsFragment : BaseFragment() {
     private val viewModel by viewModels<TVDetailsViewModel> { viewModelFactory }
 
     private val args: TVDetailsFragmentArgs by navArgs()
-    private lateinit var picasso: Picasso
     private val binding get() = _binding!! as FragmentTVDetailsBinding
 
     override fun onCreateView(
@@ -54,44 +48,47 @@ class TVDetailsFragment : BaseFragment() {
     }
 
     override fun backPressed() {
-        if (binding.fullImageLay.visibility == VISIBLE) binding.fullImageLay.visibility = GONE
-        else popBack()
+        if (binding.fullImageLay.isVisible) binding.fullImageLay.hide()
+        else super.backPressed()
     }
 
     private fun initUI() {
-        picasso = Picasso.get()
-        binding.poster.setOnClickListener { showFullImage() }
-        binding.markAsFavoriteBtn.setOnClickListener { markAsFavorite() }
+        binding.apply {
+            poster.setOnClickListener { showFullImage() }
+            markAsFavoriteBtn.setOnClickListener { markAsFavorite() }
+        }
     }
 
     private fun startObservers() {
-        viewModel.TVLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setInfo(it)
-            }
-        })
+        viewModel.apply {
+            TVLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setInfo(it)
+                }
+            })
 
-        viewModel.isInFavoritesLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                changeButtonStatus(it)
-            }
-        })
+            isInFavoritesLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    changeButtonStatus(it)
+                }
+            })
 
-        viewModel.castLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it.isNotEmpty()) setRV(binding.actorRv, it)
-                else binding.actorLayout.visibility = GONE
-            }
-        })
+            castLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it.isNotEmpty()) setRV(binding.actorRv, it)
+                    else binding.actorLayout.hide()
+                }
+            })
 
-        viewModel.crewLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it.isNotEmpty()) setRV(binding.crewRv, it)
-                else binding.crewLayout.visibility = GONE
-            }
-        })
+            crewLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it.isNotEmpty()) setRV(binding.crewRv, it)
+                    else binding.crewLayout.hide()
+                }
+            })
 
-        observeLoader(viewModel, 2)
+            observeLoader(2)
+        }
     }
 
     private fun getData() {
@@ -99,44 +96,46 @@ class TVDetailsFragment : BaseFragment() {
     }
 
     private fun setInfo(tv: TVDetailsResponse) {
-        tv.backdropPath?.let {
-            picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.backdrop)
-        }
-        tv.posterPath?.let {
-            picasso.load(IMAGES_API_HOST + it).fit().centerCrop().into(binding.poster)
-        }
-        binding.title.text = tv.name
-        tv.genres?.let {
-            val genres = StringBuilder()
-            for (i in it.indices) {
-                genres.append("${it[i].name}")
-                if (i < it.size - 1) genres.append(", ")
+        binding.apply {
+            tv.backdropPath?.let {
+                loadImage(it, backdrop)
             }
-            binding.genres.text = genres.toString()
-        }
-        binding.seasons.text =
-            requireContext().getString(R.string.season_count, tv.numberOfSeasons.toString())
-        binding.episodes.text =
-            requireContext().getString(R.string.episodes_count, tv.numberOfEpisodes.toString())
-        tv.productionCountries?.let {
-            val countries = StringBuilder()
-            for (i in it.indices) {
-                countries.append("${it[i].name}")
-                if (i < it.size - 1) countries.append(", ")
+            tv.posterPath?.let {
+                loadImageWithPlaceHolder(it, poster)
             }
-            binding.country.text = requireContext().getString(R.string.country, countries)
+            title.text = tv.name
+            tv.genres?.let {
+                val genres = StringBuilder()
+                for (i in it.indices) {
+                    genres.append("${it[i].name}")
+                    if (i < it.size - 1) genres.append(", ")
+                }
+                this.genres.text = genres.toString()
+            }
+            seasons.text =
+                requireContext().getString(R.string.season_count, tv.numberOfSeasons.toString())
+            episodes.text =
+                requireContext().getString(R.string.episodes_count, tv.numberOfEpisodes.toString())
+            tv.productionCountries?.let {
+                val countries = StringBuilder()
+                for (i in it.indices) {
+                    countries.append("${it[i].name}")
+                    if (i < it.size - 1) countries.append(", ")
+                }
+                country.text = requireContext().getString(R.string.country, countries)
+            }
+            tv.firstAirDate?.let {
+                year.text = requireContext().getString(R.string.year, formatDate(it))
+            }
+            tv.episodeRunTime?.let {
+                if (it.isNotEmpty()) duration.text = requireContext().getString(
+                    R.string.episode_duration,
+                    it[0].toString()
+                )
+            }
+            rating.text = tv.voteAverage.toString()
+            description.text = tv.overview
         }
-        tv.firstAirDate?.let {
-            binding.year.text = requireContext().getString(R.string.year, formatDate(it))
-        }
-        tv.episodeRunTime?.let {
-            if (it.isNotEmpty()) binding.duration.text = requireContext().getString(
-                R.string.episode_duration,
-                it[0].toString()
-            )
-        }
-        binding.rating.text = tv.voteAverage.toString()
-        binding.description.text = tv.overview
     }
 
     private fun setRV(recyclerView: RecyclerView, list: List<CreditsItem>) {
@@ -167,18 +166,20 @@ class TVDetailsFragment : BaseFragment() {
     private fun showFullImage() {
         val photo = viewModel.TVLD.value?.posterPath
         photo?.let {
-            picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
-            binding.fullImageLay.visibility = VISIBLE
+            loadImage(it, binding.fullPicture)
+            binding.fullImageLay.show()
         }
     }
 
     private fun changeButtonStatus(boolean: Boolean) {
-        if (boolean) {
-            binding.markAsFavoriteBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_fill)
-            binding.markAsFavoriteBtn.text = requireContext().getString(R.string.remove_from_favorites)
-        } else {
-            binding.markAsFavoriteBtn.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite)
-            binding.markAsFavoriteBtn.text = requireContext().getString(R.string.mark_as_favorite)
+        binding.markAsFavoriteBtn.apply {
+            if (boolean) {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite_fill)
+                text = requireContext().getString(R.string.remove_from_favorites)
+            } else {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite)
+                text = requireContext().getString(R.string.mark_as_favorite)
+            }
         }
     }
 

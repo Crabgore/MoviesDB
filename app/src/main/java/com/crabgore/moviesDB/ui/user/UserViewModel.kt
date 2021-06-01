@@ -20,10 +20,10 @@ class UserViewModel @Inject constructor(
     private val remote: Remote,
     private val storage: Storage
 ) : BaseViewModel() {
-
     val sessionIdLD: MutableLiveData<String> = MutableLiveData()
     val accountLD: MutableLiveData<AccountResponse> = MutableLiveData()
     val logoutLD: MutableLiveData<Boolean> = MutableLiveData()
+    val loggingError: MutableLiveData<Boolean> = MutableLiveData()
 
     val favMoviesLD: MutableLiveData<List<MovieItem>> = MutableLiveData()
     val favTVLD: MutableLiveData<List<MovieItem>> = MutableLiveData()
@@ -67,6 +67,7 @@ class UserViewModel @Inject constructor(
 
     private fun onError(throwable: Throwable?) {
         Timber.d("LOGING IN Error ${parseError(throwable)}")
+        loggingError.value = true
     }
 
 

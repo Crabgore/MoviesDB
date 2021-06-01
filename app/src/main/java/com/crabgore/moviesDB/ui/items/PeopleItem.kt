@@ -3,11 +3,10 @@ package com.crabgore.moviesDB.ui.items
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
+import com.crabgore.moviesDB.common.loadImageWithPlaceHolder
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import com.squareup.picasso.Picasso
 
 class PeopleItem(
     val id: Int,
@@ -32,7 +31,7 @@ class PeopleItem(
 
         override fun bindView(item: PeopleItem, payloads: List<Any>) {
             item.profile?.let {
-                Picasso.get().load(IMAGES_API_HOST + it).fit().centerCrop().into(profile)
+                loadImageWithPlaceHolder(it, profile)
             }
             name.text = item.name
         }

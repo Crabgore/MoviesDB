@@ -5,14 +5,21 @@ import android.content.Context
 import android.graphics.Rect
 import android.os.Build
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
+import com.crabgore.moviesDB.Const.Addresses.Companion.ORIGINAL_IMAGES_API_HOST
+import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.data.Cast
 import com.crabgore.moviesDB.data.MovieCast
 import com.crabgore.moviesDB.data.TVCast
 import com.crabgore.moviesDB.ui.items.CreditsItem
+import com.squareup.picasso.Picasso
 import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -50,7 +57,37 @@ fun addDecoration(recyclerView: RecyclerView, spacing: Int) {
     })
 }
 
+/**
+ * Загрузка картинок используя Picasso
+ */
+fun loadImage(url: String, imageView: ImageView) {
+    Picasso.get().load(ORIGINAL_IMAGES_API_HOST + url).noPlaceholder().into(imageView)
+}
 
+fun loadImageWithPlaceHolder(url: String, imageView: ImageView) {
+    Picasso.get().load(IMAGES_API_HOST + url).placeholder(R.drawable.ic_no_photo_night).fit()
+        .centerCrop().into(imageView)
+}
+
+fun loadAvatar(url: String, imageView: ImageView) {
+    Picasso.get().load(url).fit().centerCrop().transform(CircleTransform())
+        .into(imageView)
+}
+
+/**
+ * Скрываем/показываем view
+ */
+fun View.show() {
+    visibility = VISIBLE
+}
+
+fun View.hide() {
+    visibility = GONE
+}
+
+/**
+ * Форматирование дат для старых/новых апи
+ */
 fun formatDate(string: String): String {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
         val formatter = DateTimeFormatter.ofPattern("d MMMM yyyy")
@@ -62,6 +99,9 @@ fun formatDate(string: String): String {
     }
 }
 
+/**
+ * проверка на содержание
+ */
 fun Cast.isContains(items: List<CreditsItem>): Boolean {
     var result = false
 

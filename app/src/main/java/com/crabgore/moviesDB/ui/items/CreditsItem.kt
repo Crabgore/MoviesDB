@@ -4,11 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
+import com.crabgore.moviesDB.common.loadImageWithPlaceHolder
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import com.squareup.picasso.Picasso
 
 class CreditsItem(
     val id: Int,
@@ -40,7 +39,7 @@ class CreditsItem(
 
         override fun bindView(item: CreditsItem, payloads: List<Any>) {
             item.poster?.let {
-                Picasso.get().load(IMAGES_API_HOST + it).fit().centerCrop().into(poster)
+                loadImageWithPlaceHolder(it, poster)
             }
             title.text = item.title
             job.text = item.character ?: item.job

@@ -19,7 +19,6 @@ import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.PeopleItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import timber.log.Timber
 import javax.inject.Inject
 
 class PeopleFragment : BaseFragment() {
@@ -53,32 +52,38 @@ class PeopleFragment : BaseFragment() {
         binding.searchEt.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val directions = PeopleFragmentDirections.actionPeopleFragmentToSearchFragment(
-                    SEARCH_PEOPLE)
+                    SEARCH_PEOPLE
+                )
                 navigateWithAction(directions)
             }
         }
     }
 
     private fun startObservers() {
-        viewModel.moviesLiveData.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (page == 1) {
-                    setRV(it)
-                    page++
-                } else updateRV(it)
-            }
-        })
-
-        viewModel.isLastPageLiveData.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it) {
-                    showToast(requireContext(), requireContext().getString(R.string.full_meople))
-                    viewModel.isLastPageLiveData.value = null
+        viewModel.apply {
+            moviesLiveData.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (page == 1) {
+                        setRV(it)
+                        page++
+                    } else updateRV(it)
                 }
-            }
-        })
+            })
 
-        observeLoader(viewModel, 1)
+            isLastPageLiveData.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it) {
+                        showToast(
+                            requireContext(),
+                            requireContext().getString(R.string.full_people)
+                        )
+                        isLastPageLiveData.value = null
+                    }
+                }
+            })
+
+            observeLoader(1)
+        }
     }
 
     private fun getData() {
@@ -106,7 +111,6 @@ class PeopleFragment : BaseFragment() {
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                         val position = lManager.findLastVisibleItemPosition()
                         if (position >= offset) {
-                            Timber.d("Pgae $page")
                             viewModel.getData(page)
                             offset += 20
                             page++

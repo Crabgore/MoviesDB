@@ -45,44 +45,48 @@ class TVFragment : BaseFragment() {
     }
 
     private fun initUI() {
-        binding.nowPlayingTv.setOnClickListener {
-            toFullList(binding.nowPlayingTv.text.toString())
-        }
-        binding.popularTv.setOnClickListener {
-            toFullList(binding.popularTv.text.toString())
-        }
-        binding.topRatedTv.setOnClickListener {
-            toFullList(binding.topRatedTv.text.toString())
-        }
+        binding.apply {
+            nowPlayingTv.setOnClickListener {
+                toFullList(nowPlayingTv.text.toString())
+            }
+            popularTv.setOnClickListener {
+                toFullList(popularTv.text.toString())
+            }
+            topRatedTv.setOnClickListener {
+                toFullList(topRatedTv.text.toString())
+            }
 
-        binding.searchEt.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                val directions = TVFragmentDirections.actionTVFragmentToSearchFragment(SEARCH_TV)
-                navigateWithAction(directions)
+            searchEt.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    val directions = TVFragmentDirections.actionTVFragmentToSearchFragment(SEARCH_TV)
+                    navigateWithAction(directions)
+                }
             }
         }
     }
 
     private fun startObservers() {
-        viewModel.nowPlayingLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setRV(binding.nowPlayingTvRv, it)
-            }
-        })
+        viewModel.apply {
+            nowPlayingLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setRV(binding.nowPlayingTvRv, it)
+                }
+            })
 
-        viewModel.popularLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setRV(binding.popularTvRv, it)
-            }
-        })
+            popularLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setRV(binding.popularTvRv, it)
+                }
+            })
 
-        viewModel.topRatedLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setRV(binding.topRatedTvRv, it)
-            }
-        })
+            topRatedLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setRV(binding.topRatedTvRv, it)
+                }
+            })
 
-        observeLoader(viewModel, 3)
+            observeLoader(3)
+        }
     }
 
     private fun getData() {

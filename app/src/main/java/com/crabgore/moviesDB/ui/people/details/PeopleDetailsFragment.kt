@@ -3,27 +3,22 @@ package com.crabgore.moviesDB.ui.people.details
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
-import com.crabgore.moviesDB.Const.Addresses.Companion.ORIGINAL_IMAGES_API_HOST
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
-import com.crabgore.moviesDB.common.addDecoration
-import com.crabgore.moviesDB.common.formatDate
+import com.crabgore.moviesDB.common.*
 import com.crabgore.moviesDB.data.PeopleDetailsResponse
 import com.crabgore.moviesDB.databinding.FragmentPeopleDetailsBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
 class PeopleDetailsFragment : BaseFragment() {
@@ -32,7 +27,6 @@ class PeopleDetailsFragment : BaseFragment() {
     private val viewModel by viewModels<PeopleDetailsViewModel> { viewModelFactory }
 
     private val args: PeopleDetailsFragmentArgs by navArgs()
-    private lateinit var picasso: Picasso
     private val binding get() = _binding!! as FragmentPeopleDetailsBinding
 
     override fun onCreateView(
@@ -53,51 +47,52 @@ class PeopleDetailsFragment : BaseFragment() {
     }
 
     override fun backPressed() {
-        if (binding.fullImageLay.visibility == VISIBLE) binding.fullImageLay.visibility = GONE
-        else popBack()
+        if (binding.fullImageLay.isVisible) binding.fullImageLay.hide()
+        else super.backPressed()
     }
 
     private fun initUI() {
-        picasso = Picasso.get()
         binding.profile.setOnClickListener { showFullImage() }
     }
 
     private fun startObservers() {
-        viewModel.peopleLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setInfo(it)
-            }
-        })
+        viewModel.apply {
+            peopleLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setInfo(it)
+                }
+            })
 
-        viewModel.movieCastLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it.isNotEmpty()) setRV(binding.actorRv, it)
-                else binding.actorLayout.visibility = GONE
-            }
-        })
+            movieCastLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it.isNotEmpty()) setRV(binding.actorRv, it)
+                    else binding.actorLayout.hide()
+                }
+            })
 
-        viewModel.movieCrewLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it.isNotEmpty()) setRV(binding.crewRv, it)
-                else binding.crewLayout.visibility = GONE
-            }
-        })
+            movieCrewLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it.isNotEmpty()) setRV(binding.crewRv, it)
+                    else binding.crewLayout.hide()
+                }
+            })
 
-        viewModel.tvCastLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it.isNotEmpty()) setRV(binding.tvCastRv, it, true)
-                else binding.tvCastLayout.visibility = GONE
-            }
-        })
+            tvCastLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it.isNotEmpty()) setRV(binding.tvCastRv, it, true)
+                    else binding.tvCastLayout.hide()
+                }
+            })
 
-        viewModel.tvCrewLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it.isNotEmpty()) setRV(binding.tvCrewRv, it, true)
-                else binding.tvCrewLayout.visibility = GONE
-            }
-        })
+            tvCrewLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it.isNotEmpty()) setRV(binding.tvCrewRv, it, true)
+                    else binding.tvCrewLayout.hide()
+                }
+            })
 
-        observeLoader(viewModel, 3)
+            observeLoader(3)
+        }
     }
 
     private fun setRV(recyclerView: RecyclerView, list: List<CreditsItem>, isTv: Boolean = false) {
@@ -135,28 +130,31 @@ class PeopleDetailsFragment : BaseFragment() {
     }
 
     private fun setInfo(people: PeopleDetailsResponse) {
-        people.profilePath?.let {
-            picasso.load(IMAGES_API_HOST + it).fit().centerCrop().into(binding.profile)
+        binding.apply {
+            people.profilePath?.let {
+                loadImageWithPlaceHolder(it, profile)
+            }
+            name.text = people.name
+            gender.text =
+                if (people.gender == 1) requireContext().getString(R.string.gender_female)
+                else requireContext().getString(R.string.gender_male)
+            country.text =
+                requireContext().getString(R.string.place_of_birth, people.placeOfBirth)
+            people.birthday?.let {
+                birthday.text = requireContext().getString(R.string.birthday, formatDate(it))
+            }
+            people.deathday?.let {
+                deathday.text = it
+            }
+            biography.text = people.biography
         }
-        binding.name.text = people.name
-        binding.gender.text =
-            if (people.gender == 1) requireContext().getString(R.string.gender_female)
-            else requireContext().getString(R.string.gender_male)
-        binding.country.text = requireContext().getString(R.string.place_of_birth, people.placeOfBirth)
-        people.birthday?.let {
-            binding.birthday.text = requireContext().getString(R.string.birthday, formatDate(it))
-        }
-        people.deathday?.let {
-            binding.deathday.text = it
-        }
-        binding.biography.text = people.biography
     }
 
     private fun showFullImage() {
         val photo = viewModel.peopleLD.value?.profilePath
         photo?.let {
-            picasso.load(ORIGINAL_IMAGES_API_HOST + it).into(binding.fullPicture)
-            binding.fullImageLay.visibility = VISIBLE
+            loadImage(it, binding.fullPicture)
+            binding.fullImageLay.show()
         }
     }
 }

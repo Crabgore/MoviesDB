@@ -11,10 +11,13 @@ import dagger.android.support.DaggerFragment
 
 open class BaseFragment : DaggerFragment() {
     var _binding: ViewBinding? = null
-    var viewState: View? = null
     var isViewWasNull = false
-
+    private var viewState: View? = null
     private var isNavigated = false
+
+    open fun backPressed() {
+        popBack()
+    }
 
     fun checkViewState(): View? {
         if (viewState == null) {
@@ -25,9 +28,9 @@ open class BaseFragment : DaggerFragment() {
         return viewState
     }
 
-    fun observeLoader(viewModel: BaseViewModel, counter: Int) {
+    fun BaseViewModel.observeLoader(counter: Int) {
         showLoader()
-        viewModel.doneLD.observe(viewLifecycleOwner, { data ->
+        doneLD.observe(viewLifecycleOwner, { data ->
             data?.let {
                 if (it >= counter) hideLoader()
             }
@@ -48,15 +51,13 @@ open class BaseFragment : DaggerFragment() {
         (activity as MainActivity).showLoader()
     }
 
-    private fun hideLoader() {
+    fun hideLoader() {
         (activity as MainActivity).hideLoader()
     }
 
-    fun popBack() {
+    private fun popBack() {
         findNavController().popBackStack()
     }
-
-    open fun backPressed() {}
 
 //    fun navigateWithAnimation(resId: Int) {
 //        showLoader()

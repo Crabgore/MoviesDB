@@ -53,25 +53,30 @@ class MoviesCategoryFragment : BaseFragment() {
     }
 
     private fun startObservers() {
-        viewModel.moviesLiveData.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (page == 1) {
-                    setRV(it)
-                    page++
-                } else updateRV(it)
-            }
-        })
-
-        viewModel.isLastPageLiveData.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it) {
-                    showToast(requireContext(), requireContext().getString(R.string.full_movies))
-                    viewModel.isLastPageLiveData.value = null
+        viewModel.apply {
+            moviesLiveData.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (page == 1) {
+                        setRV(it)
+                        page++
+                    } else updateRV(it)
                 }
-            }
-        })
+            })
 
-        observeLoader(viewModel, 1)
+            isLastPageLiveData.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    if (it) {
+                        showToast(
+                            requireContext(),
+                            requireContext().getString(R.string.full_movies)
+                        )
+                        isLastPageLiveData.value = null
+                    }
+                }
+            })
+
+            observeLoader(1)
+        }
     }
 
     private fun getData() {

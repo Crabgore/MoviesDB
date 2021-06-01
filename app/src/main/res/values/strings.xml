@@ -22,8 +22,8 @@
     <string name="movie_actor">Movie actor</string>
     <string name="tv_actor">TV actor</string>
     <string name="tv_crew">TV crew</string>
-    <string name="register">&lt;a href=https://www.themoviedb.org/signup>Don\'t have an account yet? Register now.&lt;/a></string>
-    <string name="login">LOGIN</string>
+    <string name="register">&lt;a href=https://www.themoviedb.org/signup>Don\'t have an account yet? Register now&lt;/a></string>
+    <string name="log_in">LOG IN</string>
     <string name="exit">LOGOUT</string>
     <string name="mark_as_favorite">Mark as favorite</string>
     <string name="remove_from_favorites">Remove from favorites</string>
@@ -31,6 +31,13 @@
     <string name="favorite_tvs">Favorite TVs</string>
     <string name="full_movies">That\'s all movies here</string>
     <string name="full_tvs">That\'s all TVs here</string>
-    <string name="full_meople">That\'s all peoples here</string>
+    <string name="full_people">That\'s all peoples here</string>
+    <string name="enter_data">Enter your login and password</string>
+    <string name="wrong_data">You entered a wrong login or password</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="find_movie">Find a movie</string>
+    <string name="find_tv">Find a TV series</string>
+    <string name="find_people">Find a person</string>
 
 </resources>

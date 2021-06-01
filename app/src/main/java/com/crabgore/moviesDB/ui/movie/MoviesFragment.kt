@@ -45,46 +45,50 @@ class MoviesFragment : BaseFragment() {
     }
 
     private fun initUI() {
-        binding.nowPlayingMovies.setOnClickListener { toFullList(binding.nowPlayingMovies.text.toString()) }
-        binding.popularMovies.setOnClickListener { toFullList(binding.popularMovies.text.toString()) }
-        binding.topRatedMovies.setOnClickListener { toFullList(binding.topRatedMovies.text.toString()) }
-        binding.upcomingMovies.setOnClickListener { toFullList(binding.upcomingMovies.text.toString()) }
+        binding.apply {
+            nowPlayingMovies.setOnClickListener { toFullList(binding.nowPlayingMovies.text.toString()) }
+            popularMovies.setOnClickListener { toFullList(binding.popularMovies.text.toString()) }
+            topRatedMovies.setOnClickListener { toFullList(binding.topRatedMovies.text.toString()) }
+            upcomingMovies.setOnClickListener { toFullList(binding.upcomingMovies.text.toString()) }
 
-        binding.searchEt.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) {
-                val directions =
-                    MoviesFragmentDirections.actionMoviesFragmentToSearchFragment(SEARCH_MOVIE)
-                navigateWithAction(directions)
+            searchEt.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
+                if (hasFocus) {
+                    val directions =
+                        MoviesFragmentDirections.actionMoviesFragmentToSearchFragment(SEARCH_MOVIE)
+                    navigateWithAction(directions)
+                }
             }
         }
     }
 
     private fun startObservers() {
-        viewModel.nowPlayingLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setRV(binding.nowPlayingMoviesRv, it)
-            }
-        })
+        viewModel.apply {
+            nowPlayingLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setRV(binding.nowPlayingMoviesRv, it)
+                }
+            })
 
-        viewModel.popularLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setRV(binding.popularMoviesRv, it)
-            }
-        })
+            popularLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setRV(binding.popularMoviesRv, it)
+                }
+            })
 
-        viewModel.topRatedLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setRV(binding.topRatedMoviesRv, it)
-            }
-        })
+            topRatedLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setRV(binding.topRatedMoviesRv, it)
+                }
+            })
 
-        viewModel.upcomingLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setRV(binding.upcomingMoviesRv, it)
-            }
-        })
+            upcomingLD.observe(viewLifecycleOwner, { data ->
+                data?.let {
+                    setRV(binding.upcomingMoviesRv, it)
+                }
+            })
 
-        observeLoader(viewModel, 4)
+            observeLoader(4)
+        }
     }
 
     private fun getData() {

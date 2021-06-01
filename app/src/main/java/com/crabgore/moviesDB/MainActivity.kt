@@ -2,13 +2,13 @@ package com.crabgore.moviesDB
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.get
 import androidx.navigation.ui.NavigationUI
+import com.crabgore.moviesDB.common.hide
 import com.crabgore.moviesDB.common.hideKeyboard
+import com.crabgore.moviesDB.common.show
 import com.crabgore.moviesDB.databinding.ActivityMainBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -47,11 +47,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showLoader() {
-        binding?.loaderLayout?.visibility = VISIBLE
+        binding?.loaderLayout?.show()
     }
 
     fun hideLoader() {
-        binding?.loaderLayout?.visibility = GONE
+        binding?.loaderLayout?.hide()
     }
 
     private fun fragmentBackPressed() {
