@@ -124,6 +124,14 @@ class TVDetailsFragment : BaseFragment() {
                 }
                 country.text = requireContext().getString(R.string.country, countries)
             }
+            tv.networks?.let {
+                val networks = java.lang.StringBuilder()
+                for (i in it.indices) {
+                    networks.append("${it[i].name}")
+                    if (i < it.size - 1) networks.append(", ")
+                }
+                network.text = requireContext().getString(R.string.network, networks)
+            }
             tv.firstAirDate?.let {
                 year.text = requireContext().getString(R.string.year, formatDate(it))
             }
@@ -134,7 +142,10 @@ class TVDetailsFragment : BaseFragment() {
                 )
             }
             rating.text = tv.voteAverage.toString()
-            description.text = tv.overview
+            tv.overview?.let {
+                if (it != "") description.text = it
+                else overviewCard.hide()
+            } ?: overviewCard.hide()
         }
     }
 

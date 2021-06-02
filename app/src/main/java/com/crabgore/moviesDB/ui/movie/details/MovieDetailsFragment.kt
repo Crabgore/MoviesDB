@@ -1,5 +1,7 @@
 package com.crabgore.moviesDB.ui.movie.details
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.crabgore.moviesDB.Const.Addresses.Companion.IMDB_TITLE
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.*
@@ -120,13 +123,22 @@ class MovieDetailsFragment : BaseFragment() {
                 }
                 country.text = requireContext().getString(R.string.country, countries)
             }
+            movie.budget?.let {
+                budget.text = requireContext().getString(R.string.budget, it.toString())
+            }
             movie.releaseDate?.let {
                 year.text = requireContext().getString(R.string.year, formatDate(it))
             }
-            duration.text =
-                requireContext().getString(R.string.duration, movie.runtime.toString())
+            movie.runtime?.let {
+                duration.text =
+                    requireContext().getString(R.string.duration, it.toString())
+            }
             rating.text = movie.voteAverage.toString()
-            description.text = movie.overview
+            movie.overview?.let {
+                if (it != "") description.text = it
+                else overviewCard.hide()
+            } ?: overviewCard.hide()
+            imdb.setOnClickListener { goToIMDB(movie.imdbID) }
         }
     }
 
@@ -180,5 +192,10 @@ class MovieDetailsFragment : BaseFragment() {
     private fun markAsFavorite() {
         if (viewModel.checkSession() == null) navigate(R.id.loginFragment)
         else viewModel.markAsFavorite(args.movieId)
+    }
+
+    private fun goToIMDB(url: String?) {
+        val browse = Intent(Intent.ACTION_VIEW, Uri.parse(IMDB_TITLE + url))
+        startActivity(browse)
     }
 }

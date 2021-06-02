@@ -10,6 +10,8 @@ object Const {
             const val IMAGES_API_HOST = "https://image.tmdb.org/t/p/w500"
             const val ORIGINAL_IMAGES_API_HOST = "https://image.tmdb.org/t/p/original"
             const val GRAVATAR_IMAGES_HOST = "https://www.gravatar.com/avatar/"
+            const val IMDB_TITLE = "https://www.imdb.com/title/"
+            const val IMDB_NAME = "https://www.imdb.com/name/"
         }
     }
 

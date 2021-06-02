@@ -1,5 +1,7 @@
 package com.crabgore.moviesDB.ui.people.details
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.crabgore.moviesDB.Const.Addresses.Companion.IMDB_NAME
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.*
@@ -135,6 +138,9 @@ class PeopleDetailsFragment : BaseFragment() {
                 loadImageWithPlaceHolder(it, profile)
             }
             name.text = people.name
+            people.knownForDepartment?.let {
+                department.text = it
+            }
             gender.text =
                 if (people.gender == 1) requireContext().getString(R.string.gender_female)
                 else requireContext().getString(R.string.gender_male)
@@ -146,7 +152,13 @@ class PeopleDetailsFragment : BaseFragment() {
             people.deathday?.let {
                 deathday.text = it
             }
-            biography.text = people.biography
+            people.biography?.let {
+                if (it != "") biography.text = it
+                else biographyCard.hide()
+            } ?: biographyCard.hide()
+            imdb.setOnClickListener {
+                goToIMDB(people.imdbID)
+            }
         }
     }
 
@@ -156,5 +168,10 @@ class PeopleDetailsFragment : BaseFragment() {
             loadImage(it, binding.fullPicture)
             binding.fullImageLay.show()
         }
+    }
+
+    private fun goToIMDB(url: String?) {
+        val browse = Intent(Intent.ACTION_VIEW, Uri.parse(IMDB_NAME + url))
+        startActivity(browse)
     }
 }

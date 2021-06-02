@@ -82,6 +82,15 @@
                             android:maxLines="3" />
 
                         <TextView
+                            android:id="@+id/department"
+                            style="@style/SmallTitles"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:ellipsize="end"
+                            android:maxLines="2" />
+
+                        <TextView
                             android:id="@+id/gender"
                             style="@style/Additions"
                             android:layout_width="wrap_content"
@@ -128,6 +137,17 @@
                     android:layout_margin="5dp" />
             </androidx.cardview.widget.CardView>
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/imdb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:text="@string/on_imdb"
+                app:cornerRadius="15dp"
+                app:icon="@drawable/ic_imdb_logo"
+                app:iconTint="@null"
+                app:layout_constraintTop_toBottomOf="@id/biography_card" />
+
             <LinearLayout
                 android:id="@+id/actor_layout"
                 android:layout_width="match_parent"
@@ -135,7 +155,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="15dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@id/biography_card">
+                app:layout_constraintTop_toBottomOf="@id/imdb">
 
                 <TextView
                     style="@style/Main_Titles"

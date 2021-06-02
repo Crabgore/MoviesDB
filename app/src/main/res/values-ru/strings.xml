@@ -7,6 +7,8 @@
     <string name="episode_duration">Продолжительность серии: ~%1$s мин.</string>
     <string name="season_count">Количество сезонов: %1$s</string>
     <string name="episodes_count">Количество серий: %1$s</string>
+    <string name="budget">Бюджет: %1$s</string>
+    <string name="network">Площадка: %1$s</string>
     <string name="gender_male">Пол: Мужской</string>
     <string name="gender_female">Пол: Женский</string>
     <string name="place_of_birth">Место рождения: %1$s</string>
@@ -39,5 +41,6 @@
     <string name="find_movie">Найти фильм</string>
     <string name="find_tv">Найти сериал</string>
     <string name="find_people">Найти человека</string>
+    <string name="on_imdb">смотреть на IMDB</string>
 
 </resources>

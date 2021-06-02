@@ -13,6 +13,7 @@ data class MovieDetailsResponse (
     val genres: List<Genre>?,
     val homepage: String?,
     val id: Long,
+    @field:Json(name="imdb_id")
     val imdbID: String?,
     val originalLanguage: String?,
     val originalTitle: String?,
@@ -90,7 +91,9 @@ data class PeopleDetailsResponse (
     val gender: Int,
     val homepage: String? = null,
     val id: Long? = null,
+    @field:Json(name="imdb_id")
     val imdbID: String? = null,
+    @field:Json(name="known_for_department")
     val knownForDepartment: String? = null,
     val name: String? = null,
     @field:Json(name="place_of_birth")

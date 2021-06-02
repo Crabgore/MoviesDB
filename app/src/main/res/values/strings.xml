@@ -7,6 +7,8 @@
     <string name="episode_duration">Episode duration: ~%1$s min.</string>
     <string name="season_count">Number of seasons: %1$s</string>
     <string name="episodes_count">Number of episodes: %1$s</string>
+    <string name="budget">Budget: %1$s</string>
+    <string name="network">Network: %1$s</string>
     <string name="gender_male">Gender: Male</string>
     <string name="gender_female">Gender: Female</string>
     <string name="place_of_birth">Place of birth: %1$s</string>
@@ -39,5 +41,6 @@
     <string name="find_movie">Find a movie</string>
     <string name="find_tv">Find a TV series</string>
     <string name="find_people">Find a person</string>
+    <string name="on_imdb">look at IMDB</string>
 
 </resources>
