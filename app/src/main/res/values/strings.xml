@@ -41,6 +41,7 @@
     <string name="find_movie">Find a movie</string>
     <string name="find_tv">Find a TV series</string>
     <string name="find_people">Find a person</string>
-    <string name="on_imdb">look at IMDB</string>
+    <string name="on_imdb">on IMDB</string>
+    <string name="on_site">on site</string>
 
 </resources>

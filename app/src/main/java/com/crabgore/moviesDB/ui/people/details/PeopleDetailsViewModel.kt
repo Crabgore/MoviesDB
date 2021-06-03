@@ -4,9 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import com.crabgore.moviesDB.common.isContains
 import com.crabgore.moviesDB.common.parseError
-import com.crabgore.moviesDB.data.PeopleCreditsResponse
 import com.crabgore.moviesDB.data.PeopleDetailsResponse
-import com.crabgore.moviesDB.data.TVCastResponse
 import com.crabgore.moviesDB.domain.remote.Remote
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.CreditsItem
@@ -33,23 +31,7 @@ class PeopleDetailsViewModel @Inject constructor(
             .doOnError(::onError)
             .subscribe(::parseMovieDetailsResponse, ::handleFailure)
 
-        Timber.d("Getting people Movie Credits")
-        val movieCreditsDisposable = remote.getPeopleMovieCredits(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parseMovieCreditsResponse, ::handleFailure)
-
-        Timber.d("Getting people TV Credits")
-        val tvCreditsDisposable = remote.getPeopleTVCredits(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parseTVCreditsResponse, ::handleFailure)
-
         addDisposable(detailsDisposable)
-        addDisposable(movieCreditsDisposable)
-        addDisposable(tvCreditsDisposable)
     }
 
     private fun onError(throwable: Throwable?) {
@@ -59,40 +41,33 @@ class PeopleDetailsViewModel @Inject constructor(
     private fun parseMovieDetailsResponse(response: PeopleDetailsResponse) {
         Timber.d("Got people Details $response")
         peopleLD.value = response
-        increaseCounter()
-    }
 
-    private fun parseMovieCreditsResponse(response: PeopleCreditsResponse) {
-        Timber.d("Got people Movie Credits $response")
-        val castList: MutableList<CreditsItem> = mutableListOf()
-        val crewList: MutableList<CreditsItem> = mutableListOf()
-        (response.cast?.sortedByDescending { it.releaseDate })?.forEach {
-            castList.add(CreditsItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult, character = it.character))
+        //parse movie credits
+        val movieCastList: MutableList<CreditsItem> = mutableListOf()
+        val movieCrewList: MutableList<CreditsItem> = mutableListOf()
+        (response.movieCredits?.cast?.sortedByDescending { it.releaseDate })?.forEach {
+            movieCastList.add(CreditsItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult, character = it.character))
         }
-        (response.crew?.sortedByDescending { it.releaseDate })?.forEach {
-            if (!it.isContains(crewList))
-                crewList.add(CreditsItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult, job = it.job))
+        (response.movieCredits?.crew?.sortedByDescending { it.releaseDate })?.forEach {
+            if (!it.isContains(movieCrewList))
+                movieCrewList.add(CreditsItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult, job = it.job))
         }
+        movieCastLD.value = movieCastList
+        movieCrewLD.value = movieCrewList
 
-        movieCastLD.value = castList
-        movieCrewLD.value = crewList
-        increaseCounter()
-    }
-
-    private fun parseTVCreditsResponse(response: TVCastResponse) {
-        Timber.d("Got people Movie Credits $response")
-        val castList: MutableList<CreditsItem> = mutableListOf()
-        val crewList: MutableList<CreditsItem> = mutableListOf()
-        (response.cast?.sortedByDescending { it.firstAirDate })?.forEach {
-            castList.add(CreditsItem(it.id, it.name, it.posterPath, it.voteAverage, null, character = it.character))
+        //parse tv credits
+        val tvCastList: MutableList<CreditsItem> = mutableListOf()
+        val tvCrewList: MutableList<CreditsItem> = mutableListOf()
+        (response.tvCredits?.cast?.sortedByDescending { it.firstAirDate })?.forEach {
+            tvCastList.add(CreditsItem(it.id, it.name, it.posterPath, it.voteAverage, null, character = it.character))
         }
-        (response.crew?.sortedByDescending { it.firstAirDate })?.forEach {
-            if (!it.isContains(crewList))
-                crewList.add(CreditsItem(it.id, it.name, it.posterPath, it.voteAverage, null, job = it.job))
+        (response.tvCredits?.crew?.sortedByDescending { it.firstAirDate })?.forEach {
+            if (!it.isContains(tvCrewList))
+                tvCrewList.add(CreditsItem(it.id, it.name, it.posterPath, it.voteAverage, null, job = it.job))
         }
+        tvCastLD.value = tvCastList
+        tvCrewLD.value = tvCrewList
 
-        tvCastLD.value = castList
-        tvCrewLD.value = crewList
         increaseCounter()
     }
 }

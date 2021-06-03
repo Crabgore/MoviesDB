@@ -67,50 +67,25 @@ interface ApiService {
     fun movieDetails(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String?
+        @Query("language") language: String?,
+        @Query("append_to_response") appendToResponse: String?
     ): Observable<MovieDetailsResponse>
 
     @GET("tv/{tv_id}")
     fun tvDetails(
         @Path("tv_id") tvId: Int,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String?
+        @Query("language") language: String?,
+        @Query("append_to_response") appendToResponse: String?
     ): Observable<TVDetailsResponse>
 
     @GET("person/{person_id}")
     fun peopleDetails(
         @Path("person_id") personId: Int,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String?
+        @Query("language") language: String?,
+        @Query("append_to_response") appendToResponse: String?
     ): Observable<PeopleDetailsResponse>
-
-    @GET("person/{person_id}/movie_credits")
-    fun peopleMovieCredits(
-        @Path("person_id") personId: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String?
-    ): Observable<PeopleCreditsResponse>
-
-    @GET("person/{person_id}/tv_credits")
-    fun peopleTVCredits(
-        @Path("person_id") personId: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String?
-    ): Observable<TVCastResponse>
-
-    @GET("movie/{movie_id}/credits")
-    fun movieCredits(
-        @Path("movie_id") movieId: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String?
-    ): Observable<MovieCreditsResponse>
-
-    @GET("tv/{tv_id}/credits")
-    fun tvCredits(
-        @Path("tv_id") tvId: Int,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String?
-    ): Observable<MovieCreditsResponse>
 
     @GET("search/movie")
     fun searchMovie(

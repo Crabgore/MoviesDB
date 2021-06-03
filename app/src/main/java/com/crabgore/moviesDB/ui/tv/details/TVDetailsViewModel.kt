@@ -50,14 +50,7 @@ class TVDetailsViewModel @Inject constructor(
             addDisposable(accountStateDisposable)
         }
 
-        val creditsDisposable = remote.getTVCredits(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parseMovieCreditsResponse, ::handleFailure)
-
         addDisposable(detailsDisposable)
-        addDisposable(creditsDisposable)
     }
 
     private fun onError(throwable: Throwable?) {
@@ -67,19 +60,10 @@ class TVDetailsViewModel @Inject constructor(
     private fun parseMovieDetailsResponse(response: TVDetailsResponse) {
         Timber.d("Got TV Details $response")
         TVLD.value = response
-        increaseCounter()
-    }
 
-    private fun parseAccountState(response: AccountStateResponse) {
-        Timber.d("Got Movie AccountState $response")
-        isInFavoritesLD.value = response.favorite
-    }
-
-    private fun parseMovieCreditsResponse(response: MovieCreditsResponse) {
-        Timber.d("Got TV Credits $response")
         val castList: MutableList<CreditsItem> = mutableListOf()
         val crewList: MutableList<CreditsItem> = mutableListOf()
-        (response.cast?.sortedBy { it.creditID })?.forEach {
+        (response.credits?.cast?.sortedBy { it.creditID })?.forEach {
             castList.add(
                 CreditsItem(
                     it.id,
@@ -91,7 +75,7 @@ class TVDetailsViewModel @Inject constructor(
                 )
             )
         }
-        (response.crew?.sortedBy { it.creditID })?.forEach {
+        (response.credits?.crew?.sortedBy { it.creditID })?.forEach {
             if (!it.isContains(crewList))
                 crewList.add(
                     CreditsItem(
@@ -107,7 +91,13 @@ class TVDetailsViewModel @Inject constructor(
 
         castLD.value = castList
         crewLD.value = crewList
+
         increaseCounter()
+    }
+
+    private fun parseAccountState(response: AccountStateResponse) {
+        Timber.d("Got Movie AccountState $response")
+        isInFavoritesLD.value = response.favorite
     }
 
     fun markAsFavorite(id: Int) {
@@ -127,7 +117,7 @@ class TVDetailsViewModel @Inject constructor(
     }
 
     private fun parseMarkAsFavoriteResponse(response: MarkAsFavoriteResponse) {
-        Timber.d("Got parseMarkAsFavoriteResponse $response")
+        Timber.d("Got MarkAsFavoriteResponse $response")
         response.success?.let {
             if (it) isInFavoritesLD.value = !isInFavoritesLD.value!!
         }

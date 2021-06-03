@@ -90,7 +90,7 @@ class MovieDetailsFragment : BaseFragment() {
                 }
             })
 
-            observeLoader(2)
+            observeLoader(1)
         }
     }
 
@@ -138,7 +138,16 @@ class MovieDetailsFragment : BaseFragment() {
                 if (it != "") description.text = it
                 else overviewCard.hide()
             } ?: overviewCard.hide()
-            imdb.setOnClickListener { goToIMDB(movie.imdbID) }
+            movie.imdbID?.let {
+                imdb.show()
+                imdb.setOnClickListener { goToIMDB(movie.imdbID) }
+            }
+            movie.homepage?.let {
+                if (it != "") {
+                    homepage.show()
+                    homepage.setOnClickListener { goToHomepage(movie.homepage) }
+                }
+            }
         }
     }
 
@@ -196,6 +205,11 @@ class MovieDetailsFragment : BaseFragment() {
 
     private fun goToIMDB(url: String?) {
         val browse = Intent(Intent.ACTION_VIEW, Uri.parse(IMDB_TITLE + url))
+        startActivity(browse)
+    }
+
+    private fun goToHomepage(url: String?) {
+        val browse = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browse)
     }
 }

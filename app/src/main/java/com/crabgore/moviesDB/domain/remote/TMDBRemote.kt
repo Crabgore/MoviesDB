@@ -64,31 +64,15 @@ class TMDBRemote @Inject constructor(
     }
 
     override fun getMovieDetails(movieId: Int): Single<MovieDetailsResponse> {
-        return service.movieDetails(movieId, API_KEY, language).singleOrError()
+        return service.movieDetails(movieId, API_KEY, language, "credits").singleOrError()
     }
 
     override fun getTvDetails(tvId: Int): Single<TVDetailsResponse> {
-        return service.tvDetails(tvId, API_KEY, language).singleOrError()
+        return service.tvDetails(tvId, API_KEY, language, "credits").singleOrError()
     }
 
     override fun getPeopleDetails(personId: Int): Single<PeopleDetailsResponse> {
-        return service.peopleDetails(personId, API_KEY, language).singleOrError()
-    }
-
-    override fun getPeopleMovieCredits(personId: Int): Single<PeopleCreditsResponse> {
-        return service.peopleMovieCredits(personId, API_KEY, language).singleOrError()
-    }
-
-    override fun getPeopleTVCredits(personId: Int): Single<TVCastResponse> {
-        return service.peopleTVCredits(personId, API_KEY, language).singleOrError()
-    }
-
-    override fun getMovieCredits(movieId: Int): Single<MovieCreditsResponse> {
-        return service.movieCredits(movieId, API_KEY, language).singleOrError()
-    }
-
-    override fun getTVCredits(tvId: Int): Single<MovieCreditsResponse> {
-        return service.tvCredits(tvId, API_KEY, language).singleOrError()
+        return service.peopleDetails(personId, API_KEY, language, "movie_credits,tv_credits").singleOrError()
     }
 
     override fun getSearchMovieResults(query: String): Single<SearchMovieResponse> {

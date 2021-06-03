@@ -198,26 +198,46 @@
                     android:layout_margin="5dp" />
             </androidx.cardview.widget.CardView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/imdb"
+            <LinearLayout
+                android:id="@+id/sites_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="@string/on_imdb"
-                app:cornerRadius="15dp"
-                app:icon="@drawable/ic_imdb_logo"
-                app:iconTint="@null"
-                app:layout_constraintTop_toBottomOf="@id/overview_card" />
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/overview_card">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/imdb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:text="@string/on_imdb"
+                    android:visibility="gone"
+                    app:cornerRadius="15dp"
+                    app:icon="@drawable/ic_imdb_logo"
+                    app:iconTint="@null" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/homepage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:layout_weight="1"
+                    android:text="@string/on_site"
+                    android:visibility="gone"
+                    app:cornerRadius="15dp" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/mark_as_favorite_btn"
                 style="@style/button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="15dp"
                 android:text="@string/mark_as_favorite"
                 app:icon="@drawable/ic_favorite"
-                app:layout_constraintTop_toBottomOf="@id/imdb" />
+                app:layout_constraintTop_toBottomOf="@id/sites_layout" />
 
             <LinearLayout
                 android:id="@+id/actor_layout"

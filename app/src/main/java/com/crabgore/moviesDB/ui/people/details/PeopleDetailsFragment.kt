@@ -94,7 +94,7 @@ class PeopleDetailsFragment : BaseFragment() {
                 }
             })
 
-            observeLoader(3)
+            observeLoader(1)
         }
     }
 
@@ -156,8 +156,15 @@ class PeopleDetailsFragment : BaseFragment() {
                 if (it != "") biography.text = it
                 else biographyCard.hide()
             } ?: biographyCard.hide()
-            imdb.setOnClickListener {
-                goToIMDB(people.imdbID)
+            people.imdbID?.let {
+                imdb.show()
+                imdb.setOnClickListener { goToIMDB(people.imdbID) }
+            }
+            people.homepage?.let {
+                if (it != "") {
+                    homepage.show()
+                    homepage.setOnClickListener { goToHomepage(people.homepage) }
+                }
             }
         }
     }
@@ -172,6 +179,11 @@ class PeopleDetailsFragment : BaseFragment() {
 
     private fun goToIMDB(url: String?) {
         val browse = Intent(Intent.ACTION_VIEW, Uri.parse(IMDB_NAME + url))
+        startActivity(browse)
+    }
+
+    private fun goToHomepage(url: String?) {
+        val browse = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(browse)
     }
 }

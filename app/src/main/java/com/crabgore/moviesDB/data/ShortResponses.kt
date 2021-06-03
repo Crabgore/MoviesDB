@@ -144,14 +144,14 @@ data class KnownFor(
 data class PeopleCreditsResponse(
     val cast: List<Cast>? = null,
     val crew: List<Cast>? = null,
-    val id: Int
+    val id: Int? = null
 )
 
 @JsonClass(generateAdapter = true)
 data class TVCastResponse(
     val cast: List<TVCast>? = null,
     val crew: List<TVCast>? = null,
-    val id: Int
+    val id: Int? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -207,7 +207,7 @@ data class Cast(
 
 @JsonClass(generateAdapter = true)
 data class MovieCreditsResponse(
-    val id: Int,
+    val id: Int? = null,
     val cast: List<MovieCast>? = null,
     val crew: List<MovieCast>? = null
 )

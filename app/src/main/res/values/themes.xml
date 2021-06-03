@@ -15,6 +15,10 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.MoviesDB.Launcher">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
     <style name="chevron_color">
         <item name="android:tint">@color/night_dark</item>
     </style>

@@ -1,5 +1,7 @@
 package com.crabgore.moviesDB.ui.tv.details
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -87,7 +89,7 @@ class TVDetailsFragment : BaseFragment() {
                 }
             })
 
-            observeLoader(2)
+            observeLoader(1)
         }
     }
 
@@ -125,7 +127,7 @@ class TVDetailsFragment : BaseFragment() {
                 country.text = requireContext().getString(R.string.country, countries)
             }
             tv.networks?.let {
-                val networks = java.lang.StringBuilder()
+                val networks = StringBuilder()
                 for (i in it.indices) {
                     networks.append("${it[i].name}")
                     if (i < it.size - 1) networks.append(", ")
@@ -146,6 +148,12 @@ class TVDetailsFragment : BaseFragment() {
                 if (it != "") description.text = it
                 else overviewCard.hide()
             } ?: overviewCard.hide()
+            tv.homepage?.let {
+                if (it != "") {
+                    homepage.show()
+                    homepage.setOnClickListener { goToHomepage(tv.homepage) }
+                }
+            }
         }
     }
 
@@ -197,5 +205,10 @@ class TVDetailsFragment : BaseFragment() {
     private fun markAsFavorite() {
         if (viewModel.checkSession() == null) navigate(R.id.loginFragment)
         else viewModel.markAsFavorite(args.tvId)
+    }
+
+    private fun goToHomepage(url: String?) {
+        val browse = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(browse)
     }
 }

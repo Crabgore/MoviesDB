@@ -35,7 +35,8 @@ data class MovieDetailsResponse (
     val video: Boolean?,
     @field:Json(name="vote_average")
     val voteAverage: Double?,
-    val voteCount: Long?
+    val voteCount: Long?,
+    val credits: MovieCreditsResponse? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -78,7 +79,8 @@ data class TVDetailsResponse (
     val type: String?,
     @field:Json(name="vote_average")
     val voteAverage: Double?,
-    val voteCount: Long?
+    val voteCount: Long?,
+    val credits: MovieCreditsResponse? = null
 )
 
 @JsonClass(generateAdapter = true)
@@ -100,7 +102,11 @@ data class PeopleDetailsResponse (
     val placeOfBirth: String? = null,
     val popularity: Double? = null,
     @field:Json(name="profile_path")
-    val profilePath: String? = null
+    val profilePath: String? = null,
+    @field:Json(name="movie_credits")
+    val movieCredits: PeopleCreditsResponse? = null,
+    @field:Json(name="tv_credits")
+    val tvCredits: TVCastResponse? = null
 )
 
 @JsonClass(generateAdapter = true)

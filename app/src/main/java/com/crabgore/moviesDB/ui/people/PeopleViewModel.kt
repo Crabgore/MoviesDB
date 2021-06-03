@@ -21,7 +21,7 @@ class PeopleViewModel  @Inject constructor(
     var maxPages = Int.MAX_VALUE
 
     fun getData(page: Int) {
-        Timber.d("Getting Popular People page:$page")
+        Timber.d("Getting Popular People page: $page")
         if (page >= maxPages) {
             isLastPageLiveData.value = true
         } else {

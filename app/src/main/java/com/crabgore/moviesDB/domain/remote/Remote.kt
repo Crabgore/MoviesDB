@@ -15,10 +15,6 @@ interface Remote {
     fun getMovieDetails(movieId: Int): Single<MovieDetailsResponse>
     fun getTvDetails(tvId: Int): Single<TVDetailsResponse>
     fun getPeopleDetails(personId: Int): Single<PeopleDetailsResponse>
-    fun getPeopleMovieCredits(personId: Int): Single<PeopleCreditsResponse>
-    fun getPeopleTVCredits(personId: Int): Single<TVCastResponse>
-    fun getMovieCredits(movieId: Int): Single<MovieCreditsResponse>
-    fun getTVCredits(tvId: Int): Single<MovieCreditsResponse>
     fun getSearchMovieResults(query: String): Single<SearchMovieResponse>
     fun getSearchTVResults(query: String): Single<SearchTVResponse>
     fun getSearchPeopleResults(query: String): Single<SearchPeopleResponse>

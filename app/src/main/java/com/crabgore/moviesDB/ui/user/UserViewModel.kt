@@ -61,7 +61,6 @@ class UserViewModel @Inject constructor(
     private fun getSessionID(token: String): Single<SessionResponse> {
         Timber.d("LOGING IN getting session ID $token")
         val request = RequestToken(token)
-
         return remote.sessionId(request)
     }
 
@@ -146,7 +145,7 @@ class UserViewModel @Inject constructor(
     }
 
     private fun parseFavoriteMoviesResponse(response: MoviesResponse) {
-
+        Timber.d("Got favorite movies $response")
         val list: MutableList<MovieItem> = mutableListOf()
         response.results.forEach {
             list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
@@ -156,7 +155,7 @@ class UserViewModel @Inject constructor(
     }
 
     private fun parseFavoriteTVResponse(response: TVResponse) {
-
+        Timber.d("Got favorite tvs $response")
         val list: MutableList<MovieItem> = mutableListOf()
         response.results.forEach {
             list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
