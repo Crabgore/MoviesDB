@@ -29,6 +29,7 @@ class UserViewModel @Inject constructor(
     val favTVLD: MutableLiveData<List<MovieItem>> = MutableLiveData()
 
     fun getSession(): String? {
+        Timber.d("LOGING IN getting session ${storage.getString(SESSION_ID)}")
         return storage.getString(SESSION_ID)
     }
 
