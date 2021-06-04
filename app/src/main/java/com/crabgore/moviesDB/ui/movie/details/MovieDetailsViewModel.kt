@@ -25,7 +25,7 @@ class MovieDetailsViewModel @Inject constructor(
     val movieLD: MutableLiveData<MovieDetailsResponse> = MutableLiveData()
     val castLD: MutableLiveData<List<CreditsItem>> = MutableLiveData()
     val crewLD: MutableLiveData<List<CreditsItem>> = MutableLiveData()
-    val isInFavoritesLD: MutableLiveData<Boolean> = MutableLiveData()
+    val isInFavoritesLD: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun checkSession(): String? {
         return storage.getString(SESSION_ID)

@@ -23,6 +23,8 @@ import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.android.synthetic.main.full_image_layout.view.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MovieDetailsFragment : BaseFragment() {
@@ -43,15 +45,15 @@ class MovieDetailsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        startObservers()
         if (isViewWasNull) {
             initUI()
-            startObservers()
             getData()
         }
     }
 
     override fun backPressed() {
-        if (binding.fullImageLay.isVisible) binding.fullImageLay.hide()
+        if (binding.fullImageLay.fullImageLay.isVisible) binding.fullImageLay.fullImageLay.hide()
         else super.backPressed()
     }
 
@@ -72,6 +74,7 @@ class MovieDetailsFragment : BaseFragment() {
 
             isInFavoritesLD.observe(viewLifecycleOwner, { data ->
                 data?.let {
+                    Timber.d("CHANGE $it")
                     changeButtonStatus(it)
                 }
             })
@@ -181,8 +184,8 @@ class MovieDetailsFragment : BaseFragment() {
     private fun showFullImage() {
         val photo = viewModel.movieLD.value?.posterPath
         photo?.let {
-            loadImage(it, binding.fullPicture)
-            binding.fullImageLay.show()
+            loadImage(it, binding.fullImageLay.fullImageLay.full_picture)
+            binding.fullImageLay.fullImageLay.show()
         }
     }
 
