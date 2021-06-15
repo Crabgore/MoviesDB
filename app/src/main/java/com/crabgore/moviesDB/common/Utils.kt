@@ -34,14 +34,6 @@ fun showToast(context: Context, msg: String) {
 }
 
 /**
- * приводим ошибку ответа сервера к читаемому формату
- */
-fun parseError(throwable: Throwable?): String? {
-    return (throwable as HttpException).response()?.errorBody()?.string()?.replace("{", "")
-        ?.replace("}", "")?.replace("\"", "")?.replace(":", ": ")
-}
-
-/**
  * добавляем расстояние между элементами в RecyclerView
  */
 fun addDecoration(recyclerView: RecyclerView, spacing: Int) {

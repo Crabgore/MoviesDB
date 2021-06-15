@@ -64,6 +64,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-simplexml:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofit_version"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
 
     def activity_version = "1.2.3"
     implementation "androidx.activity:activity-ktx:$activity_version"
@@ -90,6 +91,11 @@ dependencies {
     implementation "com.mikepenz:fastadapter:$fast_adapter_version"
 
     implementation 'com.github.MikeOrtiz:TouchImageView:3.1.0'
+
+    //corutines
+    def kotlinCoroutineVersion = "1.0.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineVersion"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion"
 
     /**
      * Navigation component

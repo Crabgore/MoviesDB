@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const
@@ -16,11 +17,15 @@ import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.*
 import com.crabgore.moviesDB.data.AccountResponse
+import com.crabgore.moviesDB.data.Status.*
 import com.crabgore.moviesDB.databinding.FragmentUserBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.MovieItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class UserFragment : BaseFragment() {
@@ -82,11 +87,37 @@ class UserFragment : BaseFragment() {
 
     private fun startObservers() {
         viewModel.apply {
-            accountLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setInfo(it)
+            lifecycleScope.launch {
+                accountState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setInfo(it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
+            }
+
+            lifecycleScope.launch {
+                favMoviesState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setRV(binding.favMovieRv, it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
+                }
+            }
+
+            lifecycleScope.launch {
+                favTVState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setRV(binding.favTvRv, it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
+                }
+            }
 
             loggingError.observe(viewLifecycleOwner, { data ->
                 data?.let {
@@ -111,32 +142,18 @@ class UserFragment : BaseFragment() {
                     getData()
                 }
             })
-
-            favMoviesLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setRV(binding.favMovieRv, it)
-                }
-            })
-
-            favTVLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setRV(binding.favTvRv, it)
-                }
-            })
-
-            observeLoader(3)
         }
     }
 
-    private fun getData() {
-        viewModel.getData()
-    }
+    private fun getData() = viewModel.getData()
 
     private fun setInfo(response: AccountResponse) {
         response.avatar?.tmdb?.avatarPath?.let {
             loadAvatar(IMAGES_API_HOST + it, binding.avatar)
         } ?: loadAvatar(GRAVATAR_IMAGES_HOST + response.avatar?.gravatar?.hash, binding.avatar)
         binding.nickName.text = response.username
+
+        hideLoader()
     }
 
     private fun setRV(recyclerView: RecyclerView, moviesList: List<MovieItem>) {

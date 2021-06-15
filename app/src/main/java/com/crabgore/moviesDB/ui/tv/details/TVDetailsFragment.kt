@@ -10,12 +10,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.*
+import com.crabgore.moviesDB.data.Status.*
 import com.crabgore.moviesDB.data.TVDetailsResponse
 import com.crabgore.moviesDB.databinding.FragmentTVDetailsBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
@@ -23,6 +25,9 @@ import com.crabgore.moviesDB.ui.items.CreditsItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.android.synthetic.main.full_image_layout.view.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class TVDetailsFragment : BaseFragment() {
@@ -64,33 +69,49 @@ class TVDetailsFragment : BaseFragment() {
 
     private fun startObservers() {
         viewModel.apply {
-            TVLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setInfo(it)
+            lifecycleScope.launch {
+                tvState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setInfo(it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
+            }
+
+            lifecycleScope.launch {
+                castState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let {
+                            if (it.isNotEmpty()) setRV(binding.actorRv, it)
+                            else binding.actorLayout.hide()
+                        }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
+                }
+            }
+
+            lifecycleScope.launch {
+                crewState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let {
+                            if (it.isNotEmpty()) setRV(binding.crewRv, it)
+                            else binding.crewLayout.hide()
+                        }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
+                }
+            }
 
             isInFavoritesLD.observe(viewLifecycleOwner, { data ->
                 data?.let {
                     changeButtonStatus(it)
                 }
             })
-
-            castLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    if (it.isNotEmpty()) setRV(binding.actorRv, it)
-                    else binding.actorLayout.hide()
-                }
-            })
-
-            crewLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    if (it.isNotEmpty()) setRV(binding.crewRv, it)
-                    else binding.crewLayout.hide()
-                }
-            })
-
-            observeLoader(1)
         }
     }
 
@@ -156,6 +177,7 @@ class TVDetailsFragment : BaseFragment() {
                 }
             }
         }
+        hideLoader()
     }
 
     private fun setRV(recyclerView: RecyclerView, list: List<CreditsItem>) {
@@ -184,7 +206,7 @@ class TVDetailsFragment : BaseFragment() {
     }
 
     private fun showFullImage() {
-        val photo = viewModel.TVLD.value?.posterPath
+        val photo = viewModel.tvState.value.data?.posterPath
         photo?.let {
             loadImage(it, binding.fullImageLay.fullImageLay.full_picture)
             binding.fullImageLay.fullImageLay.show()

@@ -2,18 +2,19 @@ package com.crabgore.moviesDB.ui.search
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_MOVIE
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_TV
-import com.crabgore.moviesDB.common.parseError
+import com.crabgore.moviesDB.data.Resource
 import com.crabgore.moviesDB.data.SearchMovieResponse
 import com.crabgore.moviesDB.data.SearchPeopleResponse
 import com.crabgore.moviesDB.data.SearchTVResponse
 import com.crabgore.moviesDB.domain.remote.Remote
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.SearchItem
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,59 +23,91 @@ class SearchViewModel @Inject constructor(
     private val context: Context,
     private val remote: Remote
 ) : BaseViewModel() {
-    val searchLD: MutableLiveData<List<SearchItem>> = MutableLiveData()
+    private val _searchState = MutableStateFlow<Resource<List<SearchItem>>>(Resource.loading(null))
+    val searchState = _searchState
 
     fun search(searchId: String, query: String) {
         Timber.d("Getting Search Result")
-        val disposable = when (searchId) {
-            SEARCH_MOVIE -> remote.getSearchMovieResults(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(::onError)
-                .subscribe(::parseSearchMovieResponse, ::handleFailure)
-            SEARCH_TV -> remote.getSearchTVResults(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(::onError)
-                .subscribe(::parseSearchTVResponse, ::handleFailure)
-            else -> remote.getSearchPeopleResults(query)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnError(::onError)
-                .subscribe(::parseSearchPeopleResponse, ::handleFailure)
+        val job = when (searchId) {
+            SEARCH_MOVIE -> viewModelScope.launch {
+                val response = remote.getSearchMovieResults(query)
+                parseSearchMovieResponse(response)
+            }
+            SEARCH_TV -> viewModelScope.launch {
+                val response = remote.getSearchTVResults(query)
+                parseSearchTVResponse(response)
+            }
+            else -> viewModelScope.launch {
+                val response = remote.getSearchPeopleResults(query)
+                parseSearchPeopleResponse(response)
+            }
         }
-
-        addDisposable(disposable)
+        addJod(job)
     }
 
-    private fun onError(throwable: Throwable?) {
-        Timber.d("Error getting search result ${parseError(throwable)}")
+    private fun parseSearchMovieResponse(response: Response<SearchMovieResponse>) {
+        if (response.isSuccessful) {
+            Timber.d("Got Search Movie Results ${response.body()}")
+            response.body()?.let {
+                val list: MutableList<SearchItem> = mutableListOf()
+                it.results?.forEach { movie ->
+                    list.add(
+                        SearchItem(
+                            context,
+                            movie.id,
+                            movie.posterPath,
+                            movie.title,
+                            movie.releaseDate,
+                            movie.voteAverage
+                        )
+                    )
+                }
+                searchState.value = Resource.success(list)
+            }
+        } else _searchState.value = Resource.error(data = null, message = response.message())
     }
 
-    private fun parseSearchMovieResponse(response: SearchMovieResponse) {
-        Timber.d("Got Search Movie Results $response")
-        val list: MutableList<SearchItem> = mutableListOf()
-        response.results?.forEach {
-            list.add(SearchItem(context, it.id, it.posterPath, it.title, it.releaseDate, it.voteAverage))
-        }
-        searchLD.value = list
+    private fun parseSearchTVResponse(response: Response<SearchTVResponse>) {
+        Timber.d("Got Search TV Results ${response.body()}")
+        if (response.isSuccessful) {
+            response.body()?.let {
+                val list: MutableList<SearchItem> = mutableListOf()
+                it.results?.forEach { tv ->
+                    list.add(
+                        SearchItem(
+                            context,
+                            tv.id,
+                            tv.posterPath,
+                            tv.name,
+                            tv.firstAirDate,
+                            tv.voteAverage
+                        )
+                    )
+                }
+                searchState.value = Resource.success(list)
+            }
+        } else _searchState.value = Resource.error(data = null, message = response.message())
     }
 
-    private fun parseSearchTVResponse(response: SearchTVResponse) {
-        Timber.d("Got Search TV Results $response")
-        val list: MutableList<SearchItem> = mutableListOf()
-        response.results?.forEach {
-            list.add(SearchItem(context, it.id, it.posterPath, it.name, it.firstAirDate, it.voteAverage))
-        }
-        searchLD.value = list
-    }
-
-    private fun parseSearchPeopleResponse(response: SearchPeopleResponse) {
-        Timber.d("Got Search People Results $response")
-        val list: MutableList<SearchItem> = mutableListOf()
-        response.results?.forEach {
-            list.add(SearchItem(context, it.id, it.profilePath, it.name, null, it.popularity))
-        }
-        searchLD.value = list
+    private fun parseSearchPeopleResponse(response: Response<SearchPeopleResponse>) {
+        Timber.d("Got Search People Results ${response.body()}")
+        if (response.isSuccessful) {
+            response.body()?.let {
+                val list: MutableList<SearchItem> = mutableListOf()
+                it.results?.forEach { people ->
+                    list.add(
+                        SearchItem(
+                            context,
+                            people.id,
+                            people.profilePath,
+                            people.name,
+                            null,
+                            people.popularity
+                        )
+                    )
+                }
+                searchState.value = Resource.success(list)
+            }
+        } else _searchState.value = Resource.error(data = null, message = response.message())
     }
 }

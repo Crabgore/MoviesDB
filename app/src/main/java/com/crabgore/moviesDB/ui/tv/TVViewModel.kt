@@ -1,14 +1,15 @@
 package com.crabgore.moviesDB.ui.tv
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.MutableLiveData
-import com.crabgore.moviesDB.common.parseError
+import androidx.lifecycle.viewModelScope
+import com.crabgore.moviesDB.data.Resource
 import com.crabgore.moviesDB.data.TVResponse
 import com.crabgore.moviesDB.domain.remote.Remote
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.MovieItem
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -16,69 +17,38 @@ import javax.inject.Inject
 class TVViewModel @Inject constructor(
     private val remote: Remote
 ) : BaseViewModel() {
-    val nowPlayingLD: MutableLiveData<List<MovieItem>> = MutableLiveData()
-    val popularLD: MutableLiveData<List<MovieItem>> = MutableLiveData()
-    val topRatedLD: MutableLiveData<List<MovieItem>> = MutableLiveData()
+    private val _onTheAirState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    private val _popularState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    private val _topRatedState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    val onTheAirState = _onTheAirState
+    val popularState = _popularState
+    val topRatedState = _topRatedState
 
     fun getData() {
-        Timber.d("Getting On The Air TVs")
-        val nowPlayingDisposable = remote.getOnTheAirTVs(null)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parseOnTheAirResponse, ::handleFailure)
+        val job = viewModelScope.launch {
+            Timber.d("Getting On The Air TVs")
+            val nowPlayingResponse = remote.getOnTheAirTVs(null)
+            parseResponse(nowPlayingResponse, _onTheAirState)
 
+            Timber.d("Getting Popular TVs")
+            val popularResponse = remote.getPopularTVs(null)
+            parseResponse(popularResponse, _popularState)
 
-        Timber.d("Getting Popular TVs")
-        val popularDisposable = remote.getPopularTVs(null)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parsePopularResponse, ::handleFailure)
-
-        Timber.d("Getting Top Rated TVs")
-        val topRatedDisposable = remote.getTopRatedTVs(null)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parseTopRatedResponse, ::handleFailure)
-
-        addDisposable(nowPlayingDisposable)
-        addDisposable(popularDisposable)
-        addDisposable(topRatedDisposable)
-    }
-
-    private fun onError(throwable: Throwable?) {
-        Timber.d("Error getting TVs ${parseError(throwable)}")
-    }
-
-    private fun parseOnTheAirResponse(response: TVResponse) {
-        Timber.d("Got NOn The Air TVs $response")
-        val list: MutableList<MovieItem> = mutableListOf()
-        response.results.forEach {
-            list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
+            Timber.d("Getting Top Rated TVs")
+            val topRatedResponse = remote.getTopRatedTVs(null)
+            parseResponse(topRatedResponse, _topRatedState)
         }
-        nowPlayingLD.value = list
-        increaseCounter()
+        addJod(job)
     }
 
-    private fun parsePopularResponse(response: TVResponse) {
-        Timber.d("Got Popular TVs $response")
-        val list: MutableList<MovieItem> = mutableListOf()
-        response.results.forEach {
-            list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
-        }
-        popularLD.value = list
-        increaseCounter()
-    }
-
-    private fun parseTopRatedResponse(response: TVResponse) {
-        Timber.d("Got Top Rated TVs $response")
-        val list: MutableList<MovieItem> = mutableListOf()
-        response.results.forEach {
-            list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
-        }
-        topRatedLD.value = list
-        increaseCounter()
+    private fun parseResponse(response: Response<TVResponse>, state: MutableStateFlow<Resource<List<MovieItem>>>) {
+        if (response.isSuccessful) {
+            Timber.d("Got TV response ${response.body()}")
+            val list: MutableList<MovieItem> = mutableListOf()
+            response.body()?.results?.forEach {
+                list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
+            }
+            state.value = Resource.success(list)
+        } else state.value = Resource.error(data = null, message = response.message())
     }
 }

@@ -7,17 +7,22 @@ import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_MOVIE
 import com.crabgore.moviesDB.common.addDecoration
+import com.crabgore.moviesDB.data.Status.*
 import com.crabgore.moviesDB.databinding.FragmentMoviesBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.MovieItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class MoviesFragment : BaseFragment() {
@@ -63,37 +68,49 @@ class MoviesFragment : BaseFragment() {
 
     private fun startObservers() {
         viewModel.apply {
-            nowPlayingLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setRV(binding.nowPlayingMoviesRv, it)
+            lifecycleScope.launch {
+                nowPlayingState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setRV(binding.nowPlayingMoviesRv, it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
+            }
 
-            popularLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setRV(binding.popularMoviesRv, it)
+            lifecycleScope.launch {
+                popularState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setRV(binding.popularMoviesRv, it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
+            }
 
-            topRatedLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setRV(binding.topRatedMoviesRv, it)
+            lifecycleScope.launch {
+                topRatedState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setRV(binding.topRatedMoviesRv, it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
+            }
 
-            upcomingLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setRV(binding.upcomingMoviesRv, it)
+            lifecycleScope.launch {
+                upcomingState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setRV(binding.upcomingMoviesRv, it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
-
-            observeLoader(4)
+            }
         }
     }
 
-    private fun getData() {
-        viewModel.getData()
-    }
+    private fun getData() = viewModel.getData()
 
     private fun setRV(recyclerView: RecyclerView, moviesList: List<MovieItem>) {
         val itemAdapter = ItemAdapter<MovieItem>()
@@ -118,6 +135,8 @@ class MoviesFragment : BaseFragment() {
             navigateWithAction(directions)
             false
         }
+
+        hideLoader()
     }
 
     private fun toFullList(command: String) {

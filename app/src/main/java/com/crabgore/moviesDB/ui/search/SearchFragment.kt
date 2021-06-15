@@ -8,17 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_MOVIE
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_TV
 import com.crabgore.moviesDB.common.addDecoration
+import com.crabgore.moviesDB.data.Status.*
 import com.crabgore.moviesDB.databinding.FragmentSearchBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.SearchItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class SearchFragment : BaseFragment() {
@@ -62,11 +67,16 @@ class SearchFragment : BaseFragment() {
     }
 
     private fun startObservers() {
-        viewModel.searchLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                setSearchRV(it)
+        lifecycleScope.launch {
+            viewModel.searchState.collect { resource ->
+                when (resource.status) {
+                    SUCCESS -> resource.data?.let { setSearchRV(it) }
+                    ERROR -> Timber.d(resource.message)
+                    LOADING -> {
+                    }
+                }
             }
-        })
+        }
     }
 
     private fun initSearchAdapter() {
@@ -86,10 +96,12 @@ class SearchFragment : BaseFragment() {
         }
 
         fastAdapter.onClickListener = { _, _, item, _ ->
-            val directions = when(args.searchId) {
-                SEARCH_MOVIE -> SearchFragmentDirections.actionSearchFragmentToMovieDetailsFragment(item.id)
+            val directions = when (args.searchId) {
+                SEARCH_MOVIE -> SearchFragmentDirections.actionSearchFragmentToMovieDetailsFragment(
+                    item.id
+                )
                 SEARCH_TV -> SearchFragmentDirections.actionSearchFragmentToTVDetailsFragment(item.id)
-                else ->  SearchFragmentDirections.actionSearchFragmentToPeopleDetailsFragment(item.id)
+                else -> SearchFragmentDirections.actionSearchFragmentToPeopleDetailsFragment(item.id)
             }
             navigateWithAction(directions)
             false
@@ -100,6 +112,8 @@ class SearchFragment : BaseFragment() {
         itemAdapter.clear()
         itemAdapter.add(list)
         binding.searchRv.adapter?.notifyDataSetChanged()
+
+        hideLoader()
     }
 
     private fun search(text: Editable?) {

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,11 +14,16 @@ import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
+import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.data.Status.*
 import com.crabgore.moviesDB.databinding.FragmentMoviesCategoryBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.MovieItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class MoviesCategoryFragment : BaseFragment() {
@@ -54,14 +60,18 @@ class MoviesCategoryFragment : BaseFragment() {
 
     private fun startObservers() {
         viewModel.apply {
-            moviesLiveData.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    if (page == 1) {
-                        setRV(it)
-                        page++
-                    } else updateRV(it)
+            lifecycleScope.launch {
+                moviesState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> if (page == 1) {
+                            resource.data?.let { setRV(it) }
+                            page++
+                        } else resource.data?.let { updateRV(it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
+            }
 
             isLastPageLiveData.observe(viewLifecycleOwner, { data ->
                 data?.let {
@@ -74,14 +84,10 @@ class MoviesCategoryFragment : BaseFragment() {
                     }
                 }
             })
-
-            observeLoader(1)
         }
     }
 
-    private fun getData() {
-        viewModel.getData(args.command, page)
-    }
+    private fun getData() = viewModel.getData(args.command, page)
 
     private fun setRV(list: List<MovieItem>) {
         itemAdapter = ItemAdapter()
@@ -118,10 +124,13 @@ class MoviesCategoryFragment : BaseFragment() {
                         item.id
                     )
                 navigateWithAction(directions)
-                viewModel.moviesLiveData.value = null
+                viewModel.moviesState.value =
+                    Resource(status = SUCCESS, data = null, message = null)
                 false
             }
         }
+
+        hideLoader()
     }
 
     private fun updateRV(list: List<MovieItem>) {

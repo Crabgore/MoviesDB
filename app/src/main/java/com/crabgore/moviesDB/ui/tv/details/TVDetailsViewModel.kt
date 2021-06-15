@@ -2,18 +2,19 @@ package com.crabgore.moviesDB.ui.tv.details
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
-import com.crabgore.moviesDB.Const
+import androidx.lifecycle.viewModelScope
+import com.crabgore.moviesDB.Const.MediaTypes.Companion.TV
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.ACCOUNT_ID
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SESSION_ID
 import com.crabgore.moviesDB.common.isContains
-import com.crabgore.moviesDB.common.parseError
 import com.crabgore.moviesDB.data.*
 import com.crabgore.moviesDB.domain.remote.Remote
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.CreditsItem
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -22,9 +23,12 @@ class TVDetailsViewModel @Inject constructor(
     private val remote: Remote,
     private val storage: Storage
 ) : BaseViewModel() {
-    val TVLD: MutableLiveData<TVDetailsResponse> = MutableLiveData()
-    val castLD: MutableLiveData<List<CreditsItem>> = MutableLiveData()
-    val crewLD: MutableLiveData<List<CreditsItem>> = MutableLiveData()
+    private val _tvState = MutableStateFlow<Resource<TVDetailsResponse>>(Resource.loading(null))
+    private val _castState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
+    private val _crewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
+    val tvState = _tvState
+    val castState = _castState
+    val crewState = _crewState
     val isInFavoritesLD: MutableLiveData<Boolean> = MutableLiveData(false)
 
     fun checkSession(): String? {
@@ -32,94 +36,86 @@ class TVDetailsViewModel @Inject constructor(
     }
 
     fun getData(id: Int) {
-        Timber.d("Getting TV Details $id")
-        val detailsDisposable = remote.getTvDetails(id)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parseMovieDetailsResponse, ::handleFailure)
+        val job = viewModelScope.launch {
+            Timber.d("Getting TV Details $id")
+            val detailsResponse = remote.getTvDetails(id)
+            parseMovieDetailsResponse(detailsResponse)
 
-        storage.getString(SESSION_ID)?.let {
-            Timber.d("Getting TV Account State $id")
-            val accountStateDisposable =
-                remote.getTVAccountState(id, it)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnError(::onError)
-                    .subscribe(::parseAccountState, ::handleFailure)
-            addDisposable(accountStateDisposable)
+            storage.getString(SESSION_ID)?.let {
+                val accountStateResponse =
+                    remote.getTVAccountState(id, storage.getString(SESSION_ID)!!)
+                parseAccountState(accountStateResponse)
+            }
         }
-
-        addDisposable(detailsDisposable)
+        addJod(job)
     }
 
-    private fun onError(throwable: Throwable?) {
-        Timber.d("Error getting TV Details ${parseError(throwable)}")
-    }
+    private fun parseMovieDetailsResponse(response: Response<TVDetailsResponse>) {
+        if (response.isSuccessful) {
+            Timber.d("Got TV Details ${response.body()}")
+            response.body()?.let {
+                _tvState.value = Resource.success(it)
 
-    private fun parseMovieDetailsResponse(response: TVDetailsResponse) {
-        Timber.d("Got TV Details $response")
-        TVLD.value = response
 
-        val castList: MutableList<CreditsItem> = mutableListOf()
-        val crewList: MutableList<CreditsItem> = mutableListOf()
-        (response.credits?.cast?.sortedBy { it.creditID })?.forEach {
-            castList.add(
-                CreditsItem(
-                    it.id,
-                    it.name,
-                    it.profilePath,
-                    it.popularity,
-                    it.adult,
-                    character = it.character
-                )
-            )
-        }
-        (response.credits?.crew?.sortedBy { it.creditID })?.forEach {
-            if (!it.isContains(crewList))
-                crewList.add(
-                    CreditsItem(
-                        it.id,
-                        it.name,
-                        it.profilePath,
-                        it.popularity,
-                        it.adult,
-                        job = it.job
+                val castList: MutableList<CreditsItem> = mutableListOf()
+                val crewList: MutableList<CreditsItem> = mutableListOf()
+                (it.credits?.cast?.sortedBy { tvCast -> tvCast.creditID })?.forEach { tvCast ->
+                    castList.add(
+                        CreditsItem(
+                            tvCast.id,
+                            tvCast.name,
+                            tvCast.profilePath,
+                            tvCast.popularity,
+                            tvCast.adult,
+                            character = tvCast.character
+                        )
                     )
-                )
-        }
+                }
+                (it.credits?.crew?.sortedBy { tvCrew -> tvCrew.creditID })?.forEach { tvCrew ->
+                    if (!tvCrew.isContains(crewList))
+                        crewList.add(
+                            CreditsItem(
+                                tvCrew.id,
+                                tvCrew.name,
+                                tvCrew.profilePath,
+                                tvCrew.popularity,
+                                tvCrew.adult,
+                                job = tvCrew.job
+                            )
+                        )
+                }
 
-        castLD.value = castList
-        crewLD.value = crewList
-
-        increaseCounter()
+                _castState.value = Resource.success(castList)
+                _crewState.value = Resource.success(crewList)
+            }
+        } else _tvState.value = Resource.error(data = null, message = response.message())
     }
 
-    private fun parseAccountState(response: AccountStateResponse) {
-        Timber.d("Got Movie AccountState $response")
-        isInFavoritesLD.value = response.favorite
+    private fun parseAccountState(response: Response<AccountStateResponse>) {
+        if (response.isSuccessful) {
+            Timber.d("Got TV AccountState ${response.body()}")
+            response.body()?.let {
+                isInFavoritesLD.value = it.favorite
+            }
+        } else Timber.d("TV AccountState error ${response.message()}")
     }
 
     fun markAsFavorite(id: Int) {
-        val request = MarkAsFavoriteRequest(Const.MediaTypes.TV, id, !isInFavoritesLD.value!!)
+        val request = MarkAsFavoriteRequest(TV, id, !isInFavoritesLD.value!!)
 
-        val disposable = remote.markAsFavorite(
-            storage.getInt(ACCOUNT_ID),
-            storage.getString(SESSION_ID)!!,
-            request
-        )
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnError(::onError)
-            .subscribe(::parseMarkAsFavoriteResponse, ::handleFailure)
-
-        addDisposable(disposable)
+        val job = viewModelScope.launch {
+            val response = remote.markAsFavorite(storage.getInt(ACCOUNT_ID), storage.getString(SESSION_ID)!!, request)
+            parseMarkAsFavoriteResponse(response)
+        }
+        addJod(job)
     }
 
-    private fun parseMarkAsFavoriteResponse(response: MarkAsFavoriteResponse) {
-        Timber.d("Got MarkAsFavoriteResponse $response")
-        response.success?.let {
-            if (it) isInFavoritesLD.value = !isInFavoritesLD.value!!
-        }
+    private fun parseMarkAsFavoriteResponse(response: Response<MarkAsFavoriteResponse>) {
+        if (response.isSuccessful) {
+            Timber.d("Got MarkAsFavoriteResponse ${response.body()}")
+            response.body()?.success?.let {
+                if (it) isInFavoritesLD.value = !isInFavoritesLD.value!!
+            }
+        } else Timber.d("MarkAsFavoriteResponse error ${response.message()}")
     }
 }

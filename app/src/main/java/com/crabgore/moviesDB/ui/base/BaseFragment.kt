@@ -28,15 +28,6 @@ open class BaseFragment : DaggerFragment() {
         return viewState
     }
 
-    fun BaseViewModel.observeLoader(counter: Int) {
-        showLoader()
-        doneLD.observe(viewLifecycleOwner, { data ->
-            data?.let {
-                if (it >= counter) hideLoader()
-            }
-        })
-    }
-
     fun navigateWithAction(action: NavDirections) {
         isNavigated = true
         findNavController().navigate(action)
@@ -47,7 +38,7 @@ open class BaseFragment : DaggerFragment() {
         findNavController().navigate(resId)
     }
 
-    private fun showLoader() {
+    fun showLoader() {
         (activity as MainActivity).showLoader()
     }
 

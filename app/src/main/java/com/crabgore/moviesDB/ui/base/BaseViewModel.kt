@@ -1,25 +1,18 @@
 package com.crabgore.moviesDB.ui.base
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.crabgore.moviesDB.common.CompositeJob
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.Job
 
 abstract class BaseViewModel : ViewModel() {
     private val compositeDisposable by lazy { CompositeDisposable() }
-    val doneLD: MutableLiveData<Int> = MutableLiveData(0)
+    private val compositeJob by lazy { CompositeJob() }
 
-    val failure: MutableLiveData<Throwable> = MutableLiveData()
+    fun addJod(job: Job) = compositeJob.add(job)
 
-    fun addDisposable(disposable: Disposable) = compositeDisposable.add(disposable)
-
-    fun increaseCounter() {
-        doneLD.value = doneLD.value?.plus(1)
+    override fun onCleared() {
+        compositeDisposable.clear()
+        compositeJob.cancel()
     }
-
-    protected fun handleFailure(fail: Throwable) {
-        failure.value = fail
-    }
-
-    override fun onCleared() = compositeDisposable.clear()
 }

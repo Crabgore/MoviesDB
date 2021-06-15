@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,12 +18,16 @@ import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.*
 import com.crabgore.moviesDB.data.PeopleDetailsResponse
+import com.crabgore.moviesDB.data.Status.*
 import com.crabgore.moviesDB.databinding.FragmentPeopleDetailsBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.android.synthetic.main.full_image_layout.view.*
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class PeopleDetailsFragment : BaseFragment() {
@@ -61,41 +66,71 @@ class PeopleDetailsFragment : BaseFragment() {
 
     private fun startObservers() {
         viewModel.apply {
-            peopleLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    setInfo(it)
+            lifecycleScope.launch {
+                peopleState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let { setInfo(it) }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> showLoader()
+                    }
                 }
-            })
+            }
 
-            movieCastLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    if (it.isNotEmpty()) setRV(binding.actorRv, it)
-                    else binding.actorLayout.hide()
+            lifecycleScope.launch {
+                movieCastState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let {
+                            if (it.isNotEmpty()) setRV(binding.actorRv, it)
+                            else binding.actorLayout.hide()
+                        }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
                 }
-            })
+            }
 
-            movieCrewLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    if (it.isNotEmpty()) setRV(binding.crewRv, it)
-                    else binding.crewLayout.hide()
+            lifecycleScope.launch {
+                movieCrewState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let {
+                            if (it.isNotEmpty()) setRV(binding.crewRv, it)
+                            else binding.crewLayout.hide()
+                        }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
                 }
-            })
+            }
 
-            tvCastLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    if (it.isNotEmpty()) setRV(binding.tvCastRv, it, true)
-                    else binding.tvCastLayout.hide()
+            lifecycleScope.launch {
+                tvCastState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let {
+                            if (it.isNotEmpty()) setRV(binding.tvCastRv, it, true)
+                            else binding.tvCastLayout.hide()
+                        }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
                 }
-            })
+            }
 
-            tvCrewLD.observe(viewLifecycleOwner, { data ->
-                data?.let {
-                    if (it.isNotEmpty()) setRV(binding.tvCrewRv, it, true)
-                    else binding.tvCrewLayout.hide()
+            lifecycleScope.launch {
+                tvCrewState.collect { resource ->
+                    when (resource.status) {
+                        SUCCESS -> resource.data?.let {
+                            if (it.isNotEmpty()) setRV(binding.tvCrewRv, it, true)
+                            else binding.tvCrewLayout.hide()
+                        }
+                        ERROR -> Timber.d(resource.message)
+                        LOADING -> {
+                        }
+                    }
                 }
-            })
-
-            observeLoader(1)
+            }
         }
     }
 
@@ -168,10 +203,12 @@ class PeopleDetailsFragment : BaseFragment() {
                 }
             }
         }
+
+        hideLoader()
     }
 
     private fun showFullImage() {
-        val photo = viewModel.peopleLD.value?.profilePath
+        val photo = viewModel.peopleState.value.data?.profilePath
         photo?.let {
             loadImage(it, binding.fullImageLay.fullImageLay.full_picture)
             binding.fullImageLay.fullImageLay.show()

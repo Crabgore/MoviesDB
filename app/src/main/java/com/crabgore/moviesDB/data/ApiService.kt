@@ -1,180 +1,180 @@
 package com.crabgore.moviesDB.data
 
-import io.reactivex.Observable
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiService {
 
     @GET("movie/now_playing")
-    fun nowPlayingMovies(
+    suspend fun nowPlayingMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?,
         @Query("region") region: String?
-    ): Observable<MoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("movie/popular")
-    fun popularMovies(
+    suspend fun popularMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<MoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("movie/top_rated")
-    fun topRatedMovies(
+    suspend fun topRatedMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<MoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("movie/upcoming")
-    fun upcomingMovies(
+    suspend fun upcomingMovies(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?,
         @Query("region") region: String?
-    ): Observable<MoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("tv/on_the_air")
-    fun onTheAirTVs(
+    suspend fun onTheAirTVs(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<TVResponse>
+    ): Response<TVResponse>
 
     @GET("tv/popular")
-    fun popularTVs(
+    suspend fun popularTVs(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<TVResponse>
+    ): Response<TVResponse>
 
     @GET("tv/top_rated")
-    fun topRatedTVs(
+    suspend fun topRatedTVs(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<TVResponse>
+    ): Response<TVResponse>
 
     @GET("person/popular")
-    fun popularPeople(
+    suspend fun popularPeople(
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<PeopleResponse>
+    ): Response<PeopleResponse>
 
     @GET("movie/{movie_id}")
-    fun movieDetails(
+    suspend fun movieDetails(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("append_to_response") appendToResponse: String?
-    ): Observable<MovieDetailsResponse>
+    ): Response<MovieDetailsResponse>
 
     @GET("tv/{tv_id}")
-    fun tvDetails(
+    suspend fun tvDetails(
         @Path("tv_id") tvId: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("append_to_response") appendToResponse: String?
-    ): Observable<TVDetailsResponse>
+    ): Response<TVDetailsResponse>
 
     @GET("person/{person_id}")
-    fun peopleDetails(
+    suspend fun peopleDetails(
         @Path("person_id") personId: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("append_to_response") appendToResponse: String?
-    ): Observable<PeopleDetailsResponse>
+    ): Response<PeopleDetailsResponse>
 
     @GET("search/movie")
-    fun searchMovie(
+    suspend fun searchMovie(
         @Query("query") query: String?,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?
-    ): Observable<SearchMovieResponse>
+    ): Response<SearchMovieResponse>
 
     @GET("search/tv")
-    fun searchTV(
+    suspend fun searchTV(
         @Query("query") query: String?,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?
-    ): Observable<SearchTVResponse>
+    ): Response<SearchTVResponse>
 
     @GET("search/person")
-    fun searchPeople(
+    suspend fun searchPeople(
         @Query("query") query: String?,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?
-    ): Observable<SearchPeopleResponse>
+    ): Response<SearchPeopleResponse>
 
     @GET("authentication/token/new")
-    fun requestToken(
+    suspend fun requestToken(
         @Query("api_key") apiKey: String
-    ): Observable<TokenResponse>
+    ): Response<TokenResponse>
 
     @POST("authentication/token/validate_with_login")
-    fun authWithLogin(
+    suspend fun authWithLogin(
         @Query("api_key") apiKey: String,
         @Body request: AuthWithLoginRequest
-    ): Observable<TokenResponse>
+    ): Response<TokenResponse>
 
     @POST("authentication/session/new")
-    fun sessionId(
+    suspend fun sessionId(
         @Query("api_key") apiKey: String,
         @Body request: RequestToken
-    ): Observable<SessionResponse>
+    ): Response<SessionResponse>
 
     @GET("account")
-    fun accountDetails(
+    suspend fun accountDetails(
         @Query("api_key") apiKey: String,
         @Query("session_id") sessionId: String
-    ): Observable<AccountResponse>
+    ): Response<AccountResponse>
 
     @HTTP(method = "DELETE", path = "authentication/session", hasBody = true)
-    fun logOut(
+    suspend fun logOut(
         @Query("api_key") apiKey: String,
         @Body request: LogoutRequest
-    ): Observable<DeleteSessionResponse>
+    ): Response<DeleteSessionResponse>
 
     @GET("account/{account_id}/favorite/movies")
-    fun favoriteMovies(
+    suspend fun favoriteMovies(
         @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<MoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("account/{account_id}/favorite/tv")
-    fun favoriteTVs(
+    suspend fun favoriteTVs(
         @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String,
         @Query("api_key") apiKey: String,
         @Query("language") language: String?,
         @Query("page") page: Int?
-    ): Observable<TVResponse>
+    ): Response<TVResponse>
 
 
     @POST("account/{account_id}/favorite")
-    fun markAsFavorite(
+    suspend fun markAsFavorite(
         @Path("account_id") accountId: Int,
         @Query("session_id") sessionId: String,
         @Query("api_key") apiKey: String,
         @Body request: MarkAsFavoriteRequest
-    ): Observable<MarkAsFavoriteResponse>
+    ): Response<MarkAsFavoriteResponse>
 
     @GET("movie/{movie_id}/account_states")
-    fun movieAccountState(
+    suspend fun movieAccountState(
         @Path("movie_id") movieId: Int,
         @Query("api_key") apiKey: String,
         @Query("session_id") sessionId: String
-    ): Observable<AccountStateResponse>
+    ): Response<AccountStateResponse>
 
     @GET("tv/{tv_id}/account_states")
-    fun tvAccountState(
+    suspend fun tvAccountState(
         @Path("tv_id") tvId: Int,
         @Query("api_key") apiKey: String,
         @Query("session_id") sessionId: String
-    ): Observable<AccountStateResponse>
+    ): Response<AccountStateResponse>
 }

@@ -1,33 +1,33 @@
 package com.crabgore.moviesDB.domain.remote
 
 import com.crabgore.moviesDB.data.*
-import io.reactivex.Single
+import retrofit2.Response
 
 interface Remote {
-    fun getNowPlayingMovies(page: Int?): Single<MoviesResponse>
-    fun getPopularMovies(page: Int?): Single<MoviesResponse>
-    fun getTopRatedMovies(page: Int?): Single<MoviesResponse>
-    fun getUpcomingMovies(page: Int?): Single<MoviesResponse>
-    fun getOnTheAirTVs(page: Int?): Single<TVResponse>
-    fun getPopularTVs(page: Int?): Single<TVResponse>
-    fun getTopRatedTVs(page: Int?): Single<TVResponse>
-    fun getPopularPeople(page: Int?): Single<PeopleResponse>
-    fun getMovieDetails(movieId: Int): Single<MovieDetailsResponse>
-    fun getTvDetails(tvId: Int): Single<TVDetailsResponse>
-    fun getPeopleDetails(personId: Int): Single<PeopleDetailsResponse>
-    fun getSearchMovieResults(query: String): Single<SearchMovieResponse>
-    fun getSearchTVResults(query: String): Single<SearchTVResponse>
-    fun getSearchPeopleResults(query: String): Single<SearchPeopleResponse>
+    suspend fun getNowPlayingMovies(page: Int?): Response<MoviesResponse>
+    suspend fun getPopularMovies(page: Int?): Response<MoviesResponse>
+    suspend fun getTopRatedMovies(page: Int?): Response<MoviesResponse>
+    suspend fun getUpcomingMovies(page: Int?): Response<MoviesResponse>
+    suspend fun getOnTheAirTVs(page: Int?): Response<TVResponse>
+    suspend fun getPopularTVs(page: Int?): Response<TVResponse>
+    suspend fun getTopRatedTVs(page: Int?): Response<TVResponse>
+    suspend fun getPopularPeople(page: Int?): Response<PeopleResponse>
+    suspend fun getMovieDetails(movieId: Int): Response<MovieDetailsResponse>
+    suspend fun getTvDetails(tvId: Int): Response<TVDetailsResponse>
+    suspend fun getPeopleDetails(personId: Int): Response<PeopleDetailsResponse>
+    suspend fun getSearchMovieResults(query: String): Response<SearchMovieResponse>
+    suspend fun getSearchTVResults(query: String): Response<SearchTVResponse>
+    suspend fun getSearchPeopleResults(query: String): Response<SearchPeopleResponse>
 
-    fun getToken(): Single<TokenResponse>
-    fun authWithLogin(request: AuthWithLoginRequest): Single<TokenResponse>
-    fun sessionId(request: RequestToken): Single<SessionResponse>
-    fun getAccountDetails(session: String): Single<AccountResponse>
-    fun logOut(session: LogoutRequest): Single<DeleteSessionResponse>
+    suspend fun getToken(): Response<TokenResponse>
+    suspend fun authWithLogin(request: AuthWithLoginRequest): Response<TokenResponse>
+    suspend fun sessionId(request: RequestToken): Response<SessionResponse>
+    suspend fun getAccountDetails(session: String): Response<AccountResponse>
+    suspend fun logOut(session: LogoutRequest): Response<DeleteSessionResponse>
 
-    fun getFavoriteMovies(accountId: Int, sessionId: String, page: Int?): Single<MoviesResponse>
-    fun getFavoriteTVs(accountId: Int, sessionId: String, page: Int?): Single<TVResponse>
-    fun markAsFavorite(accountId: Int, sessionId: String, request: MarkAsFavoriteRequest): Single<MarkAsFavoriteResponse>
-    fun getMovieAccountState(movieId: Int, sessionId: String): Single<AccountStateResponse>
-    fun getTVAccountState(tvId: Int, sessionId: String): Single<AccountStateResponse>
+    suspend fun getFavoriteMovies(accountId: Int, sessionId: String, page: Int?): Response<MoviesResponse>
+    suspend fun getFavoriteTVs(accountId: Int, sessionId: String, page: Int?): Response<TVResponse>
+    suspend fun markAsFavorite(accountId: Int, sessionId: String, request: MarkAsFavoriteRequest): Response<MarkAsFavoriteResponse>
+    suspend fun getMovieAccountState(movieId: Int, sessionId: String): Response<AccountStateResponse>
+    suspend fun getTVAccountState(tvId: Int, sessionId: String): Response<AccountStateResponse>
 }
