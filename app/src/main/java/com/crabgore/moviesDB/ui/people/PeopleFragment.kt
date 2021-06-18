@@ -94,9 +94,7 @@ class PeopleFragment : BaseFragment() {
         }
     }
 
-    private fun getData() {
-        viewModel.getData(page)
-    }
+    private fun getData() = viewModel.getData(page)
 
     private fun setRV(list: List<PeopleItem>) {
         itemAdapter = ItemAdapter()

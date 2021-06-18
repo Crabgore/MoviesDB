@@ -14,7 +14,9 @@ import javax.inject.Singleton
     modules = [AndroidSupportInjectionModule::class, RemoteModule::class, StorageModule::class,
         MoviesFragmentModule::class, MovieDetailsModule::class, MoviesCategoryModule::class,
         TVFragmentModule::class, TVDetailsModule::class, TVCategoryModule::class,
-        PeopleFragmentModule::class, PeopleDetailsModule::class, SearchModule::class, UserModule::class]
+        PeopleFragmentModule::class, PeopleDetailsModule::class, SearchModule::class, UserModule::class,
+        MoviesRepositoryModule::class, TVRepositoryModule::class, PeopleRepositoryModule::class,
+        SearchRepositoryModule::class, FavoritesRepositoryModule::class, UserRepositoryModule::class]
 )
 
 interface AppComponent : AndroidInjector<App> {

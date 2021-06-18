@@ -3,25 +3,24 @@ package com.crabgore.moviesDB.ui.movie.details
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.crabgore.moviesDB.Const.MediaTypes.Companion.MOVIE
-import com.crabgore.moviesDB.Const.MyPreferences.Companion.ACCOUNT_ID
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SESSION_ID
-import com.crabgore.moviesDB.common.isContains
-import com.crabgore.moviesDB.data.*
-import com.crabgore.moviesDB.domain.remote.Remote
+import com.crabgore.moviesDB.data.MovieDetailsResponse
+import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
+import com.crabgore.moviesDB.domain.repositories.interfaces.MoviesRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
 
 @SuppressLint("StaticFieldLeak")
 class MovieDetailsViewModel @Inject constructor(
-    private val remote: Remote,
-    private val storage: Storage
+    private val storage: Storage,
+    private val repository: MoviesRepository,
+    private val favoritesRepository: FavoritesRepository
 ) : BaseViewModel() {
     private val _movieState = MutableStateFlow<Resource<MovieDetailsResponse>>(Resource.loading(null))
     private val _castState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
@@ -38,82 +37,22 @@ class MovieDetailsViewModel @Inject constructor(
     fun getData(id: Int) {
         val job = viewModelScope.launch {
             Timber.d("Getting Movie Details $id")
-            val detailsResponse = remote.getMovieDetails(id)
-            parseMovieDetailsResponse(detailsResponse)
+            _movieState.value = repository.getMovieDetails(id)
+            _castState.value = repository.castListStore
+            _crewState.value = repository.crewListStore
 
             storage.getString(SESSION_ID)?.let {
-                val accountStateResponse = remote.getMovieAccountState(id, storage.getString(SESSION_ID)!!)
-                parseAccountState(accountStateResponse)
+                isInFavoritesLD.value = repository.getMovieAccountState(id)
             }
         }
         addJod(job)
-    }
-
-    private fun parseMovieDetailsResponse(response: Response<MovieDetailsResponse>) {
-        if (response.isSuccessful) {
-            Timber.d("Got Movie Details ${response.body()}")
-            response.body()?.let {
-                _movieState.value = Resource.success(it)
-
-                val castList: MutableList<CreditsItem> = mutableListOf()
-                val crewList: MutableList<CreditsItem> = mutableListOf()
-                (it.credits?.cast?.sortedBy { movieCast -> movieCast.creditID })?.forEach { movieCast ->
-                    castList.add(
-                        CreditsItem(
-                            movieCast.id,
-                            movieCast.name,
-                            movieCast.profilePath,
-                            movieCast.popularity,
-                            movieCast.adult,
-                            character = movieCast.character
-                        )
-                    )
-                }
-                (it.credits?.crew?.sortedBy { movieCrew -> movieCrew.creditID })?.forEach { movieCrew ->
-                    if (!movieCrew.isContains(crewList))
-                        crewList.add(
-                            CreditsItem(
-                                movieCrew.id,
-                                movieCrew.name,
-                                movieCrew.profilePath,
-                                movieCrew.popularity,
-                                movieCrew.adult,
-                                job = movieCrew.job
-                            )
-                        )
-                }
-
-                _castState.value = Resource.success(castList)
-                _crewState.value = Resource.success(crewList)
-            }
-        } else _movieState.value = Resource.error(data = null, message = response.message())
-    }
-
-    private fun parseAccountState(response: Response<AccountStateResponse>) {
-        if (response.isSuccessful) {
-            Timber.d("Got Movie AccountState ${response.body()}")
-            response.body()?.let {
-                isInFavoritesLD.value = it.favorite
-            }
-        } else Timber.d("AccountState error ${response.message()}")
     }
 
     fun markAsFavorite(id: Int) {
-        val request = MarkAsFavoriteRequest(MOVIE, id, !isInFavoritesLD.value!!)
-
         val job = viewModelScope.launch {
-            val response = remote.markAsFavorite(storage.getInt(ACCOUNT_ID), storage.getString(SESSION_ID)!!, request)
-            parseMarkAsFavoriteResponse(response)
+            val success = favoritesRepository.markMovieAsFavorite(id, !isInFavoritesLD.value!!)
+            if (success) isInFavoritesLD.value = !isInFavoritesLD.value!!
         }
         addJod(job)
-    }
-
-    private fun parseMarkAsFavoriteResponse(response: Response<MarkAsFavoriteResponse>) {
-        if (response.isSuccessful) {
-            Timber.d("Got MarkAsFavoriteResponse ${response.body()}")
-            response.body()?.success?.let {
-                if (it) isInFavoritesLD.value = !isInFavoritesLD.value!!
-            }
-        } else Timber.d("MarkAsFavoriteResponse error ${response.message()}")
     }
 }

@@ -164,9 +164,7 @@ class PeopleDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun getData() {
-        viewModel.getData(args.peopleId)
-    }
+    private fun getData() = viewModel.getData(args.peopleId)
 
     private fun setInfo(people: PeopleDetailsResponse) {
         binding.apply {

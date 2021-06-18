@@ -115,9 +115,7 @@ class TVDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun getData() {
-        viewModel.getData(args.tvId)
-    }
+    private fun getData() = viewModel.getData(args.tvId)
 
     private fun setInfo(tv: TVDetailsResponse) {
         binding.apply {

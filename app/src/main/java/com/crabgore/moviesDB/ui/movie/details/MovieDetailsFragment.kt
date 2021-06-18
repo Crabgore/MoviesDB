@@ -117,9 +117,7 @@ class MovieDetailsFragment : BaseFragment() {
         }
     }
 
-    private fun getData() {
-        viewModel.getData(args.movieId)
-    }
+    private fun getData() = viewModel.getData(args.movieId)
 
     private fun setInfo(movie: MovieDetailsResponse) {
         binding.apply {

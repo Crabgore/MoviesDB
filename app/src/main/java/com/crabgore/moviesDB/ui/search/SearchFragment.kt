@@ -62,9 +62,7 @@ class SearchFragment : BaseFragment() {
         binding.searchEt.removeTextChangedListener(watcher)
     }
 
-    private fun initUI() {
-        initSearchAdapter()
-    }
+    private fun initUI() = initSearchAdapter()
 
     private fun startObservers() {
         lifecycleScope.launch {
@@ -116,9 +114,7 @@ class SearchFragment : BaseFragment() {
         hideLoader()
     }
 
-    private fun search(text: Editable?) {
-        viewModel.search(args.searchId, text.toString())
-    }
+    private fun search(text: Editable?) = viewModel.search(args.searchId, text.toString())
 
     private val watcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
