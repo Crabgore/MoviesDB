@@ -15,12 +15,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.Const.Addresses.Companion.ORIGINAL_IMAGES_API_HOST
 import com.crabgore.moviesDB.R
-import com.crabgore.moviesDB.data.Cast
-import com.crabgore.moviesDB.data.MovieCast
-import com.crabgore.moviesDB.data.TVCast
+import com.crabgore.moviesDB.data.people.models.Cast
+import com.crabgore.moviesDB.data.people.models.TVCast
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import com.squareup.picasso.Picasso
-import retrofit2.HttpException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -135,6 +133,14 @@ fun TVCast.isContains(items: List<CreditsItem>): Boolean {
 
     return result
 }
+
+fun getRegion(context: Context): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    context.resources.configuration.locales[0].country
+} else {
+    context.resources.configuration.locale.country
+}
+
+fun getLanguage(): String = Locale.getDefault().toLanguageTag()
 
 //Hiding keyboard
 fun Fragment.hideKeyboard() = view?.let { activity?.hideKeyboard(it) }

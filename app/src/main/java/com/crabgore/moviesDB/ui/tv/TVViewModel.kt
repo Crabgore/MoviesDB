@@ -2,7 +2,7 @@ package com.crabgore.moviesDB.ui.tv
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
-import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.common.Resource
 import com.crabgore.moviesDB.domain.repositories.interfaces.TVRepository
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.MovieItem

@@ -4,10 +4,10 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SESSION_ID
-import com.crabgore.moviesDB.data.MovieDetailsResponse
-import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.common.Resource
+import com.crabgore.moviesDB.data.movies.models.MovieDetailsResponse
 import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
-import com.crabgore.moviesDB.domain.repositories.interfaces.MoviesRepository
+import com.crabgore.moviesDB.domain.repositories.interfaces.MovieDetailsRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.CreditsItem
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @SuppressLint("StaticFieldLeak")
 class MovieDetailsViewModel @Inject constructor(
     private val storage: Storage,
-    private val repository: MoviesRepository,
+    private val movieDetailsRepository: MovieDetailsRepository,
     private val favoritesRepository: FavoritesRepository
 ) : BaseViewModel() {
     private val _movieState = MutableStateFlow<Resource<MovieDetailsResponse>>(Resource.loading(null))
@@ -37,12 +37,12 @@ class MovieDetailsViewModel @Inject constructor(
     fun getData(id: Int) {
         val job = viewModelScope.launch {
             Timber.d("Getting Movie Details $id")
-            _movieState.value = repository.getMovieDetails(id)
-            _castState.value = repository.castListStore
-            _crewState.value = repository.crewListStore
+            _movieState.value = movieDetailsRepository.getMovieDetails(id)
+            _castState.value = movieDetailsRepository.castListStore
+            _crewState.value = movieDetailsRepository.crewListStore
 
             storage.getString(SESSION_ID)?.let {
-                isInFavoritesLD.value = repository.getMovieAccountState(id)
+                isInFavoritesLD.value = favoritesRepository.getMovieAccountState(id)
             }
         }
         addJod(job)

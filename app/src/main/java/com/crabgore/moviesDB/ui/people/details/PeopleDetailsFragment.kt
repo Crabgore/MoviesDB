@@ -17,8 +17,8 @@ import com.crabgore.moviesDB.Const.Addresses.Companion.IMDB_NAME
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.*
-import com.crabgore.moviesDB.data.PeopleDetailsResponse
-import com.crabgore.moviesDB.data.Status.*
+import com.crabgore.moviesDB.common.Status.*
+import com.crabgore.moviesDB.data.people.models.PeopleDetailsResponse
 import com.crabgore.moviesDB.databinding.FragmentPeopleDetailsBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.CreditsItem

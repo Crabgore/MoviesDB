@@ -3,7 +3,7 @@ package com.crabgore.moviesDB.ui.people
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.common.Resource
 import com.crabgore.moviesDB.domain.repositories.interfaces.PeopleRepository
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.PeopleItem

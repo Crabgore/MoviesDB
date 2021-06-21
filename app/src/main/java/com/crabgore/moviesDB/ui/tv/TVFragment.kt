@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_TV
 import com.crabgore.moviesDB.common.addDecoration
-import com.crabgore.moviesDB.data.Status.*
+import com.crabgore.moviesDB.common.Status.*
 import com.crabgore.moviesDB.databinding.FragmentTVBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.MovieItem

@@ -15,8 +15,8 @@ import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_PEOPLE
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
-import com.crabgore.moviesDB.data.Resource
-import com.crabgore.moviesDB.data.Status.*
+import com.crabgore.moviesDB.common.Resource
+import com.crabgore.moviesDB.common.Status.*
 import com.crabgore.moviesDB.databinding.FragmentPeopleBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.PeopleItem

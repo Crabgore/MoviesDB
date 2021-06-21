@@ -1,7 +1,7 @@
 package com.crabgore.moviesDB.di.modules
 
 import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
-import com.crabgore.moviesDB.domain.repositories.FavoritesRepositoryImpl
+import com.crabgore.moviesDB.data.favorites.repositories.FavoritesRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton

@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.crabgore.moviesDB.Const.Keys.Companion.API_KEY
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.ACCOUNT_ID
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SESSION_ID
-import com.crabgore.moviesDB.data.AccountResponse
-import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.common.Resource
+import com.crabgore.moviesDB.data.user.models.AccountResponse
+import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
+import com.crabgore.moviesDB.domain.repositories.interfaces.UserDetailsRepository
 import com.crabgore.moviesDB.domain.repositories.interfaces.UserRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.base.BaseViewModel
@@ -17,7 +19,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class UserViewModel @Inject constructor(
-    private val repository: UserRepository,
+    private val userRepository: UserRepository,
+    private val userDetailsRepository: UserDetailsRepository,
+    private val favoritesRepository: FavoritesRepository,
     private val storage: Storage
 ) : BaseViewModel() {
     private val _accountState = MutableStateFlow<Resource<AccountResponse>>(Resource.loading(null))
@@ -39,7 +43,7 @@ class UserViewModel @Inject constructor(
     fun login(username: String, password: String) {
         Timber.d("LOGING IN")
         val job = viewModelScope.launch {
-            repository.login(username, password)?.let {
+            userRepository.login(username, password)?.let {
                 sessionIdLD.value = it
             }
         }
@@ -49,7 +53,7 @@ class UserViewModel @Inject constructor(
     fun logout() {
         Timber.d("Logging out")
         val job = viewModelScope.launch {
-            if (repository.logout()) {
+            if (userRepository.logout()) {
                 sessionIdLD.value = null
                 logoutLD.value = true
             }
@@ -60,9 +64,9 @@ class UserViewModel @Inject constructor(
     fun getData() {
         Timber.d("Getting account details api_key: $API_KEY account_id: ${storage.getInt(ACCOUNT_ID)} session_id: ${storage.getString(SESSION_ID)}")
         val job = viewModelScope.launch {
-            _accountState.value = repository.getAccountDetails()
-            _favMoviesState.value = repository.getFavoriteMovies(null)
-            _favTVState.value = repository.getFavoriteTVs(null)
+            _accountState.value = userDetailsRepository.getAccountDetails()
+            _favMoviesState.value = favoritesRepository.getFavoriteMovies(null)
+            _favTVState.value = favoritesRepository.getFavoriteTVs(null)
         }
         addJod(job)
     }

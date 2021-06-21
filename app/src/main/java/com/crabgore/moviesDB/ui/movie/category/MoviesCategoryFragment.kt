@@ -14,8 +14,8 @@ import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.addDecoration
 import com.crabgore.moviesDB.common.showToast
-import com.crabgore.moviesDB.data.Resource
-import com.crabgore.moviesDB.data.Status.*
+import com.crabgore.moviesDB.common.Resource
+import com.crabgore.moviesDB.common.Status.*
 import com.crabgore.moviesDB.databinding.FragmentMoviesCategoryBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.MovieItem

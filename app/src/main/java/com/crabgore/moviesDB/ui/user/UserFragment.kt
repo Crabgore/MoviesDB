@@ -16,8 +16,8 @@ import com.crabgore.moviesDB.Const.Addresses.Companion.GRAVATAR_IMAGES_HOST
 import com.crabgore.moviesDB.Const.Addresses.Companion.IMAGES_API_HOST
 import com.crabgore.moviesDB.R
 import com.crabgore.moviesDB.common.*
-import com.crabgore.moviesDB.data.AccountResponse
-import com.crabgore.moviesDB.data.Status.*
+import com.crabgore.moviesDB.common.Status.*
+import com.crabgore.moviesDB.data.user.models.AccountResponse
 import com.crabgore.moviesDB.databinding.FragmentUserBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.MovieItem

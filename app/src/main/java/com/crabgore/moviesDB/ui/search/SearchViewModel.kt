@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_MOVIE
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SEARCH_TV
-import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.common.Resource
 import com.crabgore.moviesDB.domain.repositories.interfaces.SearchRepository
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.SearchItem

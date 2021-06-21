@@ -1,7 +1,7 @@
 package com.crabgore.moviesDB.di.modules
 
 import com.crabgore.moviesDB.domain.repositories.interfaces.SearchRepository
-import com.crabgore.moviesDB.domain.repositories.SearchRepositoryImpl
+import com.crabgore.moviesDB.data.search.repositories.SearchRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton

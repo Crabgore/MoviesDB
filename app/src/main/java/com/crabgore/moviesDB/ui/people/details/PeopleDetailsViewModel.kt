@@ -2,9 +2,9 @@ package com.crabgore.moviesDB.ui.people.details
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
-import com.crabgore.moviesDB.data.PeopleDetailsResponse
-import com.crabgore.moviesDB.data.Resource
-import com.crabgore.moviesDB.domain.repositories.interfaces.PeopleRepository
+import com.crabgore.moviesDB.common.Resource
+import com.crabgore.moviesDB.data.people.models.PeopleDetailsResponse
+import com.crabgore.moviesDB.domain.repositories.interfaces.PeopleDetailsRepository
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @SuppressLint("StaticFieldLeak")
 class PeopleDetailsViewModel @Inject constructor(
-    private val repository: PeopleRepository,
+    private val repository: PeopleDetailsRepository,
 ) : BaseViewModel() {
     private val _peopleState = MutableStateFlow<Resource<PeopleDetailsResponse>>(Resource.loading(null))
     private val _movieCastState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))

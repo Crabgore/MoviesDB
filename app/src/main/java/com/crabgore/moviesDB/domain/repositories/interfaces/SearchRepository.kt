@@ -1,6 +1,6 @@
 package com.crabgore.moviesDB.domain.repositories.interfaces
 
-import com.crabgore.moviesDB.data.Resource
+import com.crabgore.moviesDB.common.Resource
 import com.crabgore.moviesDB.ui.items.SearchItem
 
 interface SearchRepository {
