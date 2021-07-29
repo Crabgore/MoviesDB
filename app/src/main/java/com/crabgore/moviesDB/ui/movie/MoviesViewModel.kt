@@ -1,18 +1,15 @@
 package com.crabgore.moviesDB.ui.movie
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
 import com.crabgore.moviesDB.common.Resource
-import com.crabgore.moviesDB.domain.repositories.interfaces.MoviesRepository
+import com.crabgore.moviesDB.data.movies.repositories.MoviesRepository
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.MovieItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@SuppressLint("StaticFieldLeak")
-class MoviesViewModel @Inject constructor(
+class MoviesViewModel(
     private val repository: MoviesRepository
 ) : BaseViewModel() {
 

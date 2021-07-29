@@ -6,23 +6,21 @@ import com.crabgore.moviesDB.common.getLanguage
 import com.crabgore.moviesDB.common.isContains
 import com.crabgore.moviesDB.data.people.models.PeopleDetailsResponse
 import com.crabgore.moviesDB.data.people.services.PeopleDetailsService
-import com.crabgore.moviesDB.domain.repositories.interfaces.PeopleDetailsRepository
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class PeopleDetailsRepositoryImpl @Inject constructor(
+class PeopleDetailsRepository(
     private val api: PeopleDetailsService
-) : PeopleDetailsRepository {
-    override var movieCastListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    override var movieCrewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    override var tvCastListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    override var tvCrewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+) {
+    var movieCastListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+    var movieCrewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+    var tvCastListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+    var tvCrewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
 
     val append = "movie_credits,tv_credits"
 
-    override suspend fun getPeopleDetails(id: Int): Resource<PeopleDetailsResponse> {
+    suspend fun getPeopleDetails(id: Int): Resource<PeopleDetailsResponse> {
         val response = api.peopleDetails(id, API_KEY, getLanguage(), append)
         return parsePeopleDetailsResponse(response)
     }

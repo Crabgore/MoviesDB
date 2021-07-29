@@ -1,15 +1,9 @@
 package com.crabgore.moviesDB.di.modules
 
-import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
-import com.crabgore.moviesDB.data.favorites.repositories.FavoritesRepositoryImpl
-import dagger.Binds
-import dagger.Module
-import javax.inject.Singleton
+import com.crabgore.moviesDB.data.favorites.repositories.FavoritesRepository
+import org.koin.dsl.module
 
-@Module
-abstract class FavoritesRepositoryModule {
-
-    @Binds
-    @Singleton
-    abstract fun provideFavoritesRepository(repository: FavoritesRepositoryImpl): FavoritesRepository
-}
+val favoritesRepositoryModule =
+    module {
+        single { FavoritesRepository(get(), get()) }
+    }

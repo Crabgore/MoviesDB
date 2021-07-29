@@ -2,14 +2,14 @@ package com.crabgore.moviesDB.ui.base
 
 import android.view.View
 import androidx.activity.addCallback
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.crabgore.moviesDB.MainActivity
 import com.crabgore.moviesDB.common.popBackStackAllInstances
-import dagger.android.support.DaggerFragment
 
-open class BaseFragment : DaggerFragment() {
+open class BaseFragment : Fragment() {
     var _binding: ViewBinding? = null
     var isViewWasNull = false
     private var viewState: View? = null

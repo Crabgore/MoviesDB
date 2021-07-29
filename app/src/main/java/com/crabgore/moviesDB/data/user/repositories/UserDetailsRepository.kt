@@ -10,24 +10,22 @@ import com.crabgore.moviesDB.data.movies.models.MoviesResponse
 import com.crabgore.moviesDB.data.tv.models.TVResponse
 import com.crabgore.moviesDB.data.user.models.AccountResponse
 import com.crabgore.moviesDB.data.user.services.UserDetailsService
-import com.crabgore.moviesDB.domain.repositories.interfaces.UserDetailsRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.items.MovieItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class UserDetailsRepositoryImpl @Inject constructor(
+class UserDetailsRepository(
     private val userDetailsService: UserDetailsService,
     private val favoritesService: FavoritesService,
     private val storage: Storage
-) : UserDetailsRepository {
-    override suspend fun getAccountDetails(): Resource<AccountResponse> {
+) {
+    suspend fun getAccountDetails(): Resource<AccountResponse> {
         val account = userDetailsService.accountDetails(API_KEY, storage.getString(SESSION_ID)!!)
         return parseAccountResponse(account)
     }
 
-    override suspend fun getFavoriteMovies(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getFavoriteMovies(page: Int?): Resource<List<MovieItem>> {
         val movies = favoritesService.favoriteMovies(
             storage.getInt(ACCOUNT_ID),
             storage.getString(SESSION_ID)!!,
@@ -38,7 +36,7 @@ class UserDetailsRepositoryImpl @Inject constructor(
         return parseFavoriteMoviesResponse(movies)
     }
 
-    override suspend fun getFavoriteTVs(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getFavoriteTVs(page: Int?): Resource<List<MovieItem>> {
         val tvs = favoritesService.favoriteTVs(
             storage.getInt(ACCOUNT_ID),
             storage.getString(SESSION_ID)!!,

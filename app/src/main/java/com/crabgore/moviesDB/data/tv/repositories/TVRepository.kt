@@ -5,28 +5,26 @@ import com.crabgore.moviesDB.common.Resource
 import com.crabgore.moviesDB.common.getLanguage
 import com.crabgore.moviesDB.data.tv.models.TVResponse
 import com.crabgore.moviesDB.data.tv.services.TVService
-import com.crabgore.moviesDB.domain.repositories.interfaces.TVRepository
 import com.crabgore.moviesDB.ui.items.MovieItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class TVRepositoryImpl @Inject constructor(
+class TVRepository(
     private val api: TVService
-) : TVRepository {
-    override var maxPages = Int.MAX_VALUE
+) {
+    var maxPages = Int.MAX_VALUE
 
-    override suspend fun getOnTheAirTVs(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getOnTheAirTVs(page: Int?): Resource<List<MovieItem>> {
         val response = api.onTheAirTVs(API_KEY, getLanguage(), page)
         return parseResponse(response)
     }
 
-    override suspend fun getPopularTVs(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getPopularTVs(page: Int?): Resource<List<MovieItem>> {
         val response = api.popularTVs(API_KEY, getLanguage(), page)
         return parseResponse(response)
     }
 
-    override suspend fun getTopRatedTVs(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getTopRatedTVs(page: Int?): Resource<List<MovieItem>> {
         val response = api.topRatedTVs(API_KEY, getLanguage(), page)
         return parseResponse(response)
     }

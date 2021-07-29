@@ -13,31 +13,29 @@ import com.crabgore.moviesDB.data.favorites.requests.MarkAsFavoriteRequest
 import com.crabgore.moviesDB.data.favorites.services.FavoritesService
 import com.crabgore.moviesDB.data.movies.models.MoviesResponse
 import com.crabgore.moviesDB.data.tv.models.TVResponse
-import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.items.MovieItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class FavoritesRepositoryImpl @Inject constructor(
+class FavoritesRepository(
     private val api: FavoritesService,
     private val storage: Storage
-) : FavoritesRepository {
-    override var maxPages = Int.MAX_VALUE
+) {
+    var maxPages = Int.MAX_VALUE
 
-    override suspend fun getMovieAccountState(id: Int): Boolean {
+    suspend fun getMovieAccountState(id: Int): Boolean {
         val response =
             api.movieAccountState(id, API_KEY, storage.getString(SESSION_ID)!!)
         return parseAccountState(response)
     }
 
-    override suspend fun getTVsAccountState(id: Int): Boolean {
+    suspend fun getTVsAccountState(id: Int): Boolean {
         val response = api.tvAccountState(id, API_KEY, storage.getString(SESSION_ID)!!)
         return parseAccountState(response)
     }
 
-    override suspend fun markMovieAsFavorite(movieId: Int, isInFavorite: Boolean): Boolean {
+    suspend fun markMovieAsFavorite(movieId: Int, isInFavorite: Boolean): Boolean {
         val request = MarkAsFavoriteRequest(MOVIE, movieId, isInFavorite)
 
         val response = api.markAsFavorite(
@@ -49,7 +47,7 @@ class FavoritesRepositoryImpl @Inject constructor(
         return parseMarkAsFavoriteResponse(response)
     }
 
-    override suspend fun markTVAsFavorite(tvId: Int, isInFavorite: Boolean): Boolean {
+    suspend fun markTVAsFavorite(tvId: Int, isInFavorite: Boolean): Boolean {
         val request = MarkAsFavoriteRequest(TV, tvId, isInFavorite)
 
         val response = api.markAsFavorite(
@@ -61,7 +59,7 @@ class FavoritesRepositoryImpl @Inject constructor(
         return parseMarkAsFavoriteResponse(response)
     }
 
-    override suspend fun getFavoriteMovies(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getFavoriteMovies(page: Int?): Resource<List<MovieItem>> {
         val response = api.favoriteMovies(
             storage.getInt(ACCOUNT_ID),
             storage.getString(SESSION_ID)!!,
@@ -72,7 +70,7 @@ class FavoritesRepositoryImpl @Inject constructor(
         return parseMovieResponse(response)
     }
 
-    override suspend fun getFavoriteTVs(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getFavoriteTVs(page: Int?): Resource<List<MovieItem>> {
         val response = api.favoriteTVs(
             storage.getInt(ACCOUNT_ID),
             storage.getString(SESSION_ID)!!,

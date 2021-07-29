@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.crabgore.moviesDB.Const.Constants.Companion.DECORATION
 import com.crabgore.moviesDB.R
-import com.crabgore.moviesDB.common.addDecoration
-import com.crabgore.moviesDB.common.showToast
 import com.crabgore.moviesDB.common.Resource
 import com.crabgore.moviesDB.common.Status.*
+import com.crabgore.moviesDB.common.addDecoration
+import com.crabgore.moviesDB.common.showToast
 import com.crabgore.moviesDB.databinding.FragmentTVCategoryBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.MovieItem
@@ -23,13 +21,11 @@ import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
 class TVCategoryFragment : BaseFragment() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel by viewModels<TVCategoryViewModel> { viewModelFactory }
+    val viewModel: TVCategoryViewModel by viewModel()
 
     private val args: TVCategoryFragmentArgs by navArgs()
     private val binding get() = _binding!! as FragmentTVCategoryBinding

@@ -9,18 +9,15 @@ import com.crabgore.moviesDB.data.user.requests.AuthWithLoginRequest
 import com.crabgore.moviesDB.data.user.requests.LogoutRequest
 import com.crabgore.moviesDB.data.user.requests.RequestToken
 import com.crabgore.moviesDB.data.user.services.UserService
-import com.crabgore.moviesDB.domain.repositories.interfaces.UserRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class UserRepositoryImpl @Inject constructor(
+class UserRepository(
     private val userService: UserService,
     private val storage: Storage
-) : UserRepository {
-
-    override suspend fun login(username: String, password: String): String? {
+) {
+    suspend fun login(username: String, password: String): String? {
         val tokenResponse = userService.requestToken(API_KEY)
         val token = parseTokenResponse(tokenResponse)
 
@@ -33,7 +30,7 @@ class UserRepositoryImpl @Inject constructor(
         return parseSessionResponse(sessionIDResponse)
     }
 
-    override suspend fun logout(): Boolean {
+    suspend fun logout(): Boolean {
         val request = LogoutRequest(storage.getString(SESSION_ID)!!)
         val response = userService.logOut(API_KEY, request)
         return parseLogoutResponse(response)

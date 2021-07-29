@@ -5,18 +5,16 @@ import com.crabgore.moviesDB.common.Resource
 import com.crabgore.moviesDB.common.getLanguage
 import com.crabgore.moviesDB.data.people.models.PeopleResponse
 import com.crabgore.moviesDB.data.people.services.PeopleService
-import com.crabgore.moviesDB.domain.repositories.interfaces.PeopleRepository
 import com.crabgore.moviesDB.ui.items.PeopleItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class PeopleRepositoryImpl @Inject constructor(
+class PeopleRepository(
     private val peopleService: PeopleService
-) : PeopleRepository {
-    override var maxPages = Int.MAX_VALUE
+) {
+    var maxPages = Int.MAX_VALUE
 
-    override suspend fun getPopularPeople(page: Int?): Resource<List<PeopleItem>> {
+    suspend fun getPopularPeople(page: Int?): Resource<List<PeopleItem>> {
         val response = peopleService.popularPeople(API_KEY, getLanguage(), page)
         return parseResponse(response)
     }

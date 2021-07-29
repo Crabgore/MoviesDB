@@ -1,21 +1,15 @@
 package com.crabgore.moviesDB.di.modules
 
-import com.crabgore.moviesDB.data.user.repositories.UserDetailsRepositoryImpl
-import com.crabgore.moviesDB.domain.repositories.interfaces.UserRepository
-import com.crabgore.moviesDB.data.user.repositories.UserRepositoryImpl
-import com.crabgore.moviesDB.domain.repositories.interfaces.UserDetailsRepository
-import dagger.Binds
-import dagger.Module
-import javax.inject.Singleton
+import com.crabgore.moviesDB.data.user.repositories.UserDetailsRepository
+import com.crabgore.moviesDB.data.user.repositories.UserRepository
+import org.koin.dsl.module
 
-@Module
-abstract class UserRepositoryModule {
+val userRepositoryModule =
+    module {
+        single { UserRepository(get(), get()) }
+    }
 
-    @Binds
-    @Singleton
-    abstract fun provideUserRepository(repository: UserRepositoryImpl): UserRepository
-
-    @Binds
-    @Singleton
-    abstract fun provideUserDetailsRepository(repository: UserDetailsRepositoryImpl): UserDetailsRepository
-}
+val userDetailsRepositoryModule =
+    module {
+        single { UserDetailsRepository(get(), get(), get()) }
+    }

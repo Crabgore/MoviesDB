@@ -1,15 +1,9 @@
 package com.crabgore.moviesDB.di.modules
 
-import com.crabgore.moviesDB.domain.repositories.interfaces.SearchRepository
-import com.crabgore.moviesDB.data.search.repositories.SearchRepositoryImpl
-import dagger.Binds
-import dagger.Module
-import javax.inject.Singleton
+import com.crabgore.moviesDB.data.search.repositories.SearchRepository
+import org.koin.dsl.module
 
-@Module
-abstract class SearchRepositoryModule {
-
-    @Binds
-    @Singleton
-    abstract fun provideMoviesRepository(repository: SearchRepositoryImpl): SearchRepository
-}
+val searchRepositoryModule =
+    module {
+        single { SearchRepository(get(), get()) }
+    }

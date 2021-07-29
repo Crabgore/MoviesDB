@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -28,13 +26,11 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import kotlinx.android.synthetic.main.full_image_layout.view.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import javax.inject.Inject
 
 class MovieDetailsFragment : BaseFragment() {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val viewModel by viewModels<MovieDetailsViewModel> { viewModelFactory }
+    val viewModel: MovieDetailsViewModel by viewModel()
 
     private val args: MovieDetailsFragmentArgs by navArgs()
     private val binding get() = _binding!! as FragmentMovieDetailsBinding

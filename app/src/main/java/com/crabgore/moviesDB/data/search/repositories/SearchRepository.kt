@@ -8,28 +8,26 @@ import com.crabgore.moviesDB.data.search.models.SearchMovieResponse
 import com.crabgore.moviesDB.data.search.models.SearchPeopleResponse
 import com.crabgore.moviesDB.data.search.models.SearchTVResponse
 import com.crabgore.moviesDB.data.search.services.SearchService
-import com.crabgore.moviesDB.domain.repositories.interfaces.SearchRepository
 import com.crabgore.moviesDB.ui.items.SearchItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class SearchRepositoryImpl @Inject constructor(
+class SearchRepository(
     private val context: Context,
     private val api: SearchService
-) : SearchRepository {
+) {
 
-    override suspend fun getSearchMovieResults(query: String): Resource<List<SearchItem>> {
+    suspend fun getSearchMovieResults(query: String): Resource<List<SearchItem>> {
         val response = api.searchMovie(query, API_KEY, getLanguage())
         return parseSearchMovieResponse(response)
     }
 
-    override suspend fun getSearchTVResults(query: String): Resource<List<SearchItem>> {
+    suspend fun getSearchTVResults(query: String): Resource<List<SearchItem>> {
         val response = api.searchTV(query, API_KEY, getLanguage())
         return parseSearchTVResponse(response)
     }
 
-    override suspend fun getSearchPeopleResults(query: String): Resource<List<SearchItem>> {
+    suspend fun getSearchPeopleResults(query: String): Resource<List<SearchItem>> {
         val response = api.searchPeople(query, API_KEY, getLanguage())
         return parseSearchPeopleResponse(response)
     }

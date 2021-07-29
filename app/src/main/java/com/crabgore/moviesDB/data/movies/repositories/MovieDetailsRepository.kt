@@ -6,21 +6,19 @@ import com.crabgore.moviesDB.common.getLanguage
 import com.crabgore.moviesDB.common.isContains
 import com.crabgore.moviesDB.data.movies.models.MovieDetailsResponse
 import com.crabgore.moviesDB.data.movies.services.MovieDetailsService
-import com.crabgore.moviesDB.domain.repositories.interfaces.MovieDetailsRepository
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class MovieDetailsRepositoryImpl @Inject constructor(
+class MovieDetailsRepository(
     private val api: MovieDetailsService
-) : MovieDetailsRepository {
-    override var castListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    override var crewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+) {
+    var castListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+    var crewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
 
     val append = "credits"
 
-    override suspend fun getMovieDetails(id: Int): Resource<MovieDetailsResponse> {
+    suspend fun getMovieDetails(id: Int): Resource<MovieDetailsResponse> {
         val response = api.movieDetails(id, API_KEY, getLanguage(), append)
         return parseMovieDetailsResponse(response)
     }

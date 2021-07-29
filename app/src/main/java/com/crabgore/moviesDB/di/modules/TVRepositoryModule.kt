@@ -1,21 +1,15 @@
 package com.crabgore.moviesDB.di.modules
 
-import com.crabgore.moviesDB.data.tv.repositories.TVDetailsRepositoryImpl
-import com.crabgore.moviesDB.domain.repositories.interfaces.TVRepository
-import com.crabgore.moviesDB.data.tv.repositories.TVRepositoryImpl
-import com.crabgore.moviesDB.domain.repositories.interfaces.TVDetailsRepository
-import dagger.Binds
-import dagger.Module
-import javax.inject.Singleton
+import com.crabgore.moviesDB.data.tv.repositories.TVDetailsRepository
+import com.crabgore.moviesDB.data.tv.repositories.TVRepository
+import org.koin.dsl.module
 
-@Module
-abstract class TVRepositoryModule {
+val tvRepositoryModule =
+    module {
+        single { TVRepository(get()) }
+    }
 
-    @Binds
-    @Singleton
-    abstract fun provideTVRepository(repository: TVRepositoryImpl): TVRepository
-
-    @Binds
-    @Singleton
-    abstract fun provideTVDetailsRepository(repository: TVDetailsRepositoryImpl): TVDetailsRepository
-}
+val tvDetailsRepositoryModule =
+    module {
+        single { TVDetailsRepository(get()) }
+    }

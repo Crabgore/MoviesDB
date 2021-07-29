@@ -1,23 +1,20 @@
 package com.crabgore.moviesDB.ui.movie.details
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SESSION_ID
 import com.crabgore.moviesDB.common.Resource
+import com.crabgore.moviesDB.data.favorites.repositories.FavoritesRepository
 import com.crabgore.moviesDB.data.movies.models.MovieDetailsResponse
-import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
-import com.crabgore.moviesDB.domain.repositories.interfaces.MovieDetailsRepository
+import com.crabgore.moviesDB.data.movies.repositories.MovieDetailsRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@SuppressLint("StaticFieldLeak")
-class MovieDetailsViewModel @Inject constructor(
+class MovieDetailsViewModel(
     private val storage: Storage,
     private val movieDetailsRepository: MovieDetailsRepository,
     private val favoritesRepository: FavoritesRepository

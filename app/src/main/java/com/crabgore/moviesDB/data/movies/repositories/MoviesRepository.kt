@@ -7,35 +7,33 @@ import com.crabgore.moviesDB.common.getLanguage
 import com.crabgore.moviesDB.common.getRegion
 import com.crabgore.moviesDB.data.movies.models.MoviesResponse
 import com.crabgore.moviesDB.data.movies.services.MovieService
-import com.crabgore.moviesDB.domain.repositories.interfaces.MoviesRepository
 import com.crabgore.moviesDB.ui.items.MovieItem
 import retrofit2.Response
 import timber.log.Timber
-import javax.inject.Inject
 
-class MoviesRepositoryImpl @Inject constructor(
+class MoviesRepository(
     private val context: Context,
     private val api: MovieService
-) : MoviesRepository {
-    override var maxPages = Int.MAX_VALUE
+) {
+    var maxPages = Int.MAX_VALUE
 
-    override suspend fun getNowPlayingMovies(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getNowPlayingMovies(page: Int?): Resource<List<MovieItem>> {
         val response =
             api.nowPlayingMovies(API_KEY, getLanguage(), page, getRegion(context))
         return parseResponse(response)
     }
 
-    override suspend fun getPopularMovies(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getPopularMovies(page: Int?): Resource<List<MovieItem>> {
         val response = api.popularMovies(API_KEY, getLanguage(), page)
         return parseResponse(response)
     }
 
-    override suspend fun getTopRatedMovies(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getTopRatedMovies(page: Int?): Resource<List<MovieItem>> {
         val response = api.topRatedMovies(API_KEY, getLanguage(), page)
         return parseResponse(response)
     }
 
-    override suspend fun getUpcomingMovies(page: Int?): Resource<List<MovieItem>> {
+    suspend fun getUpcomingMovies(page: Int?): Resource<List<MovieItem>> {
         val response = api.upcomingMovies(API_KEY, getLanguage(), page, getRegion(context))
         return parseResponse(response)
     }

@@ -6,19 +6,18 @@ import com.crabgore.moviesDB.Const.Keys.Companion.API_KEY
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.ACCOUNT_ID
 import com.crabgore.moviesDB.Const.MyPreferences.Companion.SESSION_ID
 import com.crabgore.moviesDB.common.Resource
+import com.crabgore.moviesDB.data.favorites.repositories.FavoritesRepository
 import com.crabgore.moviesDB.data.user.models.AccountResponse
-import com.crabgore.moviesDB.domain.repositories.interfaces.FavoritesRepository
-import com.crabgore.moviesDB.domain.repositories.interfaces.UserDetailsRepository
-import com.crabgore.moviesDB.domain.repositories.interfaces.UserRepository
+import com.crabgore.moviesDB.data.user.repositories.UserDetailsRepository
+import com.crabgore.moviesDB.data.user.repositories.UserRepository
 import com.crabgore.moviesDB.domain.storage.Storage
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.MovieItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-class UserViewModel @Inject constructor(
+class UserViewModel(
     private val userRepository: UserRepository,
     private val userDetailsRepository: UserDetailsRepository,
     private val favoritesRepository: FavoritesRepository,

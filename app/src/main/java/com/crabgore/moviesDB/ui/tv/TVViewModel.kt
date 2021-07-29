@@ -1,18 +1,15 @@
 package com.crabgore.moviesDB.ui.tv
 
-import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
 import com.crabgore.moviesDB.common.Resource
-import com.crabgore.moviesDB.domain.repositories.interfaces.TVRepository
+import com.crabgore.moviesDB.data.tv.repositories.TVRepository
 import com.crabgore.moviesDB.ui.base.BaseViewModel
 import com.crabgore.moviesDB.ui.items.MovieItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import javax.inject.Inject
 
-@SuppressLint("StaticFieldLeak")
-class TVViewModel @Inject constructor(
+class TVViewModel(
     private val repository: TVRepository
 ) : BaseViewModel() {
     private val _onTheAirState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
