@@ -25,12 +25,12 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSearchTVResults(query: String): Resource<List<SearchItem>> {
-        val response =  api.searchTV(query, API_KEY, getLanguage())
+        val response = api.searchTV(query, API_KEY, getLanguage())
         return parseSearchTVResponse(response)
     }
 
     override suspend fun getSearchPeopleResults(query: String): Resource<List<SearchItem>> {
-        val response =  api.searchPeople(query, API_KEY, getLanguage())
+        val response = api.searchPeople(query, API_KEY, getLanguage())
         return parseSearchPeopleResponse(response)
     }
 
