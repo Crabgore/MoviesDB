@@ -19,11 +19,11 @@ import com.crabgore.moviesDB.common.*
 import com.crabgore.moviesDB.common.Status.*
 import com.crabgore.moviesDB.data.movies.models.MovieDetailsResponse
 import com.crabgore.moviesDB.databinding.FragmentMovieDetailsBinding
+import com.crabgore.moviesDB.databinding.FullImageLayoutBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
 import com.crabgore.moviesDB.ui.items.CreditsItem
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
-import kotlinx.android.synthetic.main.full_image_layout.view.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -34,12 +34,14 @@ class MovieDetailsFragment : BaseFragment() {
 
     private val args: MovieDetailsFragmentArgs by navArgs()
     private val binding get() = _binding!! as FragmentMovieDetailsBinding
+    private lateinit var includeBinding: FullImageLayoutBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentMovieDetailsBinding.inflate(inflater, container, false)
+        includeBinding = binding.fullImageLay
         return checkViewState()
     }
 
@@ -199,7 +201,7 @@ class MovieDetailsFragment : BaseFragment() {
     private fun showFullImage() {
         val photo = viewModel.movieState.value.data?.posterPath
         photo?.let {
-            loadImage(it, binding.fullImageLay.fullImageLay.full_picture)
+            loadImage(it, includeBinding.fullPicture)
             binding.fullImageLay.fullImageLay.show()
         }
     }

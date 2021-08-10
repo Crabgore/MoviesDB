@@ -11,17 +11,16 @@ import com.crabgore.moviesDB.common.hideKeyboard
 import com.crabgore.moviesDB.common.show
 import com.crabgore.moviesDB.databinding.ActivityMainBinding
 import com.crabgore.moviesDB.ui.base.BaseFragment
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var binding: ActivityMainBinding? = null
+    private lateinit var binding: ActivityMainBinding
     private val navController by lazy { findNavController(R.id.nav_host_fragment) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_MoviesDB)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        val view = binding?.root
+        val view = binding.root
         setContentView(view)
         initUI()
     }
@@ -41,18 +40,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setUpNavigation() {
-        NavigationUI.setupWithNavController(binding!!.btv, navController)
-        btv.setOnNavigationItemReselectedListener {
+        NavigationUI.setupWithNavController(binding.btv, navController)
+        binding.btv.setOnItemReselectedListener {
             navController.popBackStack(it.itemId, false)
         }
     }
 
     fun showLoader() {
-        binding?.loaderLayout?.show()
+        binding.loaderLayout.show()
     }
 
     fun hideLoader() {
-        binding?.loaderLayout?.hide()
+        binding.loaderLayout.hide()
     }
 
     private fun fragmentBackPressed() {

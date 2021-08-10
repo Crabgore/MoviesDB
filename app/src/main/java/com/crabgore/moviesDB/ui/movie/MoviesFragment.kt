@@ -36,8 +36,8 @@ class MoviesFragment : BaseFragment() {
         return checkViewState()
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         if (isViewWasNull) {
             initUI()
             startObservers()
