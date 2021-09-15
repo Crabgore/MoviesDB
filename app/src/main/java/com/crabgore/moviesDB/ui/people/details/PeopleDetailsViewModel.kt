@@ -13,11 +13,11 @@ import timber.log.Timber
 class PeopleDetailsViewModel(
     private val repository: PeopleDetailsRepository,
 ) : BaseViewModel() {
-    private val _peopleState = MutableStateFlow<Resource<PeopleDetailsResponse>>(Resource.loading(null))
-    private val _movieCastState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
-    private val _movieCrewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
-    private val _tvCastState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
-    private val _tvCrewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
+    private val _peopleState = MutableStateFlow<Resource<PeopleDetailsResponse>>(Resource.Loading(null))
+    private val _movieCastState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
+    private val _movieCrewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
+    private val _tvCastState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
+    private val _tvCrewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
     val peopleState = _peopleState
     val movieCastState = _movieCastState
     val movieCrewState = _movieCrewState

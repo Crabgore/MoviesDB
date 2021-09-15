@@ -20,7 +20,7 @@ class MoviesCategoryViewModel(
     private val moviesRepository: MoviesRepository,
     private val favoritesRepository: FavoritesRepository
 ) : BaseViewModel() {
-    private val _moviesState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    private val _moviesState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
     val moviesState = _moviesState
     val isLastPageLiveData: MutableLiveData<Boolean> = MutableLiveData()
 

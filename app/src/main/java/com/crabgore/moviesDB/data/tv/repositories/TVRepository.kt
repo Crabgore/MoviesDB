@@ -37,7 +37,7 @@ class TVRepository(
                 list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
             }
             maxPages = response.body()?.totalPages!!
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 }

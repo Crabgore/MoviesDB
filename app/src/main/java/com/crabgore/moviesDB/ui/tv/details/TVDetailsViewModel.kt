@@ -19,9 +19,9 @@ class TVDetailsViewModel(
     private val tvDetailsRepository: TVDetailsRepository,
     private val favoritesRepository: FavoritesRepository
 ) : BaseViewModel() {
-    private val _tvState = MutableStateFlow<Resource<TVDetailsResponse>>(Resource.loading(null))
-    private val _castState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
-    private val _crewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
+    private val _tvState = MutableStateFlow<Resource<TVDetailsResponse>>(Resource.Loading(null))
+    private val _castState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
+    private val _crewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
     val tvState = _tvState
     val castState = _castState
     val crewState = _crewState

@@ -23,9 +23,9 @@ class UserViewModel(
     private val favoritesRepository: FavoritesRepository,
     private val storage: Storage
 ) : BaseViewModel() {
-    private val _accountState = MutableStateFlow<Resource<AccountResponse>>(Resource.loading(null))
-    private val _favMoviesState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
-    private val _favTVState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    private val _accountState = MutableStateFlow<Resource<AccountResponse>>(Resource.Loading(null))
+    private val _favMoviesState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
+    private val _favTVState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
     val accountState = _accountState
     val favMoviesState = _favMoviesState
     val favTVState = _favTVState

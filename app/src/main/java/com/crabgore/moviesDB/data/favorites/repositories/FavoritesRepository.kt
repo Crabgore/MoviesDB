@@ -117,8 +117,8 @@ class FavoritesRepository(
                 list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
             }
             maxPages = response.body()?.totalPages!!
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 
     private fun parseTVResponse(response: Response<TVResponse>): Resource<List<MovieItem>> {
@@ -129,7 +129,7 @@ class FavoritesRepository(
                 list.add(MovieItem(it.id, it.name, it.posterPath, it.voteAverage, false))
             }
             maxPages = response.body()?.totalPages!!
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 }

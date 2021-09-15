@@ -13,7 +13,7 @@ import timber.log.Timber
 class PeopleViewModel(
     private val repository: PeopleRepository
 ) : BaseViewModel() {
-    private val _peopleState = MutableStateFlow<Resource<List<PeopleItem>>>(Resource.loading(null))
+    private val _peopleState = MutableStateFlow<Resource<List<PeopleItem>>>(Resource.Loading(null))
     val peopleState = _peopleState
     val isLastPageLiveData: MutableLiveData<Boolean> = MutableLiveData()
 

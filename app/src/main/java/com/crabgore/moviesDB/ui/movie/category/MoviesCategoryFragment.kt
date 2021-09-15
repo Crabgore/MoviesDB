@@ -121,7 +121,7 @@ class MoviesCategoryFragment : BaseFragment() {
                     )
                 navigateWithAction(directions)
                 viewModel.moviesState.value =
-                    Resource(status = SUCCESS, data = null, message = null)
+                    Resource.Success(listOf())
                 false
             }
         }

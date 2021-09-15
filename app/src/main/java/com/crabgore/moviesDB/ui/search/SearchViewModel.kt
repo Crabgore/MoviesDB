@@ -14,7 +14,7 @@ import timber.log.Timber
 class SearchViewModel(
     private val repository: SearchRepository
 ) : BaseViewModel() {
-    private val _searchState = MutableStateFlow<Resource<List<SearchItem>>>(Resource.loading(null))
+    private val _searchState = MutableStateFlow<Resource<List<SearchItem>>>(Resource.Loading(null))
     val searchState = _searchState
 
     fun search(searchId: String, query: String) {

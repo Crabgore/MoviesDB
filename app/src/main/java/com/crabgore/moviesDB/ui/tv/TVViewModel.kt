@@ -12,9 +12,9 @@ import timber.log.Timber
 class TVViewModel(
     private val repository: TVRepository
 ) : BaseViewModel() {
-    private val _onTheAirState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
-    private val _popularState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
-    private val _topRatedState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    private val _onTheAirState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
+    private val _popularState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
+    private val _topRatedState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
     val onTheAirState = _onTheAirState
     val popularState = _popularState
     val topRatedState = _topRatedState

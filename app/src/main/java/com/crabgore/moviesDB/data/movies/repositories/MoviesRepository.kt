@@ -46,7 +46,7 @@ class MoviesRepository(
                 list.add(MovieItem(it.id, it.title, it.posterPath, it.voteAverage, it.adult))
             }
             maxPages = response.body()?.totalPages!!
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 }

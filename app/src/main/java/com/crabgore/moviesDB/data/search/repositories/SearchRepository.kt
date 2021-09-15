@@ -50,8 +50,8 @@ class SearchRepository(
                     )
                 }
             }
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 
     private fun parseSearchTVResponse(response: Response<SearchTVResponse>): Resource<List<SearchItem>> {
@@ -72,8 +72,8 @@ class SearchRepository(
                     )
                 }
             }
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 
     private fun parseSearchPeopleResponse(response: Response<SearchPeopleResponse>): Resource<List<SearchItem>> {
@@ -94,7 +94,7 @@ class SearchRepository(
                     )
                 }
             }
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 }

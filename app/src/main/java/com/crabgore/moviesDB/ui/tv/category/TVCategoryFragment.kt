@@ -117,7 +117,7 @@ class TVCategoryFragment : BaseFragment() {
                         item.id
                     )
                 navigateWithAction(directions)
-                viewModel.tvState.value = Resource(status = SUCCESS, data = null, message = null)
+                viewModel.tvState.value = Resource.Success(listOf())
                 false
             }
         }

@@ -19,9 +19,9 @@ class MovieDetailsViewModel(
     private val movieDetailsRepository: MovieDetailsRepository,
     private val favoritesRepository: FavoritesRepository
 ) : BaseViewModel() {
-    private val _movieState = MutableStateFlow<Resource<MovieDetailsResponse>>(Resource.loading(null))
-    private val _castState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
-    private val _crewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.loading(null))
+    private val _movieState = MutableStateFlow<Resource<MovieDetailsResponse>>(Resource.Loading(null))
+    private val _castState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
+    private val _crewState = MutableStateFlow<Resource<List<CreditsItem>>>(Resource.Loading(null))
     val movieState = _movieState
     val castState = _castState
     val crewState = _crewState

@@ -127,8 +127,7 @@ class PeopleFragment : BaseFragment() {
                         item.id
                     )
                 navigateWithAction(directions)
-                viewModel.peopleState.value =
-                    Resource(status = SUCCESS, data = null, message = null)
+                viewModel.peopleState.value = Resource.Success(listOf())
                 false
             }
         }

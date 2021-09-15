@@ -50,13 +50,13 @@ class UserDetailsRepository(
     private fun parseAccountResponse(response: Response<AccountResponse>): Resource<AccountResponse> {
         return if (response.isSuccessful) {
             Timber.d("Got account ${response.body()}")
-            var result: Resource<AccountResponse> = Resource.loading(null)
+            var result: Resource<AccountResponse> = Resource.Loading(null)
             response.body()?.let {
                 storage.putInt(ACCOUNT_ID, it.id)
-                result = Resource.success(it)
+                result = Resource.Success(it)
             }
             result
-        } else Resource.error(data = null, message = response.message())
+        } else Resource.Error(data = null, message = response.message())
     }
 
     private fun parseFavoriteMoviesResponse(response: Response<MoviesResponse>): Resource<List<MovieItem>> {
@@ -76,8 +76,8 @@ class UserDetailsRepository(
                     )
                 }
             }
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 
     private fun parseFavoriteTVResponse(response: Response<TVResponse>): Resource<List<MovieItem>> {
@@ -89,7 +89,7 @@ class UserDetailsRepository(
                     list.add(MovieItem(tv.id, tv.name, tv.posterPath, tv.voteAverage, false))
                 }
             }
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 }

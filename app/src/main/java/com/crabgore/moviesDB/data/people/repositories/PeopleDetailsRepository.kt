@@ -13,10 +13,10 @@ import timber.log.Timber
 class PeopleDetailsRepository(
     private val api: PeopleDetailsService
 ) {
-    var movieCastListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    var movieCrewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    var tvCastListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    var tvCrewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+    var movieCastListStore: Resource<List<CreditsItem>> = Resource.Loading(null)
+    var movieCrewListStore: Resource<List<CreditsItem>> = Resource.Loading(null)
+    var tvCastListStore: Resource<List<CreditsItem>> = Resource.Loading(null)
+    var tvCrewListStore: Resource<List<CreditsItem>> = Resource.Loading(null)
 
     val append = "movie_credits,tv_credits"
 
@@ -28,9 +28,9 @@ class PeopleDetailsRepository(
     private fun parsePeopleDetailsResponse(response: Response<PeopleDetailsResponse>): Resource<PeopleDetailsResponse> {
         return if (response.isSuccessful) {
             Timber.d("Got TV Details ${response.body()}")
-            var result: Resource<PeopleDetailsResponse> = Resource.loading(null)
+            var result: Resource<PeopleDetailsResponse> = Resource.Loading(null)
             response.body()?.let {
-                result = Resource.success(it)
+                result = Resource.Success(it)
 
                 //parse movie credits
                 val movieCastList: MutableList<CreditsItem> = mutableListOf()
@@ -61,8 +61,8 @@ class PeopleDetailsRepository(
                         )
                 }
 
-                movieCastListStore = Resource.success(movieCastList)
-                movieCrewListStore = Resource.success(movieCrewList)
+                movieCastListStore = Resource.Success(movieCastList)
+                movieCrewListStore = Resource.Success(movieCrewList)
 
                 //parse tv credits
                 val tvCastList: MutableList<CreditsItem> = mutableListOf()
@@ -92,10 +92,10 @@ class PeopleDetailsRepository(
                             )
                         )
                 }
-                tvCastListStore = Resource.success(tvCastList)
-                tvCrewListStore = Resource.success(tvCrewList)
+                tvCastListStore = Resource.Success(tvCastList)
+                tvCrewListStore = Resource.Success(tvCrewList)
             }
             result
-        } else Resource.error(data = null, message = response.message())
+        } else Resource.Error(data = null, message = response.message())
     }
 }

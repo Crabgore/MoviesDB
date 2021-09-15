@@ -13,10 +13,10 @@ class MoviesViewModel(
     private val repository: MoviesRepository
 ) : BaseViewModel() {
 
-    private val _nowPlayingState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
-    private val _popularState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
-    private val _topRatedState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
-    private val _upcomingState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    private val _nowPlayingState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
+    private val _popularState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
+    private val _topRatedState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
+    private val _upcomingState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
     val nowPlayingState = _nowPlayingState
     val popularState = _popularState
     val topRatedState = _topRatedState

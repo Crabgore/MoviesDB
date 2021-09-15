@@ -27,7 +27,7 @@ class PeopleRepository(
                 list.add(PeopleItem(it.id, it.name, it.profilePath))
             }
             maxPages = response.body()?.totalPages!!
-            Resource.success(list)
-        } else Resource.error(data = null, message = response.message())
+            Resource.Success(list)
+        } else Resource.Error(data = null, message = response.message())
     }
 }

@@ -20,7 +20,7 @@ class TVCategoryViewModel(
     private val tvRepository: TVRepository,
     private val favoritesRepository: FavoritesRepository
 ) : BaseViewModel() {
-    private val _tvState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.loading(null))
+    private val _tvState = MutableStateFlow<Resource<List<MovieItem>>>(Resource.Loading(null))
     val tvState = _tvState
     val isLastPageLiveData: MutableLiveData<Boolean> = MutableLiveData()
 

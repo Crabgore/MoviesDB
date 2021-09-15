@@ -13,8 +13,8 @@ import timber.log.Timber
 class MovieDetailsRepository(
     private val api: MovieDetailsService
 ) {
-    var castListStore: Resource<List<CreditsItem>> = Resource.loading(null)
-    var crewListStore: Resource<List<CreditsItem>> = Resource.loading(null)
+    var castListStore: Resource<List<CreditsItem>> = Resource.Loading(null)
+    var crewListStore: Resource<List<CreditsItem>> = Resource.Loading(null)
 
     val append = "credits"
 
@@ -26,9 +26,9 @@ class MovieDetailsRepository(
     private fun parseMovieDetailsResponse(response: Response<MovieDetailsResponse>): Resource<MovieDetailsResponse> {
         return if (response.isSuccessful) {
             Timber.d("Got Movie Details ${response.body()}")
-            var result: Resource<MovieDetailsResponse> = Resource.loading(null)
+            var result: Resource<MovieDetailsResponse> = Resource.Loading(null)
             response.body()?.let {
-                result = Resource.success(it)
+                result = Resource.Success(it)
 
                 val castList: MutableList<CreditsItem> = mutableListOf()
                 val crewList: MutableList<CreditsItem> = mutableListOf()
@@ -58,10 +58,10 @@ class MovieDetailsRepository(
                         )
                 }
 
-                castListStore = Resource.success(castList)
-                crewListStore = Resource.success(crewList)
+                castListStore = Resource.Success(castList)
+                crewListStore = Resource.Success(crewList)
             }
             result
-        } else Resource.error(data = null, message = response.message())
+        } else Resource.Error(data = null, message = response.message())
     }
 }
